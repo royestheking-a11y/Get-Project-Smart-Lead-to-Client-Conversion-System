@@ -17,17 +17,7 @@ import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-
-export const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-  { icon: Rocket, label: 'Campaigns', path: '/campaigns' },
-  { icon: Upload, label: 'Import Leads', path: '/leads/import' },
-  { icon: Users, label: 'Leads', path: '/leads' },
-  { icon: FileText, label: 'Templates', path: '/templates' },
-  { icon: Mail, label: 'Email Logs', path: '/logs' },
-  { icon: Clock, label: 'Follow-ups', path: '/followups' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
-];
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function AppSidebar() {
   const location = useLocation();
@@ -35,6 +25,18 @@ export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const { signOut } = useAuth();
   const { toast } = useToast();
+  const { t } = useLanguage();
+
+  const menuItems = [
+    { icon: LayoutDashboard, label: t('admin.dashboard'), path: '/dashboard' },
+    { icon: Rocket, label: t('admin.campaigns'), path: '/campaigns' },
+    { icon: Upload, label: t('admin.importLeads'), path: '/leads/import' },
+    { icon: Users, label: t('admin.leads'), path: '/leads' },
+    { icon: FileText, label: t('admin.templates'), path: '/templates' },
+    { icon: Mail, label: t('admin.emailLogs'), path: '/logs' },
+    { icon: Clock, label: t('admin.followups'), path: '/followups' },
+    { icon: Settings, label: t('admin.settings'), path: '/settings' },
+  ];
 
   const handleLogout = async () => {
     await signOut();
@@ -93,10 +95,10 @@ export function AppSidebar() {
               'w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10',
               collapsed && 'justify-center px-0'
             )}
-            title={collapsed ? 'Logout' : undefined}
+            title={collapsed ? t('admin.logout') : undefined}
           >
             <LogOut className="h-5 w-5 shrink-0" />
-            {!collapsed && <span>Logout</span>}
+            {!collapsed && <span>{t('admin.logout')}</span>}
           </Button>
 
           {/* Collapse Toggle */}

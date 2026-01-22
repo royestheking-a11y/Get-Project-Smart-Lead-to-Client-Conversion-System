@@ -17,6 +17,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { read, utils } from 'xlsx';
 import { RecentActivityTable } from '@/components/dashboard/RecentActivityTable';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface UploadedFile {
   name: string;
@@ -35,6 +36,7 @@ export default function ImportLeads() {
   const [columnMapping, setColumnMapping] = useState<Record<string, string>>({});
   const [importResult, setImportResult] = useState<any>(null);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
+  const { t } = useLanguage();
 
   // Get campaigns
   const { data: campaigns } = useQuery({
@@ -238,8 +240,8 @@ export default function ImportLeads() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Import Leads</h1>
-        <p className="text-muted-foreground mt-1">Upload your leads from CSV or Excel files</p>
+        <h1 className="text-2xl font-bold text-foreground">{t('admin.importLeads')}</h1>
+        <p className="text-muted-foreground mt-1">{t('upload.title')}</p>
       </div>
 
       {/* Campaign Selection - Prominent at top */}
@@ -249,8 +251,8 @@ export default function ImportLeads() {
             <Users className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-foreground">Select Campaign</h3>
-            <p className="text-sm text-muted-foreground">Choose which campaign to import leads into</p>
+            <h3 className="text-lg font-semibold text-foreground">{t('admin.import.selectCampaign')}</h3>
+            <p className="text-sm text-muted-foreground">{t('admin.import.chooseCampaign')}</p>
           </div>
         </div>
         <select
@@ -258,7 +260,7 @@ export default function ImportLeads() {
           onChange={(e) => setSelectedCampaignId(e.target.value)}
           className="w-full h-12 rounded-lg border-2 border-input bg-background px-4 text-base font-medium focus:border-primary focus:ring-2 focus:ring-primary/20"
         >
-          <option value="">Select campaign...</option>
+          <option value="">{t('admin.import.selectCampaign')}...</option>
           {campaigns?.sort((a, b) => {
             const dateA = new Date(a.createdAt || 0).getTime();
             const dateB = new Date(b.createdAt || 0).getTime();
@@ -281,7 +283,7 @@ export default function ImportLeads() {
         <div className="card-elevated p-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Upload className="h-5 w-5 text-primary" />
-            Upload New File
+            {t('upload.title')}
           </h3>
 
           {!file ? (
@@ -307,11 +309,11 @@ export default function ImportLeads() {
                   <Upload className="h-8 w-8 text-primary" />
                 </div>
                 <p className="text-foreground font-medium mb-1">
-                  Drag and drop your file here
+                  {t('upload.dragDrop')}
                 </p>
-                <p className="text-sm text-muted-foreground mb-4">or click to browse</p>
+                <p className="text-sm text-muted-foreground mb-4">{t('upload.or')} {t('upload.browseFile')}</p>
                 <Button variant="outline" asChild>
-                  <span>Browse Files</span>
+                  <span>{t('upload.browseFile')}</span>
                 </Button>
                 <p className="text-xs text-muted-foreground mt-4">
                   Supported formats: CSV, XLSX • Max 20MB
@@ -348,13 +350,13 @@ export default function ImportLeads() {
               {importStatus === 'mapping' && file && (
                 <div className="space-y-4 animate-fade-in">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Select Campaign</label>
+                    <label className="text-sm font-medium text-foreground">{t('admin.import.selectCampaign')}</label>
                     <select
                       value={selectedCampaignId}
                       onChange={(e) => setSelectedCampaignId(e.target.value)}
                       className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm"
                     >
-                      <option value="">Select campaign...</option>
+                      <option value="">{t('admin.import.selectCampaign')}...</option>
                       {campaigns?.map((campaign) => (
                         <option key={campaign._id || campaign.id} value={campaign._id || campaign.id}>
                           {campaign.name}
@@ -364,16 +366,16 @@ export default function ImportLeads() {
                   </div>
 
                   <p className="text-sm text-muted-foreground">
-                    Match the columns from your uploaded file to the required system fields below.
+                    {t('admin.import.matchColumns')}
                   </p>
 
                   <div className="grid gap-3">
                     {[
-                      { key: 'company_nameColumn', label: 'Company Name' },
-                      { key: 'emailColumn', label: 'Email Address *' },
-                      { key: 'websiteColumn', label: 'Website URL' },
-                      { key: 'locationColumn', label: 'Location' },
-                      { key: 'industryColumn', label: 'Industry' },
+                      { key: 'company_nameColumn', label: t('admin.import.field.companyName') },
+                      { key: 'emailColumn', label: t('admin.import.field.email') + ' *' },
+                      { key: 'websiteColumn', label: t('admin.import.field.website') },
+                      { key: 'locationColumn', label: t('admin.import.field.location') },
+                      { key: 'industryColumn', label: t('admin.import.field.industry') },
                     ].map((field) => (
                       <div key={field.key} className="flex items-center gap-4">
                         <label className="w-32 text-sm font-medium text-foreground">{field.label}</label>
@@ -382,7 +384,7 @@ export default function ImportLeads() {
                           onChange={(e) => setColumnMapping({ ...columnMapping, [field.key]: e.target.value })}
                           className="flex-1 h-10 rounded-lg border border-input bg-background px-3 text-sm"
                         >
-                          <option value="">Select column from file...</option>
+                          <option value="">{t('admin.import.selectColumn')}</option>
                           {file.columns?.map((col) => (
                             <option key={col} value={col}>{col}</option>
                           ))}
@@ -397,7 +399,7 @@ export default function ImportLeads() {
                     disabled={!selectedCampaignId || !columnMapping.emailColumn}
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Confirm Mapping & Import
+                    {t('admin.import.confirmMapping')}
                   </Button>
                 </div>
               )}
@@ -405,17 +407,16 @@ export default function ImportLeads() {
               {importStatus === 'processing' && (
                 <div className="p-6 rounded-lg bg-muted/50 text-center animate-fade-in">
                   <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-                  <p className="font-medium text-foreground">Processing file...</p>
-                  <p className="text-sm text-muted-foreground">Cleaning emails, removing duplicates...</p>
+                  <p className="font-medium text-foreground">{t('admin.import.processing')}</p>
+                  <p className="text-sm text-muted-foreground">{t('upload.cleaning')}</p>
                 </div>
               )}
 
               {importStatus === 'categorizing' && (
                 <div className="p-6 rounded-lg bg-muted/50 text-center animate-fade-in">
                   <Loader2 className="h-8 w-8 animate-spin text-purple-600 mx-auto mb-4" />
-                  <p className="font-medium text-foreground">Analyzing Leads...</p>
-                  <p className="text-sm text-muted-foreground">Checking websites, identifying value props, and assigning categories.</p>
-                  <p className="text-xs text-muted-foreground mt-2">This may take a minute...</p>
+                  <p className="font-medium text-foreground">{t('admin.import.analyzing')}</p>
+                  <p className="text-sm text-muted-foreground">{t('admin.import.analyzingDesc')}</p>
                 </div>
               )}
 
@@ -426,27 +427,27 @@ export default function ImportLeads() {
                       <CheckCircle className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground">Import & Analysis Complete!</h4>
-                      <p className="text-sm text-muted-foreground">Your leads have been imported, cleaned, and categorized. They are now <strong>READY</strong> for sending.</p>
+                      <h4 className="font-semibold text-foreground">{t('admin.import.analysisComplete')}</h4>
+                      <p className="text-sm text-muted-foreground">{t('admin.import.successDesc')}</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-4 gap-3 mb-4">
                     <div className="p-3 rounded-lg bg-background text-center">
                       <p className="text-xl font-bold text-foreground">{importResult.totalRows || 0}</p>
-                      <p className="text-xs text-muted-foreground">Total</p>
+                      <p className="text-xs text-muted-foreground">{t('upload.total')}</p>
                     </div>
                     <div className="p-3 rounded-lg bg-primary/10 text-center">
                       <p className="text-xl font-bold text-primary">{importResult.importedCount || 0}</p>
-                      <p className="text-xs text-muted-foreground">Imported</p>
+                      <p className="text-xs text-muted-foreground">{t('upload.imported')}</p>
                     </div>
                     <div className="p-3 rounded-lg bg-orange-500/10 text-center">
                       <p className="text-xl font-bold text-orange-600">{importResult.duplicateCount || 0}</p>
-                      <p className="text-xs text-muted-foreground">Duplicates</p>
+                      <p className="text-xs text-muted-foreground">{t('admin.import.duplicates')}</p>
                     </div>
                     <div className="p-3 rounded-lg bg-red-500/10 text-center">
                       <p className="text-xl font-bold text-red-600">{importResult.invalidCount || 0}</p>
-                      <p className="text-xs text-muted-foreground">Invalid</p>
+                      <p className="text-xs text-muted-foreground">{t('admin.import.invalid')}</p>
                     </div>
                   </div>
 
@@ -488,7 +489,7 @@ export default function ImportLeads() {
 
                   <div className="flex gap-2">
                     <Button asChild className="flex-1">
-                      <Link to="/leads">View Categorized Leads</Link>
+                      <Link to="/leads">{t('admin.import.viewCategorized')}</Link>
                     </Button>
                     <Button variant="outline" onClick={() => {
                       setFile(null);
@@ -497,7 +498,7 @@ export default function ImportLeads() {
                       setColumnMapping({});
                       if (fileInputRef.current) fileInputRef.current.value = '';
                     }}>
-                      Import More
+                      {t('admin.import.importMore')}
                     </Button>
                   </div>
                 </div>
@@ -544,9 +545,11 @@ export default function ImportLeads() {
       </div>
 
       {/* Import Summary footer */}
-      {campaigns && campaigns.length > 0 && (
-        <RecentActivityTable />
-      )}
-    </div>
+      {
+        campaigns && campaigns.length > 0 && (
+          <RecentActivityTable />
+        )
+      }
+    </div >
   );
 }

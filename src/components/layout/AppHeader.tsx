@@ -9,9 +9,22 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { User, LogOut, ChevronDown, Settings, Zap, Menu } from 'lucide-react';
+import {
+  User,
+  LogOut,
+  ChevronDown,
+  Settings,
+  Menu,
+  LayoutDashboard,
+  Rocket,
+  Upload,
+  Users,
+  FileText,
+  Mail,
+  Clock,
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { menuItems } from './AppSidebar';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
@@ -21,6 +34,7 @@ export function AppHeader() {
   const location = useLocation();
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
 
   const handleLogout = async () => {
     await signOut();
@@ -30,6 +44,17 @@ export function AppHeader() {
     });
     navigate('/');
   };
+
+  const menuItems = [
+    { label: t('admin.dashboard'), icon: LayoutDashboard, path: '/dashboard' },
+    { label: t('admin.campaigns'), icon: Rocket, path: '/campaigns' },
+    { label: t('admin.importLeads'), icon: Upload, path: '/import-leads' },
+    { label: t('admin.leads'), icon: Users, path: '/leads' },
+    { label: t('admin.templates'), icon: FileText, path: '/templates' },
+    { label: t('admin.emailLogs'), icon: Mail, path: '/email-logs' },
+    { label: t('admin.followups'), icon: Clock, path: '/followups' },
+    { label: t('admin.settings'), icon: Settings, path: '/settings' },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 h-16 bg-card/80 backdrop-blur-xl border-b border-border/50 z-50">
@@ -86,7 +111,7 @@ export function AppHeader() {
                       className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                     >
                       <LogOut className="h-5 w-5" />
-                      <span>Logout</span>
+                      <span>{t('admin.logout')}</span>
                     </Button>
                   </div>
                 </div>
@@ -123,7 +148,7 @@ export function AppHeader() {
                 <DropdownMenuItem asChild>
                   <Link to="/settings" className="flex items-center gap-2 cursor-pointer">
                     <Settings className="h-4 w-4" />
-                    <span>Settings</span>
+                    <span>{t('admin.settings')}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -132,13 +157,13 @@ export function AppHeader() {
                   className="flex items-center gap-2 text-destructive focus:text-destructive cursor-pointer"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span>Logout</span>
+                  <span>{t('admin.logout')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Link to="/login">
-              <Button className="shadow-lg shadow-primary/25">Login</Button>
+              <Button className="shadow-lg shadow-primary/25">{t('nav.login')}</Button>
             </Link>
           )}
         </div>

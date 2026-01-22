@@ -16,18 +16,13 @@ import { campaignsApi, sendApi } from '@/lib/backend-api';
 import { CreateCampaignDialog } from '@/components/campaigns/CreateCampaignDialog';
 import { EditCampaignDialog } from '@/components/campaigns/EditCampaignDialog';
 import { useToast } from '@/hooks/use-toast';
-
-const statusConfig: Record<string, { label: string; className: string }> = {
-  active: { label: 'Active', className: 'status-success' },
-  paused: { label: 'Paused', className: 'status-warning' },
-  draft: { label: 'Draft', className: 'bg-muted text-foreground' },
-  completed: { label: 'Completed', className: 'bg-blue-100 text-blue-700' },
-};
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Campaigns() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [editingCampaign, setEditingCampaign] = useState<{ id: string, name: string, dailyLimit: number } | null>(null);
+  const { t } = useLanguage();
 
   const { data: campaigns, isLoading } = useQuery({
     queryKey: ['campaigns'],
@@ -77,12 +72,25 @@ export default function Campaigns() {
     );
   }
 
+  const getStatusLabel = (status: string) => {
+    const key = `admin.campaigns.status.${status.toLowerCase()}`;
+    // Fallback to capitalizing first letter if key not found (though it should be)
+    return t(key).includes('admin.') ? status.charAt(0).toUpperCase() + status.slice(1) : t(key);
+  };
+
+  const statusColors: Record<string, string> = {
+    active: 'status-success',
+    paused: 'status-warning',
+    draft: 'bg-muted text-foreground',
+    completed: 'bg-blue-100 text-blue-700',
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Campaigns</h1>
-          <p className="text-muted-foreground mt-1">Manage your outreach campaigns</p>
+          <h1 className="text-2xl font-bold text-foreground">{t('admin.campaigns.title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('admin.campaigns.subtitle')}</p>
         </div>
         <CreateCampaignDialog />
       </div>
@@ -91,9 +99,9 @@ export default function Campaigns() {
         {campaigns?.length === 0 ? (
           <div className="text-center py-12 bg-muted/30 rounded-lg border border-dashed border-muted-foreground/25">
             <Rocket className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
-            <h3 className="text-lg font-medium text-foreground">No campaigns yet</h3>
+            <h3 className="text-lg font-medium text-foreground">{t('admin.campaigns.noCampaigns')}</h3>
             <p className="text-muted-foreground mt-1 max-w-sm mx-auto">
-              Create your first campaign to start reaching out to potential leads.
+              {t('admin.campaigns.createFirst')}
             </p>
           </div>
         ) : (
@@ -107,18 +115,18 @@ export default function Campaigns() {
                   <div>
                     <h3 className="text-lg font-semibold text-foreground">{campaign.name}</h3>
                     <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                      <span>{campaign.leadCount || 0} leads</span>
+                      <span>{campaign.leadCount || 0} {t('admin.campaigns.leads')}</span>
                       <span>•</span>
-                      <span>{campaign.dailyLimit || campaign.daily_limit} emails/day</span>
+                      <span>{campaign.dailyLimit || campaign.daily_limit} {t('admin.campaigns.emailsPerDay')}</span>
                       <span>•</span>
-                      <span>Created {formatDistanceToNow(new Date(campaign.createdAt || campaign.created_at), { addSuffix: true })}</span>
+                      <span>{t('admin.campaigns.created')} {formatDistanceToNow(new Date(campaign.createdAt || campaign.created_at), { addSuffix: true })}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className={cn('status-badge', statusConfig[campaign.status || 'paused']?.className || statusConfig.paused.className)}>
-                    {statusConfig[campaign.status || 'paused']?.label || campaign.status || 'Paused'}
+                  <span className={cn('status-badge', statusColors[campaign.status || 'paused'] || statusColors.paused)}>
+                    {getStatusLabel(campaign.status || 'paused')}
                   </span>
 
                   {(campaign.status === 'active' || campaign.status === 'paused') && (
@@ -154,11 +162,11 @@ export default function Campaigns() {
                         name: campaign.name,
                         dailyLimit: campaign.dailyLimit || campaign.daily_limit || 50
                       })}>
-                        Edit
+                        {t('admin.campaigns.edit')}
                       </DropdownMenuItem>
-                      <DropdownMenuItem>View Leads</DropdownMenuItem>
+                      <DropdownMenuItem>{t('admin.campaigns.viewLeads')}</DropdownMenuItem>
                       <DropdownMenuItem className="text-destructive" onClick={() => deleteMutation.mutate(campaign._id || campaign.id)}>
-                        Delete
+                        {t('admin.campaigns.delete')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -168,7 +176,7 @@ export default function Campaigns() {
               {/* Progress Bar */}
               <div className="mt-6 space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Sent Today</span>
+                  <span className="text-muted-foreground">{t('admin.campaigns.sentToday')}</span>
                   <span className="font-medium text-foreground">
                     {campaign.todayCount || 0} / {campaign.dailyLimit || campaign.daily_limit}
                   </span>
@@ -185,15 +193,15 @@ export default function Campaigns() {
 
               <div className="mt-6 grid grid-cols-3 gap-4">
                 <div className="p-3 rounded-lg bg-secondary/50 border border-border">
-                  <div className="text-sm text-muted-foreground">Total Sent</div>
+                  <div className="text-sm text-muted-foreground">{t('admin.campaigns.totalSent')}</div>
                   <div className="text-xl font-bold text-foreground mt-1">{campaign.sentCount || 0}</div>
                 </div>
                 <div className="p-3 rounded-lg bg-secondary/50 border border-border">
-                  <div className="text-sm text-muted-foreground">Total Leads</div>
+                  <div className="text-sm text-muted-foreground">{t('admin.campaigns.totalLeads')}</div>
                   <div className="text-xl font-bold text-foreground mt-1">{campaign.leadCount || 0}</div>
                 </div>
                 <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-                  <div className="text-sm text-red-600/80">Failed</div>
+                  <div className="text-sm text-red-600/80">{t('admin.campaigns.failed')}</div>
                   <div className="text-xl font-bold text-red-600 mt-1">{campaign.failedCount || 0}</div>
                 </div>
               </div>

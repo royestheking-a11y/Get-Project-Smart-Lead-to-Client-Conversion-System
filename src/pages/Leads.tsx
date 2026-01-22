@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Lead {
   _id?: string;
@@ -32,39 +33,41 @@ interface Lead {
   lastContactedAt?: string | Date | null;
 }
 
-// Removed mock data - using real API data
-
-const statusConfig: Record<string, { label: string; className: string }> = {
-  IMPORTED: { label: 'Imported', className: 'bg-muted text-muted-foreground' },
-  READY: { label: 'Ready', className: 'status-info' },
-  SENT: { label: 'Sent', className: 'bg-blue-100 text-blue-800' },
-  REPLIED: { label: 'Replied', className: 'status-success' },
-  BOUNCED: { label: 'Bounced', className: 'status-warning' },
-  FAILED: { label: 'Failed', className: 'status-error' },
-  FOLLOWUP_1_SENT: { label: 'Follow-up 1', className: 'bg-purple-100 text-purple-800' },
-  FOLLOWUP_2_SENT: { label: 'Follow-up 2', className: 'bg-indigo-100 text-indigo-800' },
-  WON: { label: 'Won', className: 'bg-green-100 text-green-800' },
-  LOST: { label: 'Lost', className: 'bg-red-100 text-red-800' },
-  DONE: { label: 'Done', className: 'bg-gray-100 text-gray-800' },
-  DO_NOT_CONTACT: { label: 'Do Not Contact', className: 'bg-orange-100 text-orange-800' },
-};
-
-const categoryLabels: Record<string, string> = {
-  NO_WEBSITE: 'No Website',
-  HAS_WEBSITE: 'Has Website',
-  WEAK_WEBSITE: 'Weak Website',
-  SEO_WEAK: 'SEO Weak',
-  ECOMMERCE: 'E-commerce',
-};
+// StatusConfig and categoryLabels are now inside the component to access t()
 
 export default function Leads() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
+
+  // Status configuration with translations
+  const statusConfig: Record<string, { label: string; className: string }> = {
+    IMPORTED: { label: t('admin.leads.status.imported'), className: 'bg-muted text-muted-foreground' },
+    READY: { label: t('admin.leads.status.ready'), className: 'status-info' },
+    SENT: { label: t('admin.leads.status.sent'), className: 'bg-blue-100 text-blue-800' },
+    REPLIED: { label: t('admin.leads.status.replied'), className: 'status-success' },
+    BOUNCED: { label: t('admin.leads.status.bounced'), className: 'status-warning' },
+    FAILED: { label: t('admin.leads.status.failed'), className: 'status-error' },
+    FOLLOWUP_1_SENT: { label: t('admin.leads.status.followup1'), className: 'bg-purple-100 text-purple-800' },
+    FOLLOWUP_2_SENT: { label: t('admin.leads.status.followup2'), className: 'bg-indigo-100 text-indigo-800' },
+    WON: { label: t('admin.leads.status.won'), className: 'bg-green-100 text-green-800' },
+    LOST: { label: t('admin.leads.status.lost'), className: 'bg-red-100 text-red-800' },
+    DONE: { label: t('admin.leads.status.done'), className: 'bg-gray-100 text-gray-800' },
+    DO_NOT_CONTACT: { label: t('admin.leads.status.doNotContact'), className: 'bg-orange-100 text-orange-800' },
+  };
+
+  const categoryLabels: Record<string, string> = {
+    NO_WEBSITE: t('admin.leads.category.noWebsite'),
+    HAS_WEBSITE: t('admin.leads.category.hasWebsite'),
+    WEAK_WEBSITE: t('admin.leads.category.weakWebsite'),
+    SEO_WEAK: t('admin.leads.category.seoWeak'),
+    ECOMMERCE: t('admin.leads.category.ecommerce'),
+  };
 
   // Get campaigns
   const { data: campaigns } = useQuery({
@@ -147,11 +150,11 @@ export default function Leads() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Leads</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t('admin.leads.title')}</h1>
           <p className="text-muted-foreground mt-1">
-            {leadsData?.total || 0} total leads
+            {t('admin.leads.subtitle', { total: leadsData?.total || 0 })}
             {selectedCampaignId && campaigns && (
-              <span> in {campaigns.find(c => (c._id || c.id) === selectedCampaignId)?.name}</span>
+              <span> {t('admin.leads.in')} {campaigns.find(c => (c._id || c.id) === selectedCampaignId)?.name}</span>
             )}
           </p>
         </div>
@@ -165,11 +168,11 @@ export default function Leads() {
               {categorizeMutation.isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
               ) : null}
-              Categorize Leads
+              {t('admin.leads.categorize')}
             </Button>
           )}
           <Button asChild>
-            <a href="/leads/import">Import Leads</a>
+            <a href="/leads/import">{t('admin.importLeads')}</a>
           </Button>
         </div>
       </div>
@@ -177,13 +180,13 @@ export default function Leads() {
       {/* Campaign Selector */}
       {campaigns && campaigns.length > 0 && (
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">Campaign:</label>
+          <label className="text-sm font-medium">{t('admin.leads.campaign')}</label>
           <select
             value={selectedCampaignId}
             onChange={(e) => setSelectedCampaignId(e.target.value)}
             className="h-9 rounded-lg border border-input bg-background px-3 text-sm"
           >
-            <option value="">All Campaigns</option>
+            <option value="">{t('admin.leads.allCampaigns')}</option>
             {campaigns.map((campaign) => (
               <option key={campaign._id || campaign.id} value={campaign._id || campaign.id}>
                 {campaign.name}
@@ -198,7 +201,7 @@ export default function Leads() {
         <div className="relative flex-1 min-w-[240px] max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search company or email..."
+            placeholder={t('admin.leads.search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -209,17 +212,17 @@ export default function Leads() {
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="IMPORTED">Imported</SelectItem>
-            <SelectItem value="READY">Ready</SelectItem>
-            <SelectItem value="SENT">Sent</SelectItem>
-            <SelectItem value="REPLIED">Replied</SelectItem>
-            <SelectItem value="BOUNCED">Bounced</SelectItem>
-            <SelectItem value="FAILED">Failed</SelectItem>
-            <SelectItem value="WON">Won</SelectItem>
-            <SelectItem value="LOST">Lost</SelectItem>
-            <SelectItem value="DONE">Done</SelectItem>
-            <SelectItem value="DO_NOT_CONTACT">Do Not Contact</SelectItem>
+            <SelectItem value="all">{t('admin.leads.allStatus')}</SelectItem>
+            <SelectItem value="IMPORTED">{statusConfig.IMPORTED.label}</SelectItem>
+            <SelectItem value="READY">{statusConfig.READY.label}</SelectItem>
+            <SelectItem value="SENT">{statusConfig.SENT.label}</SelectItem>
+            <SelectItem value="REPLIED">{statusConfig.REPLIED.label}</SelectItem>
+            <SelectItem value="BOUNCED">{statusConfig.BOUNCED.label}</SelectItem>
+            <SelectItem value="FAILED">{statusConfig.FAILED.label}</SelectItem>
+            <SelectItem value="WON">{statusConfig.WON.label}</SelectItem>
+            <SelectItem value="LOST">{statusConfig.LOST.label}</SelectItem>
+            <SelectItem value="DONE">{statusConfig.DONE.label}</SelectItem>
+            <SelectItem value="DO_NOT_CONTACT">{statusConfig.DO_NOT_CONTACT.label}</SelectItem>
           </SelectContent>
         </Select>
         <Select value={categoryFilter} onValueChange={setCategoryFilter}>
@@ -227,12 +230,12 @@ export default function Leads() {
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
-            <SelectItem value="NO_WEBSITE">No Website</SelectItem>
-            <SelectItem value="HAS_WEBSITE">Has Website</SelectItem>
-            <SelectItem value="WEAK_WEBSITE">Weak Website</SelectItem>
-            <SelectItem value="SEO_WEAK">SEO Weak</SelectItem>
-            <SelectItem value="ECOMMERCE">E-commerce</SelectItem>
+            <SelectItem value="all">{t('admin.leads.allCategories')}</SelectItem>
+            <SelectItem value="NO_WEBSITE">{categoryLabels.NO_WEBSITE}</SelectItem>
+            <SelectItem value="HAS_WEBSITE">{categoryLabels.HAS_WEBSITE}</SelectItem>
+            <SelectItem value="WEAK_WEBSITE">{categoryLabels.WEAK_WEBSITE}</SelectItem>
+            <SelectItem value="SEO_WEAK">{categoryLabels.SEO_WEAK}</SelectItem>
+            <SelectItem value="ECOMMERCE">{categoryLabels.ECOMMERCE}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -241,7 +244,7 @@ export default function Leads() {
       {selectedLeads.length > 0 && (
         <div className="flex items-center gap-3 p-3 rounded-lg bg-primary-light border border-primary/20 animate-fade-in">
           <span className="text-sm font-medium text-primary">
-            {selectedLeads.length} selected
+            {t('admin.leads.selected', { count: selectedLeads.length })}
           </span>
           <Button
             variant="outline"
@@ -253,10 +256,10 @@ export default function Leads() {
             disabled={doNotContactMutation.isPending}
           >
             <Ban className="h-4 w-4" />
-            Do Not Contact
+            {t('admin.leads.markDoNotContact')}
           </Button>
           <Button variant="outline" size="sm" className="text-destructive">
-            Delete
+            {t('admin.leads.delete')}
           </Button>
         </div>
       )}
@@ -269,9 +272,9 @@ export default function Leads() {
           </div>
         ) : filteredLeads.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">No leads found</p>
+            <p className="text-muted-foreground">{t('admin.leads.noLeads')}</p>
             {!selectedCampaignId && (
-              <p className="text-sm text-muted-foreground mt-2">Please select a campaign</p>
+              <p className="text-sm text-muted-foreground mt-2">{t('admin.leads.noLeadsDesc')}</p>
             )}
           </div>
         ) : (
@@ -285,12 +288,12 @@ export default function Leads() {
                       onCheckedChange={toggleSelectAll}
                     />
                   </th>
-                  <th>Company Name</th>
-                  <th>Email</th>
+                  <th>{t('admin.leads.company')}</th>
+                  <th>{t('admin.leads.email')}</th>
                   <th>Website</th>
-                  <th>Category</th>
-                  <th>Status</th>
-                  <th>Last Contacted</th>
+                  <th>{t('admin.leads.category')}</th>
+                  <th>{t('admin.leads.status')}</th>
+                  <th>{t('admin.leads.lastContacted')}</th>
                   <th className="w-12"></th>
                 </tr>
               </thead>

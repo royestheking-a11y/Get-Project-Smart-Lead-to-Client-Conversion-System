@@ -3,15 +3,17 @@ import { KPICard } from '@/components/dashboard/KPICard';
 import { CampaignStatusPanel } from '@/components/dashboard/CampaignStatusPanel';
 import { RecentActivityTable } from '@/components/dashboard/RecentActivityTable';
 import { Users, Send, Mail, MessageSquare, TrendingUp, ArrowUpRight, Loader2 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { campaignsApi, sendApi } from '@/lib/backend-api';
 import { useMemo } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   // Get all campaigns
   const { data: campaigns } = useQuery({
@@ -30,50 +32,52 @@ export default function Dashboard() {
 
   const kpiData = useMemo(() => [
     {
-      title: 'Leads Imported',
+      title: t('dashboard.leadsImported'),
       value: stats?.leadsImported?.toLocaleString() || '0',
       icon: Users
     },
     {
-      title: 'Ready to Send',
+      title: t('dashboard.readyToSend'),
       value: stats?.readyCount?.toLocaleString() || '0',
       icon: Send
     },
     {
-      title: 'Sent Today',
+      title: t('dashboard.sentToday'),
       value: stats?.sentToday?.toLocaleString() || '0',
       icon: Mail
     },
     {
-      title: 'Replies',
+      title: t('dashboard.replies'),
       value: stats?.repliedCount?.toLocaleString() || '0',
       icon: MessageSquare
     },
     {
-      title: 'Failed / Bounced',
+      title: t('admin.dashboard.failedBounced'),
       value: stats?.failedCount?.toLocaleString() || '0',
-      icon: TrendingUp // Or AlertCircle if imported, but TrendingUp is available
+      icon: TrendingUp
     },
-  ], [stats]);
+  ], [stats, t]);
 
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Welcome back, {user?.name?.split(' ')[0] || 'User'}! Here's your outreach overview.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t('admin.dashboard')}</h1>
+          <p className="text-muted-foreground mt-1">
+            {t('admin.dashboard.welcome').replace('{name}', user?.name?.split(' ')[0] || 'User')}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" asChild>
             <Link to="/leads/import" className="flex items-center gap-2">
-              Import Leads
+              {t('admin.importLeads')}
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </Button>
           <Button asChild className="shadow-lg shadow-primary/25">
             <Link to="/campaigns" className="flex items-center gap-2">
-              New Campaign
+              {t('admin.dashboard.newCampaign')}
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </Button>
@@ -89,12 +93,12 @@ export default function Dashboard() {
                 <TrendingUp className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-white/80 text-sm">Campaign Performance</p>
-                <p className="font-semibold">Your reply rate is 15% higher than last week!</p>
+                <p className="text-white/80 text-sm">{t('admin.dashboard.campaignPerformance')}</p>
+                <p className="font-semibold">{t('admin.dashboard.replyRateMsg')}</p>
               </div>
             </div>
             <Button variant="secondary" size="sm" className="bg-white text-primary hover:bg-white/90" asChild>
-              <Link to="/campaigns">View Details</Link>
+              <Link to="/campaigns">{t('admin.dashboard.viewDetails')}</Link>
             </Button>
           </div>
         </CardContent>

@@ -87,5 +87,5 @@ A powerful, full-stack email outreach automation platform designed to turn cold 
     └── pages/       # Main application views
 ```
 
-## 📝 License
-ISC
+## 📝 License 
+Aurangzeb Sunny
