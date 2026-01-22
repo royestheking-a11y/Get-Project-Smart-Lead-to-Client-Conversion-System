@@ -82,7 +82,7 @@ router.post('/start', async (req, res) => {
 
     for (const lead of leads) {
       const templateId = templateMap[lead.category] || templates[0]?._id;
-      
+
       if (!templateId) {
         continue; // Skip if no template
       }
@@ -214,7 +214,7 @@ router.get('/stats', async (req, res) => {
         status: { $in: ['SENT', 'FOLLOWUP_1_SENT', 'FOLLOWUP_2_SENT'] }
       }),
       Lead.countDocuments({ campaignId, status: 'REPLIED' }),
-      Lead.countDocuments({ campaignId, status: 'FAILED' }),
+      EmailLog.countDocuments({ campaignId, status: { $in: ['failed', 'bounced'] } }),
       Job.countDocuments({ campaignId, status: 'PENDING' }),
       Job.countDocuments({ campaignId, status: 'RUNNING' })
     ]);

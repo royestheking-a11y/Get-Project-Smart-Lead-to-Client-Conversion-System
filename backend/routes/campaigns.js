@@ -77,9 +77,10 @@ router.get('/', async (req, res) => {
           status: 'sent'
         });
 
-        const failedCount = await Lead.countDocuments({
+
+        const failedCount = await EmailLog.countDocuments({
           campaignId: campaign._id,
-          status: { $in: ['FAILED', 'BOUNCED'] }
+          status: { $in: ['failed', 'bounced'] }
         });
 
         const repliedCount = await Lead.countDocuments({
