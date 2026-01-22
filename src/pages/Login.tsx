@@ -171,18 +171,7 @@ export default function Login() {
               </Button>
             </form>
 
-            <div className="mt-6 pt-6 border-t border-border">
-              <p className="text-center text-sm text-muted-foreground">
-                {t('login.demoMode')}
-              </p>
-            </div>
 
-            <p className="mt-6 text-center text-sm text-muted-foreground">
-              {t('login.noAccount')}{' '}
-              <span className="text-muted-foreground font-medium">
-                (Registration is currently closed)
-              </span>
-            </p>
           </div>
         </div>
       </div>

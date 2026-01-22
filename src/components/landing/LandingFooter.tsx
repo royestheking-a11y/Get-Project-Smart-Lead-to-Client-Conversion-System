@@ -84,12 +84,12 @@ const LandingFooter = () => {
               <ul className="space-y-4">
                 {footerLinks.product.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-muted-foreground hover:text-primary transition-colors block text-sm font-medium"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -100,12 +100,12 @@ const LandingFooter = () => {
               <ul className="space-y-4">
                 {footerLinks.company.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-muted-foreground hover:text-primary transition-colors block text-sm font-medium"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -116,12 +116,12 @@ const LandingFooter = () => {
               <ul className="space-y-4">
                 {footerLinks.legal.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-muted-foreground hover:text-primary transition-colors block text-sm font-medium"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
