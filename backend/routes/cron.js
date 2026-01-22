@@ -120,6 +120,7 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
         await EmailLog.create({
           campaignId: campaign._id,
           leadId: lead._id,
+          recipient: lead.email,
           type: emailType,
           subject,
           body,

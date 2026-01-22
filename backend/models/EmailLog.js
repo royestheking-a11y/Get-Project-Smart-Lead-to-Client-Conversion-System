@@ -11,6 +11,10 @@ const emailLogSchema = new mongoose.Schema({
     ref: 'Lead',
     required: true
   },
+  recipient: {
+    type: String,
+    required: true
+  },
   type: {
     type: String,
     enum: ['initial', 'followup1', 'followup2'],
