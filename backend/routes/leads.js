@@ -122,7 +122,8 @@ router.post('/import', upload.single('file'), async (req, res) => {
         if (errors.length < 5) {
           // Check if the raw value was actually undefined (wrong column mapping)
           if (rawEmail === undefined) {
-            errors.push(`Row ${i + 2}: Column "${emailColumn}" not found or empty. Check your Column Mapping.`);
+            const availableColumns = Object.keys(row).join(', ');
+            errors.push(`Row ${i + 2}: Column "${emailColumn}" not found. Found columns: [${availableColumns}]`);
           } else {
             errors.push(`Row ${i + 2}: Empty value in column "${emailColumn}"`);
           }
