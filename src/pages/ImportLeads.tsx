@@ -111,7 +111,7 @@ export default function ImportLeads() {
 
     // Priority lists for mapping
     const emailKeywords = ['email address', 'e-mail address', 'email', 'e-mail', 'mail', 'email 1', 'primary email', 'work email', 'office email', 'contact email'];
-    const companyKeywords = ['company name', 'company', 'organization', 'business name', 'business'];
+    const companyKeywords = ['company name', 'company', 'organization', 'business name', 'business', 'name', 'title'];
     const websiteKeywords = ['website', 'web', 'url', 'domain', 'company website', 'site'];
     const locationKeywords = ['location', 'city', 'address', 'country', 'region', 'state'];
     const industryKeywords = ['industry', 'sector', 'niche', 'category', 'vertical'];
