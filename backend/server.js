@@ -13,6 +13,7 @@ import leadRoutes from './routes/leads.js';
 import sendRoutes from './routes/send.js';
 import cronRoutes from './routes/cron.js';
 import emailLogsRoutes from './routes/emailLogs.js';
+import settingsRoutes from './routes/settings.js';
 
 // Load environment variables
 import { fileURLToPath } from 'url';
@@ -51,6 +52,7 @@ app.use('/api/leads', leadRoutes);
 app.use('/api/send', sendRoutes);
 app.use('/api/cron', cronRoutes);
 app.use('/api/email-logs', emailLogsRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // 404 handler
 app.use((req, res) => {
