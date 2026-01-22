@@ -433,6 +433,26 @@ export default function ImportLeads() {
                     </div>
                   )}
 
+                  {importResult.errors && importResult.errors.length > 0 && (
+                    <div className="mb-4 rounded-lg bg-destructive/10 border border-destructive/20 p-4">
+                      <h5 className="font-semibold text-destructive flex items-center gap-2 mb-2">
+                        <X className="h-4 w-4" />
+                        Why were leads skipped?
+                      </h5>
+                      <ul className="list-disc list-inside text-sm text-destructive/90 space-y-1">
+                        {importResult.errors.map((err: string, i: number) => (
+                          <li key={i}>{err}</li>
+                        ))}
+                        {importResult.invalidCount > importResult.errors.length && (
+                          <li className="italic text-xs mt-2">...and {importResult.invalidCount - importResult.errors.length} more similar errors.</li>
+                        )}
+                      </ul>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Make sure your CSV has a column header that matches your selection, and the emails are real email addresses.
+                      </p>
+                    </div>
+                  )}
+
                   <div className="p-4 rounded-lg bg-background border border-border mb-4">
                     <h5 className="font-medium text-sm mb-2">Next Steps:</h5>
                     <ol className="list-decimal list-inside text-sm text-muted-foreground space-y-1">

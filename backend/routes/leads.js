@@ -109,12 +109,27 @@ router.post('/import', upload.single('file'), async (req, res) => {
     const existingLeads = await Lead.find({ campaignId }).select('email');
     const existingEmails = new Set(existingLeads.map(l => l.email.toLowerCase()));
 
-    for (const row of rows) {
-      const email = normalizeEmail(row[emailColumn]);
+    const errors = []; // Store specific validation errors
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const rawEmail = row[emailColumn];
+      const email = normalizeEmail(rawEmail);
 
       // Skip if email is invalid
-      if (!email || !isValidEmail(email)) {
+      if (!email) {
         invalidRows.push(row);
+        if (errors.length < 5) {
+          errors.push(`Row ${i + 2}: Missing or empty email in column "${emailColumn}"`);
+        }
+        continue;
+      }
+
+      if (!isValidEmail(email)) {
+        invalidRows.push(row);
+        if (errors.length < 5) {
+          errors.push(`Row ${i + 2}: Invalid email format "${rawEmail}"`);
+        }
         continue;
       }
 
@@ -154,7 +169,8 @@ router.post('/import', upload.single('file'), async (req, res) => {
       totalRows: rows.length,
       importedCount: processedLeads.length,
       invalidCount: invalidRows.length,
-      duplicateCount
+      duplicateCount,
+      errors // Return the specific errors
     });
   } catch (error) {
     console.error('Import leads error:', error);
