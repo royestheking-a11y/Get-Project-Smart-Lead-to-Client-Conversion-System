@@ -1,0 +1,583 @@
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+
+type Language = 'en' | 'bn';
+
+interface LanguageContextType {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string) => string;
+}
+
+const translations = {
+  en: {
+    // Navbar
+    'nav.features': 'Features',
+    'nav.howItWorks': 'How it works',
+    'nav.pricing': 'Pricing',
+    'nav.free': 'Free',
+    'nav.login': 'Login',
+    'nav.getStarted': 'Get Started',
+    
+    // Hero Section
+    'hero.badge': 'Free Lead Automation Tool',
+    'hero.title1': 'Upload your lead file.',
+    'hero.title2': "We'll prepare your outreach list.",
+    'hero.subtitle': 'Import CSV/XLSX, auto-clean emails, detect website/no-website, and get a ready-to-send lead list.',
+    'hero.noCreditCard': 'No credit card required',
+    'hero.fileLimit': '20MB file limit',
+    'hero.csvSupport': 'CSV & XLSX support',
+    
+    'hero.title3': 'Find Clients Automatically.',
+    'hero.title4': 'Send 50–70 Smart Emails Daily.',
+    'hero.subtitle2': 'Import leads from Excel/Sheets, auto-categorize companies, send personalized outreach, and track replies — all from one dashboard.',
+    
+    'hero.autoImport': 'Auto Import',
+    'hero.csvExcel': 'CSV & Excel files',
+    'hero.smartSending': 'Smart Sending',
+    'hero.rateLimited': 'Rate-limited',
+    'hero.trackResults': 'Track Results',
+    'hero.realTimeStats': 'Real-time stats',
+    
+    'hero.noPaidTools': 'No paid tools needed',
+    'hero.freefirst': 'Free-first',
+    'hero.builtFor': 'Built for agencies & freelancers',
+    'hero.watchDemo': 'Watch Demo',
+    
+    // Upload Card
+    'upload.title': 'Upload Lead File',
+    'upload.dragDrop': 'Drag & drop your file here',
+    'upload.or': 'or',
+    'upload.browseFile': 'Browse File',
+    'upload.maxSize': 'Max 20MB • CSV/XLSX • Required: company_name, email',
+    'upload.dailyLimit': 'Daily send limit',
+    'upload.emailsPerDay': 'emails/day',
+    'upload.autoCategories': 'Auto categorize (No website / Has website)',
+    'upload.uploadProcess': 'Upload & Process',
+    'upload.processing': 'Processing file...',
+    'upload.cleaning': 'Cleaning emails, removing duplicates...',
+    'upload.complete': '% complete',
+    'upload.success': 'File processed!',
+    'upload.successDesc': 'Your leads are ready. Login to view your dashboard.',
+    'upload.total': 'Total',
+    'upload.imported': 'Imported',
+    'upload.skipped': 'Skipped',
+    'upload.goToDashboard': 'Go to Dashboard',
+    
+    // Social Proof
+    'social.autoOutreach': 'Auto outreach engine',
+    'social.queueFollowups': 'Queue + follow-ups',
+    'social.excelImport': 'Excel/CSV import',
+    'social.trackingDashboard': 'Tracking dashboard',
+    
+    // How It Works
+    'how.title': 'How It Works',
+    'how.subtitle': 'Get started in 3 simple steps',
+    'how.step1.title': 'Import Leads',
+    'how.step1.desc': 'Upload your CSV or XLSX file with leads. We auto-clean emails and remove duplicates.',
+    'how.step2.title': 'Auto Categorize',
+    'how.step2.desc': 'We analyze each lead and categorize them: No website, Weak website, SEO issues, or E-commerce.',
+    'how.step3.title': 'Send & Track',
+    'how.step3.desc': 'Launch campaigns with rate-limited sending. Track opens, replies, and manage follow-ups.',
+    
+    // Features
+    'features.title': 'Powerful Features',
+    'features.subtitle': 'Everything you need to automate your outreach',
+    'features.categorization.title': 'Smart Categorization',
+    'features.categorization.desc': 'Auto-detect website status and categorize leads for targeted outreach.',
+    'features.templates.title': 'Template Manager',
+    'features.templates.desc': 'Create dynamic email templates with personalized variables.',
+    'features.rateLimit.title': 'Rate-Limited Sending',
+    'features.rateLimit.desc': 'Anti-spam protection with daily limits to keep your domain safe.',
+    'features.followups.title': 'Auto Follow-ups',
+    'features.followups.desc': 'Automated follow-up sequences after 3 and 7 days of no reply.',
+    'features.tracking.title': 'Pipeline Tracking',
+    'features.tracking.desc': 'Track lead status from import to reply with detailed logs.',
+    'features.exclusion.title': 'Lead Exclusion',
+    'features.exclusion.desc': 'Mark leads as "Do Not Contact" to prevent unwanted emails.',
+    
+    // Built For
+    'builtFor.title': 'Built For',
+    'builtFor.subtitle': 'Perfect for professionals who need consistent outreach',
+    'builtFor.agencies.title': 'Agencies',
+    'builtFor.agencies.desc': 'Consistent client pipeline without manual outreach effort.',
+    'builtFor.freelancers.title': 'Freelancers',
+    'builtFor.freelancers.desc': 'Find new clients while you focus on delivering great work.',
+    'builtFor.startups.title': 'Sales Teams',
+    'builtFor.startups.desc': 'Scale your outreach with automated, personalized emails.',
+    
+    // FAQ
+    'faq.title': 'Frequently Asked Questions',
+    'faq.subtitle': 'Got questions? We have answers.',
+    'faq.q1': 'Is this really free?',
+    'faq.a1': 'Yes! The basic plan is free forever. You can import 50 leads/month and send 20 emails/day at no cost.',
+    'faq.q2': 'Can I send 70 emails per day?',
+    'faq.a2': 'Yes, with our Premium plan you can send up to 70 emails per day with automated follow-ups.',
+    'faq.q3': 'Can I use my Gmail account?',
+    'faq.a3': 'Yes, you can connect your Gmail account using Gmail API for sending emails.',
+    'faq.q4': 'Will my emails go to spam?',
+    'faq.a4': 'We use rate-limiting and best practices to help ensure deliverability. We recommend warming up your domain.',
+    'faq.q5': 'Can I publish this as a SaaS?',
+    'faq.a5': 'This is designed for personal/agency use. Contact us for white-label or enterprise licensing.',
+    
+    // CTA
+    'cta.badge': 'Start for Free',
+    'cta.title': 'Ready to catch clients daily?',
+    'cta.subtitle': 'Start free. Import your leads and launch your first campaign today.',
+    
+    // Footer
+    'footer.description': 'Automated lead outreach platform for agencies and freelancers. Import, categorize, send, and track — all in one place.',
+    'footer.product': 'Product',
+    'footer.company': 'Company',
+    'footer.legal': 'Legal',
+    'footer.about': 'About',
+    'footer.blog': 'Blog',
+    'footer.careers': 'Careers',
+    'footer.privacy': 'Privacy',
+    'footer.terms': 'Terms',
+    'footer.copyright': '© 2026 Get Project. All rights reserved.',
+    
+    // Login
+    'login.backToHome': 'Back to Home',
+    'login.title': 'Automate your lead outreach',
+    'login.subtitle': 'Import leads, categorize automatically, send personalized emails, and track everything from one dashboard.',
+    'login.feature1': 'Send 50-70 emails daily',
+    'login.feature2': 'Auto follow-ups',
+    'login.feature3': 'Free to start',
+    'login.welcome': 'Welcome back',
+    'login.enterCredentials': 'Enter your credentials to access your dashboard',
+    'login.email': 'Email',
+    'login.emailPlaceholder': 'you@company.com',
+    'login.password': 'Password',
+    'login.loggingIn': 'Logging in...',
+    'login.loginBtn': 'Login',
+    'login.demoMode': 'Demo mode: Use any email and password (6+ chars)',
+    'login.tagline': 'Lead Outreach Automation',
+    'login.successTitle': 'Welcome back!',
+    'login.successDesc': 'You have successfully logged in.',
+    'login.errorTitle': 'Login failed',
+    'login.errorDesc': 'Invalid email or password. Password must be at least 6 characters.',
+    'login.errorGeneric': 'Something went wrong. Please try again.',
+    'login.noAccount': "Don't have an account?",
+    'login.signupLink': 'Sign up',
+    
+    // Signup
+    'signup.badge': 'Free Forever Plan Available',
+    'signup.title': 'Create your account',
+    'signup.subtitle': 'Start automating your lead outreach in minutes',
+    'signup.name': 'Full Name',
+    'signup.namePlaceholder': 'John Doe',
+    'signup.email': 'Email',
+    'signup.emailPlaceholder': 'you@company.com',
+    'signup.password': 'Password',
+    'signup.creating': 'Creating account...',
+    'signup.createAccount': 'Create Account',
+    'signup.alreadyHaveAccount': 'Already have an account?',
+    'signup.terms1': 'By signing up, you agree to our',
+    'signup.termsLink': 'Terms of Service',
+    'signup.terms2': 'and',
+    'signup.privacyLink': 'Privacy Policy',
+    'signup.benefitsTitle': 'Start growing your client base today',
+    'signup.benefitsSubtitle': 'Join thousands of agencies and freelancers who automate their outreach',
+    'signup.benefit1': 'Import unlimited leads from CSV/Excel',
+    'signup.benefit2': 'Send 50-70 personalized emails daily',
+    'signup.benefit3': 'Automatic follow-ups after 3 & 7 days',
+    'signup.benefit4': 'Real-time tracking & analytics',
+    'signup.joinedUsers': '2,500+ users joined this month',
+    'signup.testimonial': 'Get Project helped me land 12 new clients in my first month. The automation is a game-changer!',
+    'signup.testimonialAuthor': 'Sarah K., Freelance Designer',
+    'signup.successTitle': 'Welcome!',
+    'signup.successDesc': 'Your account has been created successfully.',
+    'signup.errorTitle': 'Signup failed',
+    'signup.errorDesc': 'Could not create account. Please try again.',
+    'signup.errorGeneric': 'Something went wrong. Please try again.',
+    
+    // Dashboard
+    'dashboard.title': 'Dashboard',
+    'dashboard.subtitle': 'Overview of your lead outreach performance',
+    'dashboard.leadsImported': 'Leads Imported',
+    'dashboard.readyToSend': 'Ready to Send',
+    'dashboard.sentToday': 'Sent Today',
+    'dashboard.replies': 'Replies',
+    
+    // Pricing
+    'pricing.badge': 'Simple, Transparent Pricing',
+    'pricing.title': 'Choose Your Plan',
+    'pricing.subtitle': 'Start free and scale as you grow. No hidden fees, cancel anytime.',
+    'pricing.basic': 'Basic',
+    'pricing.basicDesc': 'Perfect for getting started',
+    'pricing.premium': 'Premium',
+    'pricing.premiumDesc': 'For growing agencies',
+    'pricing.enterprise': 'Enterprise',
+    'pricing.enterpriseDesc': 'For large teams',
+    'pricing.popular': 'Most Popular',
+    'pricing.getStartedFree': 'Get Started Free',
+    'pricing.startTrial': 'Start 14-Day Trial',
+    'pricing.contactSales': 'Contact Sales',
+    'pricing.questions': 'Have questions?',
+    'pricing.questionsDesc': 'Check out our FAQ or contact us.',
+    'pricing.viewFaq': 'View FAQ',
+    'pricing.contactSupport': 'contact us',
+    'pricing.or': 'or',
+    'pricing.free': 'Free',
+    'pricing.perMonth': '/month',
+    'pricing.basic.feature1': 'Import up to 500 leads',
+    'pricing.basic.feature2': '20 emails per day',
+    'pricing.basic.feature3': 'Basic email templates',
+    'pricing.basic.feature4': 'Manual follow-ups',
+    'pricing.basic.feature5': 'Email tracking',
+    'pricing.basic.feature6': 'CSV/XLSX import',
+    'pricing.premium.feature1': 'Unlimited leads',
+    'pricing.premium.feature2': '70 emails per day',
+    'pricing.premium.feature3': 'Custom templates',
+    'pricing.premium.feature4': 'Auto follow-ups (3/7 days)',
+    'pricing.premium.feature5': 'Advanced analytics',
+    'pricing.premium.feature6': 'Priority support',
+    'pricing.premium.feature7': 'AI categorization',
+    'pricing.premium.feature8': 'Template variables',
+    'pricing.enterprise.feature1': 'Everything in Premium',
+    'pricing.enterprise.feature2': 'Unlimited daily emails',
+    'pricing.enterprise.feature3': 'Multiple team members',
+    'pricing.enterprise.feature4': 'Custom integrations',
+    'pricing.enterprise.feature5': 'Dedicated manager',
+    'pricing.enterprise.feature6': 'SLA guarantee',
+    'pricing.enterprise.feature7': 'White-label options',
+    'pricing.enterprise.feature8': 'API access',
+    
+    // Watch Demo
+    'demo.badge': 'Video Tutorials',
+    'demo.title': 'Watch Demo Videos',
+    'demo.subtitle': 'Learn everything about Get Project with our comprehensive video tutorials.',
+    'demo.featured': 'Featured Tutorial',
+    'demo.walkthrough': 'Complete Platform Walkthrough',
+    'demo.walkthroughDesc': 'Get a comprehensive overview of Get Project in this walkthrough.',
+    'demo.watchNow': 'Watch Now',
+    'demo.allTutorials': 'All Tutorials',
+    'demo.readyToStart': 'Ready to get started?',
+    'demo.readyDesc': 'Try Get Project free and start automating your lead outreach today.',
+    'demo.getStartedFree': 'Get Started Free',
+    'demo.addVideosTitle': 'Add Your Own Videos',
+    'demo.addVideosDesc': 'You can embed your own video tutorials here by adding YouTube or Vimeo links.',
+    'demo.category.gettingStarted': 'Getting Started',
+    'demo.category.import': 'Import',
+    'demo.category.templates': 'Templates',
+    'demo.category.automation': 'Automation',
+    'demo.category.ai': 'AI Features',
+    'demo.category.analytics': 'Analytics',
+    'demo.video1.title': 'Getting Started with Get Project',
+    'demo.video1.desc': 'Learn how to set up your account and import your first leads.',
+    'demo.video2.title': 'Importing Leads from CSV/Excel',
+    'demo.video2.desc': 'Step-by-step guide on importing your lead lists.',
+    'demo.video3.title': 'Creating Email Templates',
+    'demo.video3.desc': 'Master the template editor and learn personalization.',
+    'demo.video4.title': 'Auto Follow-up Configuration',
+    'demo.video4.desc': 'Set up automatic follow-ups to maximize responses.',
+    'demo.video5.title': 'Understanding Lead Categories',
+    'demo.video5.desc': 'Learn how our AI categorizes leads automatically.',
+    'demo.video6.title': 'Dashboard & Analytics Overview',
+    'demo.video6.desc': 'Navigate the dashboard and understand your metrics.',
+  },
+  bn: {
+    // Navbar
+    'nav.features': 'ফিচার',
+    'nav.howItWorks': 'কিভাবে কাজ করে',
+    'nav.pricing': 'মূল্য',
+    'nav.free': 'বিনামূল্যে',
+    'nav.login': 'লগইন',
+    'nav.getStarted': 'শুরু করুন',
+    
+    // Hero Section
+    'hero.badge': 'বিনামূল্যে লিড অটোমেশন টুল',
+    'hero.title1': 'আপনার লিড ফাইল আপলোড করুন।',
+    'hero.title2': 'আমরা আপনার আউটরিচ তালিকা প্রস্তুত করব।',
+    'hero.subtitle': 'CSV/XLSX আমদানি করুন, ইমেইল অটো-ক্লিন করুন, ওয়েবসাইট আছে/নেই শনাক্ত করুন এবং পাঠানোর জন্য প্রস্তুত তালিকা পান।',
+    'hero.noCreditCard': 'ক্রেডিট কার্ড লাগবে না',
+    'hero.fileLimit': '২০MB ফাইল সীমা',
+    'hero.csvSupport': 'CSV ও XLSX সাপোর্ট',
+    
+    'hero.title3': 'স্বয়ংক্রিয়ভাবে ক্লায়েন্ট খুঁজুন।',
+    'hero.title4': 'প্রতিদিন ৫০-৭০টি স্মার্ট ইমেইল পাঠান।',
+    'hero.subtitle2': 'Excel/Sheets থেকে লিড আমদানি করুন, কোম্পানি অটো-ক্যাটাগরি করুন, ব্যক্তিগতকৃত আউটরিচ পাঠান এবং রিপ্লাই ট্র্যাক করুন — সব এক ড্যাশবোর্ড থেকে।',
+    
+    'hero.autoImport': 'অটো ইম্পোর্ট',
+    'hero.csvExcel': 'CSV ও Excel ফাইল',
+    'hero.smartSending': 'স্মার্ট সেন্ডিং',
+    'hero.rateLimited': 'রেট-লিমিটেড',
+    'hero.trackResults': 'ফলাফল ট্র্যাক',
+    'hero.realTimeStats': 'রিয়েল-টাইম পরিসংখ্যান',
+    
+    'hero.noPaidTools': 'পেইড টুলের দরকার নেই',
+    'hero.freefirst': 'প্রথমে বিনামূল্যে',
+    'hero.builtFor': 'এজেন্সি ও ফ্রিল্যান্সারদের জন্য',
+    'hero.watchDemo': 'ডেমো দেখুন',
+    
+    // Upload Card
+    'upload.title': 'লিড ফাইল আপলোড',
+    'upload.dragDrop': 'এখানে ফাইল টেনে আনুন',
+    'upload.or': 'অথবা',
+    'upload.browseFile': 'ফাইল ব্রাউজ করুন',
+    'upload.maxSize': 'সর্বোচ্চ ২০MB • CSV/XLSX • প্রয়োজন: company_name, email',
+    'upload.dailyLimit': 'দৈনিক পাঠানোর সীমা',
+    'upload.emailsPerDay': 'ইমেইল/দিন',
+    'upload.autoCategories': 'অটো ক্যাটাগরি (ওয়েবসাইট নেই / আছে)',
+    'upload.uploadProcess': 'আপলোড ও প্রসেস',
+    'upload.processing': 'ফাইল প্রসেস হচ্ছে...',
+    'upload.cleaning': 'ইমেইল ক্লিন করা হচ্ছে, ডুপ্লিকেট সরানো হচ্ছে...',
+    'upload.complete': '% সম্পন্ন',
+    'upload.success': 'ফাইল প্রসেস হয়েছে!',
+    'upload.successDesc': 'আপনার লিড প্রস্তুত। ড্যাশবোর্ড দেখতে লগইন করুন।',
+    'upload.total': 'মোট',
+    'upload.imported': 'ইম্পোর্টেড',
+    'upload.skipped': 'বাদ দেওয়া',
+    'upload.goToDashboard': 'ড্যাশবোর্ডে যান',
+    
+    // Social Proof
+    'social.autoOutreach': 'অটো আউটরিচ ইঞ্জিন',
+    'social.queueFollowups': 'কিউ + ফলো-আপ',
+    'social.excelImport': 'Excel/CSV ইম্পোর্ট',
+    'social.trackingDashboard': 'ট্র্যাকিং ড্যাশবোর্ড',
+    
+    // How It Works
+    'how.title': 'কিভাবে কাজ করে',
+    'how.subtitle': '৩টি সহজ ধাপে শুরু করুন',
+    'how.step1.title': 'লিড ইম্পোর্ট',
+    'how.step1.desc': 'লিড সহ আপনার CSV বা XLSX ফাইল আপলোড করুন। আমরা অটো-ক্লিন ও ডুপ্লিকেট সরাই।',
+    'how.step2.title': 'অটো ক্যাটাগরি',
+    'how.step2.desc': 'আমরা প্রতিটি লিড বিশ্লেষণ করি: ওয়েবসাইট নেই, দুর্বল ওয়েবসাইট, SEO সমস্যা বা ই-কমার্স।',
+    'how.step3.title': 'পাঠান ও ট্র্যাক করুন',
+    'how.step3.desc': 'রেট-লিমিটেড সেন্ডিং দিয়ে ক্যাম্পেইন চালু করুন। ওপেন, রিপ্লাই ট্র্যাক করুন।',
+    
+    // Features
+    'features.title': 'শক্তিশালী ফিচার',
+    'features.subtitle': 'আউটরিচ অটোমেট করতে যা কিছু দরকার',
+    'features.categorization.title': 'স্মার্ট ক্যাটাগরাইজেশন',
+    'features.categorization.desc': 'ওয়েবসাইট স্ট্যাটাস অটো-ডিটেক্ট করুন এবং টার্গেটেড আউটরিচের জন্য ক্যাটাগরি করুন।',
+    'features.templates.title': 'টেমপ্লেট ম্যানেজার',
+    'features.templates.desc': 'ব্যক্তিগতকৃত ভেরিয়েবল দিয়ে ডায়নামিক ইমেইল টেমপ্লেট তৈরি করুন।',
+    'features.rateLimit.title': 'রেট-লিমিটেড সেন্ডিং',
+    'features.rateLimit.desc': 'আপনার ডোমেইন নিরাপদ রাখতে দৈনিক সীমাসহ অ্যান্টি-স্প্যাম প্রোটেকশন।',
+    'features.followups.title': 'অটো ফলো-আপ',
+    'features.followups.desc': 'রিপ্লাই না পেলে ৩ ও ৭ দিন পর স্বয়ংক্রিয় ফলো-আপ।',
+    'features.tracking.title': 'পাইপলাইন ট্র্যাকিং',
+    'features.tracking.desc': 'ইম্পোর্ট থেকে রিপ্লাই পর্যন্ত বিস্তারিত লগসহ লিড স্ট্যাটাস ট্র্যাক করুন।',
+    'features.exclusion.title': 'লিড বাদ দেওয়া',
+    'features.exclusion.desc': 'অবাঞ্ছিত ইমেইল প্রতিরোধে "যোগাযোগ করবেন না" হিসেবে চিহ্নিত করুন।',
+    
+    // Built For
+    'builtFor.title': 'যাদের জন্য তৈরি',
+    'builtFor.subtitle': 'যাদের ধারাবাহিক আউটরিচ দরকার তাদের জন্য পারফেক্ট',
+    'builtFor.agencies.title': 'এজেন্সি',
+    'builtFor.agencies.desc': 'ম্যানুয়াল আউটরিচ প্রচেষ্টা ছাড়াই ধারাবাহিক ক্লায়েন্ট পাইপলাইন।',
+    'builtFor.freelancers.title': 'ফ্রিল্যান্সার',
+    'builtFor.freelancers.desc': 'দুর্দান্ত কাজ ডেলিভারিতে মনোযোগ দেওয়ার সময় নতুন ক্লায়েন্ট খুঁজুন।',
+    'builtFor.startups.title': 'সেলস টিম',
+    'builtFor.startups.desc': 'অটোমেটেড, ব্যক্তিগতকৃত ইমেইল দিয়ে আপনার আউটরিচ স্কেল করুন।',
+    
+    // FAQ
+    'faq.title': 'সাধারণ প্রশ্নাবলী',
+    'faq.subtitle': 'প্রশ্ন আছে? আমাদের কাছে উত্তর আছে।',
+    'faq.q1': 'এটা কি সত্যিই বিনামূল্যে?',
+    'faq.a1': 'হ্যাঁ! বেসিক প্ল্যান চিরকাল বিনামূল্যে। আপনি বিনা খরচে মাসে ৫০টি লিড ইম্পোর্ট ও দিনে ২০টি ইমেইল পাঠাতে পারবেন।',
+    'faq.q2': 'আমি কি দিনে ৭০টি ইমেইল পাঠাতে পারি?',
+    'faq.a2': 'হ্যাঁ, আমাদের প্রিমিয়াম প্ল্যানে আপনি অটো ফলো-আপসহ দিনে ৭০টি পর্যন্ত ইমেইল পাঠাতে পারবেন।',
+    'faq.q3': 'আমি কি আমার Gmail অ্যাকাউন্ট ব্যবহার করতে পারি?',
+    'faq.a3': 'হ্যাঁ, আপনি ইমেইল পাঠাতে Gmail API ব্যবহার করে আপনার Gmail অ্যাকাউন্ট কানেক্ট করতে পারবেন।',
+    'faq.q4': 'আমার ইমেইল কি স্প্যামে যাবে?',
+    'faq.a4': 'আমরা ডেলিভারেবিলিটি নিশ্চিত করতে রেট-লিমিটিং ও বেস্ট প্র্যাক্টিস ব্যবহার করি। ডোমেইন ওয়ার্ম-আপ রেকমেন্ডেড।',
+    'faq.q5': 'আমি কি এটা SaaS হিসেবে পাবলিশ করতে পারি?',
+    'faq.a5': 'এটি ব্যক্তিগত/এজেন্সি ব্যবহারের জন্য ডিজাইন করা হয়েছে। হোয়াইট-লেবেল বা এন্টারপ্রাইজের জন্য যোগাযোগ করুন।',
+    
+    // CTA
+    'cta.badge': 'বিনামূল্যে শুরু করুন',
+    'cta.title': 'প্রতিদিন ক্লায়েন্ট পেতে প্রস্তুত?',
+    'cta.subtitle': 'বিনামূল্যে শুরু করুন। আপনার লিড ইম্পোর্ট করুন এবং আজই প্রথম ক্যাম্পেইন চালু করুন।',
+    
+    // Footer
+    'footer.description': 'এজেন্সি ও ফ্রিল্যান্সারদের জন্য অটোমেটেড লিড আউটরিচ প্ল্যাটফর্ম। ইম্পোর্ট, ক্যাটাগরি, পাঠান ও ট্র্যাক — সব এক জায়গায়।',
+    'footer.product': 'প্রোডাক্ট',
+    'footer.company': 'কোম্পানি',
+    'footer.legal': 'আইনি',
+    'footer.about': 'সম্পর্কে',
+    'footer.blog': 'ব্লগ',
+    'footer.careers': 'ক্যারিয়ার',
+    'footer.privacy': 'গোপনীয়তা',
+    'footer.terms': 'শর্তাবলী',
+    'footer.copyright': '© ২০২৬ Get Project। সর্বস্বত্ব সংরক্ষিত।',
+    
+    // Login
+    'login.backToHome': 'হোমে ফিরুন',
+    'login.title': 'আপনার লিড আউটরিচ অটোমেট করুন',
+    'login.subtitle': 'লিড ইম্পোর্ট করুন, অটোমেটিক্যালি ক্যাটাগরি করুন, ব্যক্তিগতকৃত ইমেইল পাঠান এবং এক ড্যাশবোর্ড থেকে সব ট্র্যাক করুন।',
+    'login.feature1': 'দৈনিক ৫০-৭০ ইমেইল পাঠান',
+    'login.feature2': 'অটো ফলো-আপ',
+    'login.feature3': 'বিনামূল্যে শুরু করুন',
+    'login.welcome': 'স্বাগতম',
+    'login.enterCredentials': 'আপনার ড্যাশবোর্ড অ্যাক্সেস করতে ক্রেডেনশিয়াল দিন',
+    'login.email': 'ইমেইল',
+    'login.emailPlaceholder': 'you@company.com',
+    'login.password': 'পাসওয়ার্ড',
+    'login.loggingIn': 'লগইন হচ্ছে...',
+    'login.loginBtn': 'লগইন',
+    'login.demoMode': 'ডেমো মোড: যেকোনো ইমেইল ও পাসওয়ার্ড (৬+ অক্ষর) ব্যবহার করুন',
+    'login.tagline': 'লিড আউটরিচ অটোমেশন',
+    'login.successTitle': 'স্বাগতম!',
+    'login.successDesc': 'আপনি সফলভাবে লগইন করেছেন।',
+    'login.errorTitle': 'লগইন ব্যর্থ',
+    'login.errorDesc': 'ভুল ইমেইল বা পাসওয়ার্ড। পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে।',
+    'login.errorGeneric': 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
+    'login.noAccount': 'অ্যাকাউন্ট নেই?',
+    'login.signupLink': 'সাইন আপ করুন',
+    
+    // Signup
+    'signup.badge': 'বিনামূল্যে প্ল্যান উপলব্ধ',
+    'signup.title': 'আপনার অ্যাকাউন্ট তৈরি করুন',
+    'signup.subtitle': 'মিনিটেই আপনার লিড আউটরিচ অটোমেট করা শুরু করুন',
+    'signup.name': 'পুরো নাম',
+    'signup.namePlaceholder': 'আপনার নাম',
+    'signup.email': 'ইমেইল',
+    'signup.emailPlaceholder': 'you@company.com',
+    'signup.password': 'পাসওয়ার্ড',
+    'signup.creating': 'অ্যাকাউন্ট তৈরি হচ্ছে...',
+    'signup.createAccount': 'অ্যাকাউন্ট তৈরি করুন',
+    'signup.alreadyHaveAccount': 'ইতিমধ্যে অ্যাকাউন্ট আছে?',
+    'signup.terms1': 'সাইন আপ করে, আপনি আমাদের',
+    'signup.termsLink': 'সেবার শর্তাবলী',
+    'signup.terms2': 'এবং',
+    'signup.privacyLink': 'গোপনীয়তা নীতি',
+    'signup.benefitsTitle': 'আজই আপনার ক্লায়েন্ট বেস বাড়াতে শুরু করুন',
+    'signup.benefitsSubtitle': 'হাজার হাজার এজেন্সি ও ফ্রিল্যান্সারদের সাথে যোগ দিন যারা তাদের আউটরিচ অটোমেট করে',
+    'signup.benefit1': 'CSV/Excel থেকে আনলিমিটেড লিড ইম্পোর্ট',
+    'signup.benefit2': 'প্রতিদিন ৫০-৭০টি ব্যক্তিগতকৃত ইমেইল পাঠান',
+    'signup.benefit3': '৩ ও ৭ দিন পর স্বয়ংক্রিয় ফলো-আপ',
+    'signup.benefit4': 'রিয়েল-টাইম ট্র্যাকিং ও অ্যানালিটিক্স',
+    'signup.joinedUsers': 'এই মাসে ২,৫০০+ ইউজার যোগ দিয়েছেন',
+    'signup.testimonial': 'Get Project আমাকে প্রথম মাসেই ১২টি নতুন ক্লায়েন্ট পেতে সাহায্য করেছে। অটোমেশন সত্যিই গেম-চেঞ্জার!',
+    'signup.testimonialAuthor': 'সারাহ কে., ফ্রিল্যান্স ডিজাইনার',
+    'signup.successTitle': 'স্বাগতম!',
+    'signup.successDesc': 'আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।',
+    'signup.errorTitle': 'সাইন আপ ব্যর্থ',
+    'signup.errorDesc': 'অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।',
+    'signup.errorGeneric': 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
+    
+    // Dashboard
+    'dashboard.title': 'ড্যাশবোর্ড',
+    'dashboard.subtitle': 'আপনার লিড আউটরিচ পারফরম্যান্সের সারসংক্ষেপ',
+    'dashboard.leadsImported': 'লিড ইম্পোর্টেড',
+    'dashboard.readyToSend': 'পাঠাতে প্রস্তুত',
+    'dashboard.sentToday': 'আজ পাঠানো',
+    'dashboard.replies': 'রিপ্লাই',
+    
+    // Pricing
+    'pricing.badge': 'সহজ, স্বচ্ছ মূল্য',
+    'pricing.title': 'আপনার প্ল্যান বেছে নিন',
+    'pricing.subtitle': 'বিনামূল্যে শুরু করুন এবং বাড়ার সাথে স্কেল করুন। কোনো লুকানো ফি নেই।',
+    'pricing.basic': 'বেসিক',
+    'pricing.basicDesc': 'শুরু করার জন্য পারফেক্ট',
+    'pricing.premium': 'প্রিমিয়াম',
+    'pricing.premiumDesc': 'বর্ধনশীল এজেন্সিদের জন্য',
+    'pricing.enterprise': 'এন্টারপ্রাইজ',
+    'pricing.enterpriseDesc': 'বড় টিমদের জন্য',
+    'pricing.popular': 'সবচেয়ে জনপ্রিয়',
+    'pricing.getStartedFree': 'বিনামূল্যে শুরু করুন',
+    'pricing.startTrial': '১৪ দিনের ট্রায়াল শুরু করুন',
+    'pricing.contactSales': 'সেলসে যোগাযোগ করুন',
+    'pricing.questions': 'প্রশ্ন আছে?',
+    'pricing.questionsDesc': 'আমাদের FAQ দেখুন বা যোগাযোগ করুন।',
+    'pricing.viewFaq': 'FAQ দেখুন',
+    'pricing.contactSupport': 'যোগাযোগ করুন',
+    'pricing.or': 'অথবা',
+    'pricing.free': 'বিনামূল্যে',
+    'pricing.perMonth': '/মাস',
+    'pricing.basic.feature1': '৫০০ লিড পর্যন্ত ইম্পোর্ট',
+    'pricing.basic.feature2': 'দিনে ২০টি ইমেইল',
+    'pricing.basic.feature3': 'বেসিক ইমেইল টেমপ্লেট',
+    'pricing.basic.feature4': 'ম্যানুয়াল ফলো-আপ',
+    'pricing.basic.feature5': 'ইমেইল ট্র্যাকিং',
+    'pricing.basic.feature6': 'CSV/XLSX ইম্পোর্ট',
+    'pricing.premium.feature1': 'আনলিমিটেড লিড',
+    'pricing.premium.feature2': 'দিনে ৭০টি ইমেইল',
+    'pricing.premium.feature3': 'কাস্টম টেমপ্লেট',
+    'pricing.premium.feature4': 'অটো ফলো-আপ (৩/৭ দিন)',
+    'pricing.premium.feature5': 'অ্যাডভান্সড অ্যানালিটিক্স',
+    'pricing.premium.feature6': 'প্রায়োরিটি সাপোর্ট',
+    'pricing.premium.feature7': 'AI ক্যাটাগরাইজেশন',
+    'pricing.premium.feature8': 'টেমপ্লেট ভেরিয়েবল',
+    'pricing.enterprise.feature1': 'প্রিমিয়ামের সব কিছু',
+    'pricing.enterprise.feature2': 'আনলিমিটেড দৈনিক ইমেইল',
+    'pricing.enterprise.feature3': 'একাধিক টিম মেম্বার',
+    'pricing.enterprise.feature4': 'কাস্টম ইন্টিগ্রেশন',
+    'pricing.enterprise.feature5': 'ডেডিকেটেড ম্যানেজার',
+    'pricing.enterprise.feature6': 'SLA গ্যারান্টি',
+    'pricing.enterprise.feature7': 'হোয়াইট-লেবেল অপশন',
+    'pricing.enterprise.feature8': 'API অ্যাক্সেস',
+    
+    // Watch Demo
+    'demo.badge': 'ভিডিও টিউটোরিয়াল',
+    'demo.title': 'ডেমো ভিডিও দেখুন',
+    'demo.subtitle': 'আমাদের সম্পূর্ণ ভিডিও টিউটোরিয়াল দিয়ে Get Project সম্পর্কে সব শিখুন।',
+    'demo.featured': 'ফিচার্ড টিউটোরিয়াল',
+    'demo.walkthrough': 'সম্পূর্ণ প্ল্যাটফর্ম ওয়াকথ্রু',
+    'demo.walkthroughDesc': 'এই ওয়াকথ্রুতে Get Project-এর সম্পূর্ণ ওভারভিউ পান।',
+    'demo.watchNow': 'এখনই দেখুন',
+    'demo.allTutorials': 'সব টিউটোরিয়াল',
+    'demo.readyToStart': 'শুরু করতে প্রস্তুত?',
+    'demo.readyDesc': 'Get Project বিনামূল্যে ট্রাই করুন এবং আজই আপনার লিড আউটরিচ অটোমেট করা শুরু করুন।',
+    'demo.getStartedFree': 'বিনামূল্যে শুরু করুন',
+    'demo.addVideosTitle': 'আপনার নিজের ভিডিও যোগ করুন',
+    'demo.addVideosDesc': 'আপনি YouTube বা Vimeo লিঙ্ক যোগ করে এখানে আপনার নিজের ভিডিও টিউটোরিয়াল এম্বেড করতে পারেন।',
+    'demo.category.gettingStarted': 'শুরু করা',
+    'demo.category.import': 'ইম্পোর্ট',
+    'demo.category.templates': 'টেমপ্লেট',
+    'demo.category.automation': 'অটোমেশন',
+    'demo.category.ai': 'AI ফিচার',
+    'demo.category.analytics': 'অ্যানালিটিক্স',
+    'demo.video1.title': 'Get Project দিয়ে শুরু করা',
+    'demo.video1.desc': 'কিভাবে আপনার অ্যাকাউন্ট সেটআপ করবেন এবং প্রথম লিড ইম্পোর্ট করবেন শিখুন।',
+    'demo.video2.title': 'CSV/Excel থেকে লিড ইম্পোর্ট',
+    'demo.video2.desc': 'আপনার লিড তালিকা ইম্পোর্ট করার ধাপে ধাপে গাইড।',
+    'demo.video3.title': 'ইমেইল টেমপ্লেট তৈরি',
+    'demo.video3.desc': 'টেমপ্লেট এডিটর মাস্টার করুন এবং পার্সোনালাইজেশন শিখুন।',
+    'demo.video4.title': 'অটো ফলো-আপ কনফিগারেশন',
+    'demo.video4.desc': 'রেসপন্স বাড়াতে স্বয়ংক্রিয় ফলো-আপ সেটআপ করুন।',
+    'demo.video5.title': 'লিড ক্যাটাগরি বোঝা',
+    'demo.video5.desc': 'আমাদের AI কিভাবে স্বয়ংক্রিয়ভাবে লিড ক্যাটাগরি করে শিখুন।',
+    'demo.video6.title': 'ড্যাশবোর্ড ও অ্যানালিটিক্স ওভারভিউ',
+    'demo.video6.desc': 'ড্যাশবোর্ড নেভিগেট করুন এবং আপনার মেট্রিক্স বুঝুন।',
+  },
+};
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const [language, setLanguageState] = useState<Language>(() => {
+    const saved = localStorage.getItem('getproject_language');
+    return (saved as Language) || 'en';
+  });
+
+  // Update HTML lang attribute when language changes
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
+  const setLanguage = useCallback((lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem('getproject_language', lang);
+  }, []);
+
+  const t = useCallback((key: string): string => {
+    return translations[language][key as keyof typeof translations['en']] || key;
+  }, [language]);
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+}

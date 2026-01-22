@@ -1,0 +1,398 @@
+import express from 'express';
+import Job from '../models/Job.js';
+import Lead from '../models/Lead.js';
+import Campaign from '../models/Campaign.js';
+import EmailTemplate from '../models/EmailTemplate.js';
+import EmailLog from '../models/EmailLog.js';
+import { sendEmail } from '../services/emailService.js';
+import { renderTemplate } from '../services/emailRenderService.js';
+import User from '../models/User.js';
+
+const router = express.Router();
+
+// Optional: Add a simple auth token check for cron endpoints
+// For production, use a secret token or IP whitelist
+
+const verifyCronSecret = (req, res, next) => {
+  // Read secret dynamically to ensure env vars are loaded
+  const CRON_SECRET = process.env.CRON_SECRET || 'change-this-secret';
+  const token = req.headers['x-cron-secret'] || req.query.secret;
+
+  console.log('[CRON Auth] Token received:', token);
+  console.log('[CRON Auth] Expected secret:', CRON_SECRET);
+  console.log('[CRON Auth] Match:', token === CRON_SECRET);
+
+  if (token === CRON_SECRET) {
+    next();
+  } else {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+};
+
+// Run jobs (worker)
+router.post('/run-jobs', verifyCronSecret, async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit || '5');
+    const now = new Date();
+
+    // Find due jobs
+    const jobs = await Job.find({
+      status: 'PENDING',
+      runAt: { $lte: now }
+    })
+      .sort({ runAt: 1 })
+      .limit(limit)
+      .populate('campaignId')
+      .populate('leadId')
+      .populate('templateId');
+
+    if (jobs.length === 0) {
+      return res.json({ processed: 0, message: 'No due jobs' });
+    }
+
+    let processed = 0;
+    let succeeded = 0;
+    let failed = 0;
+
+    for (const job of jobs) {
+      try {
+        // Atomically claim job
+        const claimedJob = await Job.findOneAndUpdate(
+          { _id: job._id, status: 'PENDING' },
+          { status: 'RUNNING' },
+          { new: true }
+        );
+
+        if (!claimedJob) {
+          continue; // Job was already claimed
+        }
+
+        const lead = job.leadId;
+        const campaign = job.campaignId;
+        const template = job.templateId;
+
+        // Safety checks
+        if (!lead || !campaign || !template) {
+          await Job.findByIdAndUpdate(job._id, {
+            status: 'FAILED',
+            lastError: 'Missing lead, campaign, or template'
+          });
+          failed++;
+          continue;
+        }
+
+        if (lead.doNotContact) {
+          await Job.findByIdAndUpdate(job._id, {
+            status: 'CANCELLED',
+            lastError: 'Lead marked as do not contact'
+          });
+          continue;
+        }
+
+        if (['REPLIED', 'BOUNCED', 'DONE', 'WON', 'LOST'].includes(lead.status)) {
+          await Job.findByIdAndUpdate(job._id, {
+            status: 'CANCELLED',
+            lastError: `Lead status is ${lead.status}`
+          });
+          continue;
+        }
+
+        // Get sender profile
+        const user = await User.findById(campaign.userId);
+        const senderProfile = {
+          name: user?.name || '',
+          email: user?.email || '',
+          company: user?.signature?.company || '',
+          whatsapp: user?.signature?.whatsapp || '',
+          portfolioLink: user?.signature?.portfolioLink || ''
+        };
+
+        // Render email
+        const { subject, body } = renderTemplate(template, lead, senderProfile);
+
+        // Send email
+        const emailResult = await sendEmail(lead.email, subject, body);
+
+        // Write email log
+        const emailType = job.type === 'SEND_EMAIL' ? 'initial' :
+          job.type === 'FOLLOWUP_1_EMAIL' ? 'followup1' : 'followup2';
+
+        await EmailLog.create({
+          campaignId: campaign._id,
+          leadId: lead._id,
+          type: emailType,
+          subject,
+          body,
+          providerMessageId: emailResult.messageId || null,
+          status: emailResult.success ? 'sent' : 'failed',
+          errorMessage: emailResult.error || null
+        });
+
+        if (emailResult.success) {
+          // Update lead
+          let newStatus = 'SENT';
+          if (job.type === 'FOLLOWUP_1_EMAIL') {
+            newStatus = 'FOLLOWUP_1_SENT';
+          } else if (job.type === 'FOLLOWUP_2_EMAIL') {
+            newStatus = 'FOLLOWUP_2_SENT';
+          }
+
+          lead.status = newStatus;
+          lead.lastContactedAt = new Date();
+          await lead.save();
+
+          // Mark job as done
+          await Job.findByIdAndUpdate(job._id, {
+            status: 'DONE'
+          });
+
+          succeeded++;
+        } else {
+          // Handle retry
+          job.attempts += 1;
+          if (job.attempts <= 2) {
+            // Retry after 10 minutes
+            job.status = 'PENDING';
+            job.runAt = new Date(now.getTime() + 10 * 60 * 1000);
+            job.lastError = emailResult.error;
+            await job.save();
+          } else {
+            // Max attempts reached
+            await Job.findByIdAndUpdate(job._id, {
+              status: 'FAILED',
+              lastError: emailResult.error
+            });
+
+            lead.status = 'FAILED';
+            await lead.save();
+
+            failed++;
+          }
+        }
+
+        processed++;
+      } catch (error) {
+        console.error(`Error processing job ${job._id}:`, error);
+
+        job.attempts += 1;
+        if (job.attempts <= 2) {
+          job.status = 'PENDING';
+          job.runAt = new Date(now.getTime() + 10 * 60 * 1000);
+          job.lastError = error.message;
+          await job.save();
+        } else {
+          await Job.findByIdAndUpdate(job._id, {
+            status: 'FAILED',
+            lastError: error.message
+          });
+          failed++;
+        }
+        processed++;
+      }
+    }
+
+    res.json({
+      processed,
+      succeeded,
+      failed,
+      message: `Processed ${processed} jobs`
+    });
+  } catch (error) {
+    console.error('Run jobs error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
+  }
+});
+
+// Follow-ups cron
+router.post('/followups', verifyCronSecret, async (req, res) => {
+  try {
+    const now = new Date();
+    const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+    // Get active campaigns
+    const activeCampaigns = await Campaign.find({ status: 'active', followupsEnabled: true });
+
+    let followup1Created = 0;
+    let followup2Created = 0;
+    let markedDone = 0;
+
+    for (const campaign of activeCampaigns) {
+      // Followup 1: SENT leads contacted 3+ days ago
+      const followup1Leads = await Lead.find({
+        campaignId: campaign._id,
+        status: 'SENT',
+        lastContactedAt: { $lte: threeDaysAgo },
+        doNotContact: false
+      });
+
+      // Get templates
+      const templates = await EmailTemplate.find({ campaignId: campaign._id });
+      const templateMap = {};
+      templates.forEach(t => {
+        templateMap[t.category] = t._id;
+      });
+
+      for (const lead of followup1Leads) {
+        // Use specific FOLLOWUP_1 template if available, otherwise fall back to category or defaults
+        const templateId = templateMap['FOLLOWUP_1'] || templateMap[lead.category] || templates[0]?._id;
+        if (!templateId) continue;
+
+        // Check if followup1 job already exists
+        const existingJob = await Job.findOne({
+          campaignId: campaign._id,
+          leadId: lead._id,
+          type: 'FOLLOWUP_1_EMAIL',
+          status: { $in: ['PENDING', 'RUNNING', 'DONE'] }
+        });
+
+        if (!existingJob) {
+          const randomDelay = Math.floor(
+            Math.random() * (campaign.rateLimitMaxSec - campaign.rateLimitMinSec + 1) +
+            campaign.rateLimitMinSec
+          );
+
+          await Job.create({
+            type: 'FOLLOWUP_1_EMAIL',
+            campaignId: campaign._id,
+            leadId: lead._id,
+            templateId,
+            runAt: new Date(now.getTime() + randomDelay * 1000),
+            status: 'PENDING',
+            attempts: 0
+          });
+
+          followup1Created++;
+        }
+      }
+
+      // Followup 2: FOLLOWUP_1_SENT leads contacted 7+ days ago (exclude replied/won/lost)
+      const followup2Leads = await Lead.find({
+        campaignId: campaign._id,
+        status: 'FOLLOWUP_1_SENT',
+        lastContactedAt: { $lte: sevenDaysAgo },
+        doNotContact: false
+      });
+
+      for (const lead of followup2Leads) {
+        // Use specific FOLLOWUP_2 template
+        const templateId = templateMap['FOLLOWUP_2'] || templateMap[lead.category] || templates[0]?._id;
+        if (!templateId) continue;
+
+        const existingJob = await Job.findOne({
+          campaignId: campaign._id,
+          leadId: lead._id,
+          type: 'FOLLOWUP_2_EMAIL',
+          status: { $in: ['PENDING', 'RUNNING', 'DONE'] }
+        });
+
+        if (!existingJob) {
+          const randomDelay = Math.floor(
+            Math.random() * (campaign.rateLimitMaxSec - campaign.rateLimitMinSec + 1) +
+            campaign.rateLimitMinSec
+          );
+
+          await Job.create({
+            type: 'FOLLOWUP_2_EMAIL',
+            campaignId: campaign._id,
+            leadId: lead._id,
+            templateId,
+            runAt: new Date(now.getTime() + randomDelay * 1000),
+            status: 'PENDING',
+            attempts: 0
+          });
+
+          followup2Created++;
+        }
+      }
+
+      // Mark as DONE: followup2 older than 14 days with no reply
+      const doneLeads = await Lead.updateMany(
+        {
+          campaignId: campaign._id,
+          status: 'FOLLOWUP_2_SENT',
+          lastContactedAt: { $lte: fourteenDaysAgo },
+          doNotContact: false
+        },
+        {
+          status: 'DONE'
+        }
+      );
+
+      markedDone += doneLeads.modifiedCount;
+    }
+
+    res.json({
+      followup1Created,
+      followup2Created,
+      markedDone,
+      message: 'Follow-ups processed'
+    });
+  } catch (error) {
+    console.error('Followups cron error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
+  }
+});
+
+// Auto-pause check (bounce/failure rate)
+router.post('/check-bounce-rate', verifyCronSecret, async (req, res) => {
+  try {
+    const campaigns = await Campaign.find({ status: 'active' });
+    let pausedCount = 0;
+
+    for (const campaign of campaigns) {
+      // Get last 20 email logs
+      const recentLogs = await EmailLog.find({
+        campaignId: campaign._id
+      })
+        .sort({ sentAt: -1 })
+        .limit(20);
+
+      if (recentLogs.length < 10) {
+        continue; // Not enough data
+      }
+
+      const failedCount = recentLogs.filter(log => log.status === 'failed').length;
+      const failureRate = failedCount / recentLogs.length;
+
+      if (failureRate > 0.1) { // 10% failure rate
+        campaign.status = 'paused';
+        await campaign.save();
+        pausedCount++;
+      }
+    }
+
+    res.json({
+      pausedCount,
+      message: `Auto-paused ${pausedCount} campaigns due to high failure rate`
+    });
+  } catch (error) {
+    console.error('Check bounce rate error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
+  }
+});
+
+// Check replies cron
+router.post('/check-replies', verifyCronSecret, async (req, res) => {
+  try {
+    // Only check if IMAP is configured
+    if (!process.env.IMAP_USER || !process.env.IMAP_PASSWORD) {
+      return res.json({ message: 'IMAP not configured, skipping reply check' });
+    }
+
+    const { checkReplies } = await import('../services/replyService.js');
+    const result = await checkReplies();
+
+    res.json({
+      success: true,
+      stats: result,
+      message: `Checked ${result.checked} messages, found ${result.found} replies, updated ${result.updated} leads`
+    });
+  } catch (error) {
+    console.error('Check replies error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
+  }
+});
+
+export default router;
