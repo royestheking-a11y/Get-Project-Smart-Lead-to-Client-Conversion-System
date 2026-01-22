@@ -497,8 +497,8 @@ router.post('/schedule-jobs', verifyCronSecret, async (req, res) => {
         });
 
         // Update lead status to signify it's queued
-        lead.status = 'PENDING'; // Or keep IMPORTED? PENDING is better UX.
-        await lead.save();
+        // lead.status = 'PENDING'; // Removed because PENDING is not valid enum
+        // await lead.save();
 
         jobsCreated++;
       }
