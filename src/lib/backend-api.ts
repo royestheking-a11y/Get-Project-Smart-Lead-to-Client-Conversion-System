@@ -243,6 +243,19 @@ export const leadsApi = {
       body: JSON.stringify({ campaignId, limit }),
     });
   },
+
+  delete: async (id: string) => {
+    return apiRequest<{ message: string }>(`/leads/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  deleteBatch: async (leadIds: string[]) => {
+    return apiRequest<{ message: string; deletedCount: number }>('/leads/delete-batch', {
+      method: 'POST',
+      body: JSON.stringify({ leadIds }),
+    });
+  },
 };
 
 // Send API

@@ -146,6 +146,25 @@ export default function Leads() {
     },
   });
 
+  const deleteBatchMutation = useMutation({
+    mutationFn: (ids: string[]) => leadsApi.deleteBatch(ids),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+      setSelectedLeads([]);
+      toast({ title: t('admin.leads.deletedCount', { count: data.deletedCount }) || `${data.deletedCount} leads deleted` });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => leadsApi.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+      toast({ title: t('admin.leads.deleted') || 'Lead deleted' });
+    },
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -258,7 +277,18 @@ export default function Leads() {
             <Ban className="h-4 w-4" />
             {t('admin.leads.markDoNotContact')}
           </Button>
-          <Button variant="outline" size="sm" className="text-destructive">
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-destructive hover:bg-destructive/10"
+            onClick={() => {
+              if (confirm(t('admin.leads.confirmDelete') || 'Are you sure you want to delete these leads?')) {
+                deleteBatchMutation.mutate(selectedLeads);
+              }
+            }}
+            disabled={deleteBatchMutation.isPending}
+          >
+            {deleteBatchMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
             {t('admin.leads.delete')}
           </Button>
         </div>
@@ -391,6 +421,17 @@ export default function Leads() {
                             >
                               <Ban className="h-4 w-4 mr-2" />
                               Do Not Contact
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="text-destructive"
+                              onClick={() => {
+                                if (confirm(t('admin.leads.confirmDelete') || 'Are you sure?')) {
+                                  deleteMutation.mutate(leadId);
+                                }
+                              }}
+                            >
+                              <Ban className="h-4 w-4 mr-2" />
+                              {t('admin.leads.delete')}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

@@ -5,7 +5,7 @@ type Language = 'en' | 'bn';
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 const translations = {
@@ -879,8 +879,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('getproject_language', lang);
   }, []);
 
-  const t = useCallback((key: string): string => {
-    return translations[language][key as keyof typeof translations['en']] || key;
+  const t = useCallback((key: string, params?: Record<string, string | number>): string => {
+    let text = translations[language][key as keyof typeof translations['en']] || key;
+
+    if (params) {
+      Object.entries(params).forEach(([paramKey, paramValue]) => {
+        text = text.replace(new RegExp(`{${paramKey}}`, 'g'), String(paramValue));
+      });
+    }
+
+    return text;
   }, [language]);
 
   return (
