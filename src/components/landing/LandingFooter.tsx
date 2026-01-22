@@ -20,7 +20,7 @@ const LandingFooter = () => {
       { label: t('footer.about'), href: '/about' },
       { label: t('footer.blog'), href: '/blog' },
       { label: t('footer.careers'), href: '/careers' },
-      { label: 'Contact', href: '/contact' },
+      { label: t('footer.contact'), href: '/contact' },
     ],
     legal: [
       { label: t('footer.privacy'), href: '/privacy' },

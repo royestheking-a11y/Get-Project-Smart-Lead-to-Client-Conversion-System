@@ -11,13 +11,14 @@ interface LanguageContextType {
 const translations = {
   en: {
     // Navbar
+    'nav.home': 'Home',
     'nav.features': 'Features',
     'nav.howItWorks': 'How it works',
     'nav.pricing': 'Pricing',
     'nav.free': 'Free',
     'nav.login': 'Login',
     'nav.getStarted': 'Get Started',
-    
+
     // Hero Section
     'hero.badge': 'Free Lead Automation Tool',
     'hero.title1': 'Upload your lead file.',
@@ -26,23 +27,23 @@ const translations = {
     'hero.noCreditCard': 'No credit card required',
     'hero.fileLimit': '20MB file limit',
     'hero.csvSupport': 'CSV & XLSX support',
-    
+
     'hero.title3': 'Find Clients Automatically.',
     'hero.title4': 'Send 50–70 Smart Emails Daily.',
     'hero.subtitle2': 'Import leads from Excel/Sheets, auto-categorize companies, send personalized outreach, and track replies — all from one dashboard.',
-    
+
     'hero.autoImport': 'Auto Import',
     'hero.csvExcel': 'CSV & Excel files',
     'hero.smartSending': 'Smart Sending',
     'hero.rateLimited': 'Rate-limited',
     'hero.trackResults': 'Track Results',
     'hero.realTimeStats': 'Real-time stats',
-    
+
     'hero.noPaidTools': 'No paid tools needed',
     'hero.freefirst': 'Free-first',
     'hero.builtFor': 'Built for agencies & freelancers',
     'hero.watchDemo': 'Watch Demo',
-    
+
     // Upload Card
     'upload.title': 'Upload Lead File',
     'upload.dragDrop': 'Drag & drop your file here',
@@ -62,13 +63,13 @@ const translations = {
     'upload.imported': 'Imported',
     'upload.skipped': 'Skipped',
     'upload.goToDashboard': 'Go to Dashboard',
-    
+
     // Social Proof
     'social.autoOutreach': 'Auto outreach engine',
     'social.queueFollowups': 'Queue + follow-ups',
     'social.excelImport': 'Excel/CSV import',
     'social.trackingDashboard': 'Tracking dashboard',
-    
+
     // How It Works
     'how.title': 'How It Works',
     'how.subtitle': 'Get started in 3 simple steps',
@@ -78,7 +79,7 @@ const translations = {
     'how.step2.desc': 'We analyze each lead and categorize them: No website, Weak website, SEO issues, or E-commerce.',
     'how.step3.title': 'Send & Track',
     'how.step3.desc': 'Launch campaigns with rate-limited sending. Track opens, replies, and manage follow-ups.',
-    
+
     // Features
     'features.title': 'Powerful Features',
     'features.subtitle': 'Everything you need to automate your outreach',
@@ -94,7 +95,7 @@ const translations = {
     'features.tracking.desc': 'Track lead status from import to reply with detailed logs.',
     'features.exclusion.title': 'Lead Exclusion',
     'features.exclusion.desc': 'Mark leads as "Do Not Contact" to prevent unwanted emails.',
-    
+
     // Built For
     'builtFor.title': 'Built For',
     'builtFor.subtitle': 'Perfect for professionals who need consistent outreach',
@@ -104,7 +105,7 @@ const translations = {
     'builtFor.freelancers.desc': 'Find new clients while you focus on delivering great work.',
     'builtFor.startups.title': 'Sales Teams',
     'builtFor.startups.desc': 'Scale your outreach with automated, personalized emails.',
-    
+
     // FAQ
     'faq.title': 'Frequently Asked Questions',
     'faq.subtitle': 'Got questions? We have answers.',
@@ -118,12 +119,12 @@ const translations = {
     'faq.a4': 'We use rate-limiting and best practices to help ensure deliverability. We recommend warming up your domain.',
     'faq.q5': 'Can I publish this as a SaaS?',
     'faq.a5': 'This is designed for personal/agency use. Contact us for white-label or enterprise licensing.',
-    
+
     // CTA
     'cta.badge': 'Start for Free',
     'cta.title': 'Ready to catch clients daily?',
     'cta.subtitle': 'Start free. Import your leads and launch your first campaign today.',
-    
+
     // Footer
     'footer.description': 'Automated lead outreach platform for agencies and freelancers. Import, categorize, send, and track — all in one place.',
     'footer.product': 'Product',
@@ -132,10 +133,11 @@ const translations = {
     'footer.about': 'About',
     'footer.blog': 'Blog',
     'footer.careers': 'Careers',
+    'footer.contact': 'Contact',
     'footer.privacy': 'Privacy',
     'footer.terms': 'Terms',
     'footer.copyright': '© 2026 Get Project. All rights reserved.',
-    
+
     // Login
     'login.backToHome': 'Back to Home',
     'login.title': 'Automate your lead outreach',
@@ -159,7 +161,7 @@ const translations = {
     'login.errorGeneric': 'Something went wrong. Please try again.',
     'login.noAccount': "Don't have an account?",
     'login.signupLink': 'Sign up',
-    
+
     // Signup
     'signup.badge': 'Free Forever Plan Available',
     'signup.title': 'Create your account',
@@ -190,7 +192,7 @@ const translations = {
     'signup.errorTitle': 'Signup failed',
     'signup.errorDesc': 'Could not create account. Please try again.',
     'signup.errorGeneric': 'Something went wrong. Please try again.',
-    
+
     // Dashboard
     'dashboard.title': 'Dashboard',
     'dashboard.subtitle': 'Overview of your lead outreach performance',
@@ -198,7 +200,7 @@ const translations = {
     'dashboard.readyToSend': 'Ready to Send',
     'dashboard.sentToday': 'Sent Today',
     'dashboard.replies': 'Replies',
-    
+
     // Pricing
     'pricing.badge': 'Simple, Transparent Pricing',
     'pricing.title': 'Choose Your Plan',
@@ -242,7 +244,7 @@ const translations = {
     'pricing.enterprise.feature6': 'SLA guarantee',
     'pricing.enterprise.feature7': 'White-label options',
     'pricing.enterprise.feature8': 'API access',
-    
+
     // Watch Demo
     'demo.badge': 'Video Tutorials',
     'demo.title': 'Watch Demo Videos',
@@ -278,13 +280,14 @@ const translations = {
   },
   bn: {
     // Navbar
+    'nav.home': 'হোম',
     'nav.features': 'ফিচার',
     'nav.howItWorks': 'কিভাবে কাজ করে',
     'nav.pricing': 'মূল্য',
     'nav.free': 'বিনামূল্যে',
     'nav.login': 'লগইন',
     'nav.getStarted': 'শুরু করুন',
-    
+
     // Hero Section
     'hero.badge': 'বিনামূল্যে লিড অটোমেশন টুল',
     'hero.title1': 'আপনার লিড ফাইল আপলোড করুন।',
@@ -293,23 +296,23 @@ const translations = {
     'hero.noCreditCard': 'ক্রেডিট কার্ড লাগবে না',
     'hero.fileLimit': '২০MB ফাইল সীমা',
     'hero.csvSupport': 'CSV ও XLSX সাপোর্ট',
-    
+
     'hero.title3': 'স্বয়ংক্রিয়ভাবে ক্লায়েন্ট খুঁজুন।',
     'hero.title4': 'প্রতিদিন ৫০-৭০টি স্মার্ট ইমেইল পাঠান।',
     'hero.subtitle2': 'Excel/Sheets থেকে লিড আমদানি করুন, কোম্পানি অটো-ক্যাটাগরি করুন, ব্যক্তিগতকৃত আউটরিচ পাঠান এবং রিপ্লাই ট্র্যাক করুন — সব এক ড্যাশবোর্ড থেকে।',
-    
+
     'hero.autoImport': 'অটো ইম্পোর্ট',
     'hero.csvExcel': 'CSV ও Excel ফাইল',
     'hero.smartSending': 'স্মার্ট সেন্ডিং',
     'hero.rateLimited': 'রেট-লিমিটেড',
     'hero.trackResults': 'ফলাফল ট্র্যাক',
     'hero.realTimeStats': 'রিয়েল-টাইম পরিসংখ্যান',
-    
+
     'hero.noPaidTools': 'পেইড টুলের দরকার নেই',
     'hero.freefirst': 'প্রথমে বিনামূল্যে',
     'hero.builtFor': 'এজেন্সি ও ফ্রিল্যান্সারদের জন্য',
     'hero.watchDemo': 'ডেমো দেখুন',
-    
+
     // Upload Card
     'upload.title': 'লিড ফাইল আপলোড',
     'upload.dragDrop': 'এখানে ফাইল টেনে আনুন',
@@ -329,13 +332,13 @@ const translations = {
     'upload.imported': 'ইম্পোর্টেড',
     'upload.skipped': 'বাদ দেওয়া',
     'upload.goToDashboard': 'ড্যাশবোর্ডে যান',
-    
+
     // Social Proof
     'social.autoOutreach': 'অটো আউটরিচ ইঞ্জিন',
     'social.queueFollowups': 'কিউ + ফলো-আপ',
     'social.excelImport': 'Excel/CSV ইম্পোর্ট',
     'social.trackingDashboard': 'ট্র্যাকিং ড্যাশবোর্ড',
-    
+
     // How It Works
     'how.title': 'কিভাবে কাজ করে',
     'how.subtitle': '৩টি সহজ ধাপে শুরু করুন',
@@ -345,7 +348,7 @@ const translations = {
     'how.step2.desc': 'আমরা প্রতিটি লিড বিশ্লেষণ করি: ওয়েবসাইট নেই, দুর্বল ওয়েবসাইট, SEO সমস্যা বা ই-কমার্স।',
     'how.step3.title': 'পাঠান ও ট্র্যাক করুন',
     'how.step3.desc': 'রেট-লিমিটেড সেন্ডিং দিয়ে ক্যাম্পেইন চালু করুন। ওপেন, রিপ্লাই ট্র্যাক করুন।',
-    
+
     // Features
     'features.title': 'শক্তিশালী ফিচার',
     'features.subtitle': 'আউটরিচ অটোমেট করতে যা কিছু দরকার',
@@ -361,7 +364,7 @@ const translations = {
     'features.tracking.desc': 'ইম্পোর্ট থেকে রিপ্লাই পর্যন্ত বিস্তারিত লগসহ লিড স্ট্যাটাস ট্র্যাক করুন।',
     'features.exclusion.title': 'লিড বাদ দেওয়া',
     'features.exclusion.desc': 'অবাঞ্ছিত ইমেইল প্রতিরোধে "যোগাযোগ করবেন না" হিসেবে চিহ্নিত করুন।',
-    
+
     // Built For
     'builtFor.title': 'যাদের জন্য তৈরি',
     'builtFor.subtitle': 'যাদের ধারাবাহিক আউটরিচ দরকার তাদের জন্য পারফেক্ট',
@@ -371,7 +374,7 @@ const translations = {
     'builtFor.freelancers.desc': 'দুর্দান্ত কাজ ডেলিভারিতে মনোযোগ দেওয়ার সময় নতুন ক্লায়েন্ট খুঁজুন।',
     'builtFor.startups.title': 'সেলস টিম',
     'builtFor.startups.desc': 'অটোমেটেড, ব্যক্তিগতকৃত ইমেইল দিয়ে আপনার আউটরিচ স্কেল করুন।',
-    
+
     // FAQ
     'faq.title': 'সাধারণ প্রশ্নাবলী',
     'faq.subtitle': 'প্রশ্ন আছে? আমাদের কাছে উত্তর আছে।',
@@ -385,12 +388,12 @@ const translations = {
     'faq.a4': 'আমরা ডেলিভারেবিলিটি নিশ্চিত করতে রেট-লিমিটিং ও বেস্ট প্র্যাক্টিস ব্যবহার করি। ডোমেইন ওয়ার্ম-আপ রেকমেন্ডেড।',
     'faq.q5': 'আমি কি এটা SaaS হিসেবে পাবলিশ করতে পারি?',
     'faq.a5': 'এটি ব্যক্তিগত/এজেন্সি ব্যবহারের জন্য ডিজাইন করা হয়েছে। হোয়াইট-লেবেল বা এন্টারপ্রাইজের জন্য যোগাযোগ করুন।',
-    
+
     // CTA
     'cta.badge': 'বিনামূল্যে শুরু করুন',
     'cta.title': 'প্রতিদিন ক্লায়েন্ট পেতে প্রস্তুত?',
     'cta.subtitle': 'বিনামূল্যে শুরু করুন। আপনার লিড ইম্পোর্ট করুন এবং আজই প্রথম ক্যাম্পেইন চালু করুন।',
-    
+
     // Footer
     'footer.description': 'এজেন্সি ও ফ্রিল্যান্সারদের জন্য অটোমেটেড লিড আউটরিচ প্ল্যাটফর্ম। ইম্পোর্ট, ক্যাটাগরি, পাঠান ও ট্র্যাক — সব এক জায়গায়।',
     'footer.product': 'প্রোডাক্ট',
@@ -399,10 +402,11 @@ const translations = {
     'footer.about': 'সম্পর্কে',
     'footer.blog': 'ব্লগ',
     'footer.careers': 'ক্যারিয়ার',
+    'footer.contact': 'যোগাযোগ',
     'footer.privacy': 'গোপনীয়তা',
     'footer.terms': 'শর্তাবলী',
     'footer.copyright': '© ২০২৬ Get Project। সর্বস্বত্ব সংরক্ষিত।',
-    
+
     // Login
     'login.backToHome': 'হোমে ফিরুন',
     'login.title': 'আপনার লিড আউটরিচ অটোমেট করুন',
@@ -426,7 +430,7 @@ const translations = {
     'login.errorGeneric': 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
     'login.noAccount': 'অ্যাকাউন্ট নেই?',
     'login.signupLink': 'সাইন আপ করুন',
-    
+
     // Signup
     'signup.badge': 'বিনামূল্যে প্ল্যান উপলব্ধ',
     'signup.title': 'আপনার অ্যাকাউন্ট তৈরি করুন',
@@ -457,7 +461,7 @@ const translations = {
     'signup.errorTitle': 'সাইন আপ ব্যর্থ',
     'signup.errorDesc': 'অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।',
     'signup.errorGeneric': 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
-    
+
     // Dashboard
     'dashboard.title': 'ড্যাশবোর্ড',
     'dashboard.subtitle': 'আপনার লিড আউটরিচ পারফরম্যান্সের সারসংক্ষেপ',
@@ -465,7 +469,7 @@ const translations = {
     'dashboard.readyToSend': 'পাঠাতে প্রস্তুত',
     'dashboard.sentToday': 'আজ পাঠানো',
     'dashboard.replies': 'রিপ্লাই',
-    
+
     // Pricing
     'pricing.badge': 'সহজ, স্বচ্ছ মূল্য',
     'pricing.title': 'আপনার প্ল্যান বেছে নিন',
@@ -509,7 +513,7 @@ const translations = {
     'pricing.enterprise.feature6': 'SLA গ্যারান্টি',
     'pricing.enterprise.feature7': 'হোয়াইট-লেবেল অপশন',
     'pricing.enterprise.feature8': 'API অ্যাক্সেস',
-    
+
     // Watch Demo
     'demo.badge': 'ভিডিও টিউটোরিয়াল',
     'demo.title': 'ডেমো ভিডিও দেখুন',
