@@ -42,9 +42,7 @@ const LandingFooter = () => {
           {/* Brand Column */}
           <div className="xl:col-span-2">
             <Link to="/" className="flex items-center gap-2.5 mb-6 group w-fit">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25 group-hover:shadow-primary/40 transition-all duration-300">
-                <Zap className="h-5 w-5 text-primary-foreground" />
-              </div>
+              <img src="/get-project.png" alt="Get Project" className="h-10 w-10 object-contain" />
               <span className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
                 Get Project
               </span>

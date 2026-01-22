@@ -61,9 +61,7 @@ export default function Login() {
 
         <div className="relative z-10 flex flex-col justify-center px-12 lg:px-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-              <Zap className="h-6 w-6 text-white" />
-            </div>
+            <img src="/get-project.png" alt="Get Project" className="h-12 w-12 object-contain" />
             <span className="text-2xl font-bold text-white">Get Project</span>
           </div>
 
@@ -106,9 +104,7 @@ export default function Login() {
           <div className="bg-card rounded-2xl border border-border shadow-xl p-8 animate-fade-in">
             {/* Logo - Mobile */}
             <div className="flex flex-col items-center mb-8 lg:hidden">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mb-4 shadow-lg shadow-primary/25">
-                <Zap className="h-7 w-7 text-primary-foreground" />
-              </div>
+              <img src="/get-project.png" alt="Get Project" className="w-14 h-14 object-contain mb-4" />
               <h1 className="text-2xl font-bold text-foreground">Get Project</h1>
               <p className="text-muted-foreground text-sm mt-1">{t('login.tagline')}</p>
             </div>

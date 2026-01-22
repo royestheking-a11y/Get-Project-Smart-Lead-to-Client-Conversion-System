@@ -21,9 +21,7 @@ const LandingNavbar = () => {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25 group-hover:shadow-primary/40 transition-shadow">
-            <Zap className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <img src="/get-project.png" alt="Get Project" className="h-10 w-10 object-contain" />
           <span className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
             Get Project
           </span>

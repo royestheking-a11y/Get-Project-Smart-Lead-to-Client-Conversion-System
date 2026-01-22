@@ -47,9 +47,7 @@ export function AppHeader() {
                 <div className="flex flex-col h-full">
                   <div className="p-6 border-b border-border/50">
                     <Link to="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/20">
-                        <Zap className="h-4 w-4 text-primary-foreground" />
-                      </div>
+                      <img src="/get-project.png" alt="Get Project" className="w-8 h-8 object-contain" />
                       <span className="text-lg font-bold text-foreground">Get Project</span>
                     </Link>
                   </div>
@@ -98,9 +96,7 @@ export function AppHeader() {
 
           {/* Logo */}
           <Link to={isAuthenticated ? '/dashboard' : '/'} className="flex items-center gap-2.5 group">
-            <div className={`w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-shadow ${isAuthenticated ? 'hidden md:flex' : 'flex'}`}>
-              <Zap className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <img src="/get-project.png" alt="Get Project" className={`w-10 h-10 object-contain ${isAuthenticated ? 'hidden md:block' : 'block'}`} />
             <span className={`text-xl font-bold text-foreground ${isAuthenticated ? 'hidden md:block' : 'block'}`}>Get Project</span>
           </Link>
         </div>

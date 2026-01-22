@@ -53,7 +53,7 @@ const Contact = () => {
                                 </CardHeader>
                                 <CardContent>
                                     <a href="mailto:support@getproject.com" className="text-primary font-medium hover:underline">
-                                        support@getproject.com
+                                        getproject.org@gmail.com
                                     </a>
                                 </CardContent>
                             </Card>
@@ -87,7 +87,7 @@ const Contact = () => {
                                 </CardHeader>
                                 <CardContent>
                                     <p className="text-muted-foreground font-medium">
-                                        123 Innovation Dr, San Francisco, CA 94103
+                                        18 No Road Dhaka, Bangladesh
                                     </p>
                                 </CardContent>
                             </Card>
