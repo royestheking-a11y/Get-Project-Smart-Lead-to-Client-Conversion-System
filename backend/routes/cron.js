@@ -220,6 +220,9 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
 // Follow-ups cron
 router.post('/followups', verifyCronSecret, async (req, res) => {
   try {
+    const now = new Date();
+    const activeCampaigns = await Campaign.find({ status: 'active' });
+
     for (const campaign of activeCampaigns) {
       // Calculate dynamic delay dates based on campaign settings
       const delay1 = campaign.followup1DelayDays || 3;
