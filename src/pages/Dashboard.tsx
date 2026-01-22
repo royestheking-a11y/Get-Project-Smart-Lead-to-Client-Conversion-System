@@ -49,6 +49,11 @@ export default function Dashboard() {
       value: stats?.repliedCount?.toLocaleString() || '0',
       icon: MessageSquare
     },
+    {
+      title: 'Failed / Bounced',
+      value: stats?.failedCount?.toLocaleString() || '0',
+      icon: TrendingUp // Or AlertCircle if imported, but TrendingUp is available
+    },
   ], [stats]);
 
   return (
@@ -101,7 +106,7 @@ export default function Dashboard() {
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {kpiData.map((kpi, index) => (
             <KPICard
               key={index}

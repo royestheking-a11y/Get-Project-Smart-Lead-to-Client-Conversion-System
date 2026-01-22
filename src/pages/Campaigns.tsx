@@ -150,11 +150,11 @@ export default function Campaigns() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => setEditingCampaign({
-                          id: campaign._id || campaign.id,
-                          name: campaign.name,
-                          dailyLimit: campaign.dailyLimit || campaign.daily_limit || 50
+                        id: campaign._id || campaign.id,
+                        name: campaign.name,
+                        dailyLimit: campaign.dailyLimit || campaign.daily_limit || 50
                       })}>
-                          Edit
+                        Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem>View Leads</DropdownMenuItem>
                       <DropdownMenuItem className="text-destructive" onClick={() => deleteMutation.mutate(campaign._id || campaign.id)}>
@@ -183,7 +183,7 @@ export default function Campaigns() {
                 </div>
               </div>
 
-              <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="mt-6 grid grid-cols-3 gap-4">
                 <div className="p-3 rounded-lg bg-secondary/50 border border-border">
                   <div className="text-sm text-muted-foreground">Total Sent</div>
                   <div className="text-xl font-bold text-foreground mt-1">{campaign.sentCount || 0}</div>
@@ -191,6 +191,10 @@ export default function Campaigns() {
                 <div className="p-3 rounded-lg bg-secondary/50 border border-border">
                   <div className="text-sm text-muted-foreground">Total Leads</div>
                   <div className="text-xl font-bold text-foreground mt-1">{campaign.leadCount || 0}</div>
+                </div>
+                <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <div className="text-sm text-red-600/80">Failed</div>
+                  <div className="text-xl font-bold text-red-600 mt-1">{campaign.failedCount || 0}</div>
                 </div>
               </div>
 
@@ -200,8 +204,8 @@ export default function Campaigns() {
         )}
       </div>
 
-      <EditCampaignDialog 
-        open={!!editingCampaign} 
+      <EditCampaignDialog
+        open={!!editingCampaign}
         onOpenChange={(open) => !open && setEditingCampaign(null)}
         campaign={editingCampaign}
       />

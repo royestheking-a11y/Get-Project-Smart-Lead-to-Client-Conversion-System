@@ -77,11 +77,23 @@ router.get('/', async (req, res) => {
           status: 'sent'
         });
 
+        const failedCount = await Lead.countDocuments({
+          campaignId: campaign._id,
+          status: { $in: ['FAILED', 'BOUNCED'] }
+        });
+
+        const repliedCount = await Lead.countDocuments({
+          campaignId: campaign._id,
+          status: 'REPLIED'
+        });
+
         return {
           ...campaign.toObject(),
           leadCount,
           sentCount,
-          todayCount
+          todayCount,
+          failedCount,
+          repliedCount
         };
       })
     );
