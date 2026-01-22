@@ -90,6 +90,50 @@ export default function ImportLeads() {
     return [];
   };
 
+  // Helper to find the best matching column based on priority
+  const findBestMatch = (columns: string[], keywords: string[], exactMatch = false) => {
+    // 1. Exact match (case insensitive)
+    const exact = columns.find(col => keywords.some(k => col.toLowerCase() === k.toLowerCase()));
+    if (exact) return exact;
+
+    // 2. Contains match (prioritized by order of keywords)
+    if (!exactMatch) {
+      for (const keyword of keywords) {
+        const match = columns.find(col => col.toLowerCase().includes(keyword.toLowerCase()));
+        if (match) return match;
+      }
+    }
+    return undefined;
+  };
+
+  const autoMapColumns = (columns: string[]) => {
+    const mapping: Record<string, string> = {};
+
+    // Priority lists for mapping
+    const emailKeywords = ['email address', 'e-mail address', 'email', 'e-mail', 'mail', 'email 1', 'primary email', 'work email', 'office email', 'contact email'];
+    const companyKeywords = ['company name', 'company', 'organization', 'business name', 'business'];
+    const websiteKeywords = ['website', 'web', 'url', 'domain', 'company website', 'site'];
+    const locationKeywords = ['location', 'city', 'address', 'country', 'region', 'state'];
+    const industryKeywords = ['industry', 'sector', 'niche', 'category', 'vertical'];
+
+    const emailCol = findBestMatch(columns, emailKeywords);
+    if (emailCol) mapping['emailColumn'] = emailCol;
+
+    const companyCol = findBestMatch(columns, companyKeywords);
+    if (companyCol) mapping['company_nameColumn'] = companyCol;
+
+    const websiteCol = findBestMatch(columns, websiteKeywords);
+    if (websiteCol) mapping['websiteColumn'] = websiteCol;
+
+    const locationCol = findBestMatch(columns, locationKeywords);
+    if (locationCol) mapping['locationColumn'] = locationCol;
+
+    const industryCol = findBestMatch(columns, industryKeywords);
+    if (industryCol) mapping['industryColumn'] = industryCol;
+
+    return mapping;
+  };
+
   const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
@@ -98,17 +142,7 @@ export default function ImportLeads() {
       const columns = await parseFileColumns(droppedFile);
       setFile({ name: droppedFile.name, size: droppedFile.size, file: droppedFile, columns });
       setImportStatus('mapping');
-      // Auto-map common column names
-      const autoMapping: Record<string, string> = {};
-      columns.forEach((col) => {
-        const colLower = col.toLowerCase();
-        if (colLower.includes('email')) autoMapping['emailColumn'] = col;
-        if (colLower.includes('company') || colLower.includes('name')) autoMapping['company_nameColumn'] = col;
-        if (colLower.includes('website') || colLower.includes('url')) autoMapping['websiteColumn'] = col;
-        if (colLower.includes('location') || colLower.includes('city')) autoMapping['locationColumn'] = col;
-        if (colLower.includes('industry')) autoMapping['industryColumn'] = col;
-      });
-      setColumnMapping(autoMapping);
+      setColumnMapping(autoMapColumns(columns));
     }
   }, []);
 
@@ -118,17 +152,7 @@ export default function ImportLeads() {
       const columns = await parseFileColumns(selectedFile);
       setFile({ name: selectedFile.name, size: selectedFile.size, file: selectedFile, columns });
       setImportStatus('mapping');
-      // Auto-map common column names
-      const autoMapping: Record<string, string> = {};
-      columns.forEach((col) => {
-        const colLower = col.toLowerCase();
-        if (colLower.includes('email')) autoMapping['emailColumn'] = col;
-        if (colLower.includes('company') || colLower.includes('name')) autoMapping['company_nameColumn'] = col;
-        if (colLower.includes('website') || colLower.includes('url')) autoMapping['websiteColumn'] = col;
-        if (colLower.includes('location') || colLower.includes('city')) autoMapping['locationColumn'] = col;
-        if (colLower.includes('industry')) autoMapping['industryColumn'] = col;
-      });
-      setColumnMapping(autoMapping);
+      setColumnMapping(autoMapColumns(columns));
     }
   };
 
