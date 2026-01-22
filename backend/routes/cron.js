@@ -373,6 +373,128 @@ router.post('/check-bounce-rate', verifyCronSecret, async (req, res) => {
   }
 });
 
+// Schedule new jobs (Main scheduler)
+router.post('/schedule-jobs', verifyCronSecret, async (req, res) => {
+  try {
+    const activeCampaigns = await Campaign.find({ status: 'active' });
+    let jobsCreated = 0;
+    const now = new Date();
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    for (const campaign of activeCampaigns) {
+      // 1. Check daily limit
+      const sentToday = await EmailLog.countDocuments({
+        campaignId: campaign._id,
+        sentAt: { $gte: startOfDay },
+        status: { $in: ['sent', 'failed'] }
+      });
+
+      const pendingJobsToday = await Job.countDocuments({
+        campaignId: campaign._id,
+        runAt: { $gte: startOfDay, $lte: new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000) },
+        status: { $in: ['PENDING', 'RUNNING'] }
+      });
+
+      // Total allotted for today
+      const usage = sentToday + pendingJobsToday;
+      const remainingQuota = campaign.dailyLimit - usage;
+
+      if (remainingQuota <= 0) {
+        continue; // Limit reached for today
+      }
+
+      // 2. Find fresh leads (IMPORTED) that don't have jobs yet
+      // We limit by remainingQuota to not over-schedule
+      const newLeads = await Lead.find({
+        campaignId: campaign._id,
+        status: 'IMPORTED',
+        doNotContact: false
+      }).limit(remainingQuota);
+
+      if (newLeads.length === 0) continue;
+
+      // 3. Get templates
+      const templates = await EmailTemplate.find({ campaignId: campaign._id });
+      // Identify initial template (default or categorized)
+      const templateMap = {};
+      templates.forEach(t => {
+        templateMap[t.category] = t._id;
+      });
+
+      // 4. Create jobs
+      let nextRunAt = new Date();
+      // If there are existing pending jobs, we should schedule AFTER them (not implemented here for simplicity, 
+      // but we add random jitter). simpler is to just schedule from "now".
+
+      for (const lead of newLeads) {
+        // Find best template
+        const templateId = templateMap['INITIAL'] || templateMap[lead.category] || templates[0]?._id;
+
+        if (!templateId) {
+          console.log(`Campaign ${campaign._id} has leads but no valid template found.`);
+          continue;
+        }
+
+        // Check if job already exists (double safety)
+        const existingJob = await Job.findOne({
+          leadId: lead._id,
+          type: 'SEND_EMAIL'
+        });
+        if (existingJob) continue;
+
+        // Calculate schedule time with rate limiting
+        // We accumulate delay so they are spread out
+        const randomDelay = Math.floor(
+          Math.random() * (campaign.rateLimitMaxSec - campaign.rateLimitMinSec + 1) +
+          campaign.rateLimitMinSec
+        );
+
+        // Add randomDelay to nextRunAt
+        nextRunAt = new Date(nextRunAt.getTime() + randomDelay * 1000);
+
+        // Enforce Sending Window (e.g. 09:00 - 17:00)
+        // Parse window
+        const [startHour, startMin] = (campaign.sendingWindowStart || '09:00').split(':').map(Number);
+        const [endHour, endMin] = (campaign.sendingWindowEnd || '17:00').split(':').map(Number);
+
+        // Adjust nextRunAt if outside window
+        // (Simplified logic: if it's too late, push to tomorrow start)
+        const currentHour = nextRunAt.getHours();
+        if (currentHour >= endHour) {
+          // Move to tomorrow start
+          nextRunAt.setDate(nextRunAt.getDate() + 1);
+          nextRunAt.setHours(startHour, startMin, 0, 0);
+        } else if (currentHour < startHour) {
+          nextRunAt.setHours(startHour, startMin, 0, 0);
+        }
+
+        await Job.create({
+          type: 'SEND_EMAIL',
+          campaignId: campaign._id,
+          leadId: lead._id,
+          templateId,
+          runAt: nextRunAt,
+          status: 'PENDING',
+          attempts: 0
+        });
+
+        // Update lead status to signify it's queued
+        lead.status = 'PENDING'; // Or keep IMPORTED? PENDING is better UX.
+        await lead.save();
+
+        jobsCreated++;
+      }
+    }
+
+    res.json({ jobsCreated, message: `Scheduled ${jobsCreated} new emails` });
+
+  } catch (error) {
+    console.error('Schedule jobs error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
+  }
+});
+
 // Check replies cron
 router.post('/check-replies', verifyCronSecret, async (req, res) => {
   try {
