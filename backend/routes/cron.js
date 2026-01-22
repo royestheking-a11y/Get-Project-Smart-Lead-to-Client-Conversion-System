@@ -534,4 +534,17 @@ router.post('/check-replies', verifyCronSecret, async (req, res) => {
   }
 });
 
+// Debug config
+router.get('/debug-config', async (req, res) => {
+  const config = {
+    SMTP_HOST: process.env.SMTP_HOST ? 'Set' : 'Missing',
+    SMTP_USER: process.env.SMTP_USER ? 'Set' : 'Missing',
+    SMTP_PASS: process.env.SMTP_PASS ? 'Set' : 'Missing',
+    SMTP_PORT: process.env.SMTP_PORT ? 'Set' : 'Missing',
+    Keys: Object.keys(process.env).filter(k => k.startsWith('SMTP')),
+  };
+  console.log('Debug Config:', config);
+  res.json(config);
+});
+
 export default router;
