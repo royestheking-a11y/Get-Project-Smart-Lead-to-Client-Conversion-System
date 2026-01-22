@@ -206,24 +206,20 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
 // Follow-ups cron
 router.post('/followups', verifyCronSecret, async (req, res) => {
   try {
-    const now = new Date();
-    const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
-
-    // Get active campaigns
-    const activeCampaigns = await Campaign.find({ status: 'active', followupsEnabled: true });
-
-    let followup1Created = 0;
-    let followup2Created = 0;
-    let markedDone = 0;
-
     for (const campaign of activeCampaigns) {
-      // Followup 1: SENT leads contacted 3+ days ago
+      // Calculate dynamic delay dates based on campaign settings
+      const delay1 = campaign.followup1DelayDays || 3;
+      const delay2 = campaign.followup2DelayDays || 7;
+
+      const cutoff1 = new Date(now.getTime() - delay1 * 24 * 60 * 60 * 1000);
+      const cutoff2 = new Date(now.getTime() - delay2 * 24 * 60 * 60 * 1000);
+      const cutoffDone = new Date(now.getTime() - (delay2 + 7) * 24 * 60 * 60 * 1000); // 7 days after last email
+
+      // Followup 1: SENT leads contacted X days ago
       const followup1Leads = await Lead.find({
         campaignId: campaign._id,
         status: 'SENT',
-        lastContactedAt: { $lte: threeDaysAgo },
+        lastContactedAt: { $lte: cutoff1 },
         doNotContact: false
       });
 
@@ -267,11 +263,11 @@ router.post('/followups', verifyCronSecret, async (req, res) => {
         }
       }
 
-      // Followup 2: FOLLOWUP_1_SENT leads contacted 7+ days ago (exclude replied/won/lost)
+      // Followup 2: FOLLOWUP_1_SENT leads contacted Y days ago (exclude replied/won/lost)
       const followup2Leads = await Lead.find({
         campaignId: campaign._id,
         status: 'FOLLOWUP_1_SENT',
-        lastContactedAt: { $lte: sevenDaysAgo },
+        lastContactedAt: { $lte: cutoff2 },
         doNotContact: false
       });
 
@@ -307,12 +303,12 @@ router.post('/followups', verifyCronSecret, async (req, res) => {
         }
       }
 
-      // Mark as DONE: followup2 older than 14 days with no reply
+      // Mark as DONE: followup2 older than 7 days afterwards with no reply
       const doneLeads = await Lead.updateMany(
         {
           campaignId: campaign._id,
           status: 'FOLLOWUP_2_SENT',
-          lastContactedAt: { $lte: fourteenDaysAgo },
+          lastContactedAt: { $lte: cutoffDone },
           doNotContact: false
         },
         {

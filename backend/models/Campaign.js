@@ -37,6 +37,14 @@ const campaignSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  followup1DelayDays: {
+    type: Number,
+    default: 3
+  },
+  followup2DelayDays: {
+    type: Number,
+    default: 7
+  },
   status: {
     type: String,
     enum: ['active', 'paused'],
