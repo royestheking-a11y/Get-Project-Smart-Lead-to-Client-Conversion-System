@@ -31,21 +31,23 @@ export const renderTemplate = (template, lead, senderProfile = {}) => {
   const hasClosing = /(regards|sincerely|cheers|best,|faithfully|yours|thanks,)/i.test(body);
 
   if (!hasClosing) {
-    const sigLines = [
-      '<br><br>Best regards,',
-      senderProfile.name,
-      senderProfile.company,
-      senderProfile.whatsapp ? `WhatsApp: ${senderProfile.whatsapp}` : '',
-      senderProfile.portfolioLink ? `Website: <a href="${senderProfile.portfolioLink}">${senderProfile.portfolioLink}</a>` : ''
-    ].filter(Boolean).join('<br>');
+    // Use exact signature format requested by user
+    const signature = `<br><br><p>
+Best regards,<br>
+${senderProfile.name || 'Aurangzeb Sunny'}<br>
+${senderProfile.company || 'RizQara Tech'}<br>
+WhatsApp: <a href="https://api.whatsapp.com/send?phone=${senderProfile.whatsapp || '8801343042761'}">${senderProfile.whatsapp || '+880 1343-042761'}</a><br>
+Website: <a href="${senderProfile.portfolioLink || 'https://rizqaratech.vercel.app/'}">${senderProfile.portfolioLink || 'https://rizqaratech.com/'}</a><br><br>
+Reply STOP to opt out.
+</p>`;
 
-    body = body + sigLines;
-  }
-
-  // Only append opt-out if not already present
-  if (!body.toLowerCase().includes('reply stop')) {
-    const optOut = '<br><br><span style="font-size: 12px; color: #888;">Reply STOP to opt out.</span>';
-    body = body + optOut;
+    body = body + signature;
+  } else {
+    // If body already has a closing, just add the opt-out line separately
+    if (!body.toLowerCase().includes('reply stop')) {
+      const optOut = '<br><br><span style="font-size: 12px; color: #888;">Reply STOP to opt out.</span>';
+      body = body + optOut;
+    }
   }
 
   return { subject, body };
