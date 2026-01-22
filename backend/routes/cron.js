@@ -425,7 +425,7 @@ router.post('/schedule-jobs', verifyCronSecret, async (req, res) => {
       // We limit by remainingQuota to not over-schedule
       const newLeads = await Lead.find({
         campaignId: campaign._id,
-        status: 'IMPORTED',
+        status: 'READY',
         doNotContact: false
       }).limit(remainingQuota);
 
