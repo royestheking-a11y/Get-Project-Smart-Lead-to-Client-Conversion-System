@@ -223,6 +223,10 @@ router.post('/followups', verifyCronSecret, async (req, res) => {
     const now = new Date();
     const activeCampaigns = await Campaign.find({ status: 'active' });
 
+    let followup1Created = 0;
+    let followup2Created = 0;
+    let markedDone = 0;
+
     for (const campaign of activeCampaigns) {
       // Calculate dynamic delay dates based on campaign settings
       const delay1 = campaign.followup1DelayDays || 3;
