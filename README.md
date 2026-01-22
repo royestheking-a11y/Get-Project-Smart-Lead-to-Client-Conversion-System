@@ -1,122 +1,91 @@
-# ClientCatcher AI - Reach Out Rocket
+# 🚀 Get Project - Smart Lead to Client Conversion System
 
-Full-stack email outreach platform with automated lead management and email sending.
+**Live Website:** [https://getprojects.vercel.app](https://getprojects.vercel.app)
 
-## 🚀 Quick Start
+A powerful, full-stack email outreach automation platform designed to turn cold leads into warm clients. Built with React (Vite) and Node.js.
 
-### Backend Setup
+![Dashboard Preview](https://github.com/user-attachments/assets/placeholder)
 
-1. **Go to backend folder**:
-   ```bash
-   cd backend
-   ```
+---
 
-2. **See `backend/START_HERE.md`** for complete setup instructions!
+## ✨ Key Features
 
-   Quick version:
-   - Create `.env` file (MongoDB is already configured!)
-   - Set up Gmail SMTP (5 minutes - see `EMAIL_SETUP.md`)
-   - Run `npm install && npm run dev`
+### 📨 Intelligent Email Engine
+*   **One-by-One Throttling:** Sends emails individually with random "human-like" delays (e.g., 60-120 seconds apart) to avoid spam filters.
+*   **Daily Safety Limits:** Set a hard cap (e.g., 50 emails/day) per campaign. The system stops automatically when the limit is reached and resumes the next day.
+*   **Background Worker:** A dedicated worker process runs every minute to manage the queue, ensuring no lead is left behind.
 
-### Frontend Setup
+### 🤖 Smart Automation & Follow-ups
+*   **Auto-Reply Detection:** The system logs into your email (IMAP) every 10 minutes to check for replies.
+    *   If a lead replies, they are marked as **"REPLIED"**.
+    *   **Future follow-ups are automatically CANCELLED** so you don't annoy interested prospects.
+*   **Drip Campaigns:**
+    *   **Follow-up #1:** Sent automatically after **3 days** (configurable) if no reply.
+    *   **Follow-up #2:** Sent after **7 days** (configurable).
+    *   *Note:* Follow-ups respect the "Replies" rule—if they reply, the drip stops.
 
-```bash
-# Install dependencies
-npm install
+### � Real-Time Analytics Dashboard
+*   **Live Status Tracking:** See leads moving from `Imported` → `Sent` → `Replied`.
+*   **Failed/Bounce Detection:** Instantly see if emails are bouncing or failing (SMTP errors) right on your dashboard.
+*   **Visual KPIs:** Beautiful charts and cards built with Shadcn UI & Recharts.
 
-# Start development server
-npm run dev
-```
+### 📥 Smart Lead Import
+*   **Ghost Space Removal:** Automatically trims invisible spaces from Excel/CSV headers (e.g., "Email " becomes "Email").
+*   **Auto-Mapping:** intelligently recognizes columns like "Name", "Title", or "Business Name" as the Company Name.
+*   **Duplicate Protection:** Prevents importing the same email twice across campaigns.
+*   **Validation:** Checks for valid email formats before importing.
 
-## 📁 Project Structure
+### 🎨 Email Template System
+*   **Dynamic Variables:** Personalize emails with `{{company_name}}`, `{{your_name}}`, etc.
+*   **Signature Management:**
+    *   Auto-detects if you forgot a signature.
+    *   Appends a professional HTML signature if missing.
+    *   Prevents duplicate signatures if "Kind regards" is already in your template.
 
-```
-├── backend/          # Express.js API server
-│   ├── models/      # MongoDB schemas
-│   ├── routes/      # API endpoints
-│   ├── services/    # Business logic
-│   └── server.js    # Main server file
-└── src/             # React frontend
-    ├── pages/       # Page components
-    ├── components/  # UI components
-    └── lib/         # Utilities
-```
+---
 
-## 🛠️ Technologies
-
-### Frontend
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-### Backend
-- Node.js
-- Express.js
-- MongoDB Atlas
-- JWT Authentication
-- Gmail API / SMTP
-
-## 📚 Documentation
-
-### Backend
-- **`backend/START_HERE.md`** - Quick setup guide ⭐
-- **`backend/EMAIL_SETUP.md`** - Email configuration (SMTP/Gmail API)
-- **`backend/README.md`** - Full API documentation
-- **`backend/QUICKSTART.md`** - API examples
+## 🛠️ Technology Stack
 
 ### Frontend
-- Standard React/Vite setup
-- See `src/` for component structure
-
-## 🔑 Environment Variables
-
-### Backend (.env)
-```env
-MONGODB_URI=mongodb+srv://...
-JWT_SECRET=your-secret
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-```
-
-See `backend/START_HERE.md` for complete setup!
-
-## 🚀 Deployment
+*   **Framework:** React (Vite) + TypeScript
+*   **UI Library:** shadcn/ui + Tailwind CSS
+*   **State Management:** TanStack Query (React Query)
+*   **Icons:** Lucide React
 
 ### Backend
-- Deploy to Render, Railway, or any Node.js host
-- Set up cron jobs for `/api/cron/run-jobs` (every 5 min)
-- Set up daily cron for `/api/cron/followups`
+*   **Runtime:** Node.js + Express
+*   **Database:** MongoDB Atlas (Mongoose)
+*   **Email Sending:** Nodemailer (SMTP)
+*   **Reply Check:** IMAP Simple
+*   **Scheduling:** Custom Interval Workers + Cron Jobs
 
-### Frontend
-- Deploy to Vercel, Netlify, or any static host
-- Update API URL in frontend config
+---
 
-## 📖 API Endpoints
+## � Quick Start Guide
 
-See `backend/README.md` for complete API documentation.
+### 1. Backend Setup
+1.  Navigate to `backend/`.
+2.  Install dependencies: `npm install`
+3.  Create a `.env` file (see `backend/START_HERE.md`).
+4.  Run server: `npm run dev`
 
-Main endpoints:
-- `/api/auth/*` - Authentication
-- `/api/campaigns/*` - Campaign management
-- `/api/templates/*` - Email templates
-- `/api/leads/*` - Lead management
-- `/api/send/*` - Email sending
-- `/api/cron/*` - Worker endpoints
+### 2. Frontend Setup
+1.  Navigate to root directory.
+2.  Install dependencies: `npm install`
+3.  Run frontend: `npm run dev`
 
-## 🎯 Features
+---
 
-- ✅ User authentication (JWT)
-- ✅ Campaign management
-- ✅ Lead import (CSV/XLSX)
-- ✅ Automatic lead categorization
-- ✅ Email template system
-- ✅ Automated email sending
-- ✅ Follow-up automation
-- ✅ Job queue (MongoDB-based)
-- ✅ Statistics dashboard
+## 🏗️ Project Structure
+```
+├── backend/          # Express API, Workers, Cron Jobs
+│   ├── routes/      # API endpoints (cron.js, campaigns.js, etc.)
+│   ├── services/    # Email sending & IMAP logic
+│   └── worker.js    # Background task runner
+└── src/             # React Frontend
+    ├── components/  # Dashboard & UI components
+    └── pages/       # Main application views
+```
 
 ## 📝 License
-
 ISC
