@@ -11,6 +11,7 @@ const LandingNavbar = () => {
   const { t } = useLanguage();
 
   const navLinks = [
+    { label: t('nav.home'), href: '/', isRoute: true },
     { label: t('nav.features'), href: '/features', isRoute: true },
     { label: t('nav.howItWorks'), href: '/how-it-works', isRoute: true },
     { label: t('nav.pricing'), href: '/pricing', isRoute: true, badge: t('nav.free') },

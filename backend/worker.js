@@ -41,6 +41,24 @@ const runWorker = async () => {
                 }
             }
 
+            // 1.5 Schedule New Jobs (Every minute - every 2 cycles)
+            if (cycleCount % 2 === 0) {
+                const scheduleResponse = await fetch(`${API_URL}/cron/schedule-jobs`, {
+                    method: 'POST',
+                    headers: {
+                        'x-cron-secret': CRON_SECRET,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (scheduleResponse.ok) {
+                    const scheduleResult = await scheduleResponse.json();
+                    if (scheduleResult.jobsCreated > 0) {
+                        console.log(`[${new Date().toLocaleTimeString()}] Scheduled ${scheduleResult.jobsCreated} new emails`);
+                    }
+                }
+            }
+
             // 2. Run Follow-ups (Every minute - every 2 cycles)
             if (cycleCount % 2 === 0) {
                 const followupResponse = await fetch(`${API_URL}/cron/followups`, {
