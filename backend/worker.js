@@ -8,9 +8,16 @@ const __dirname = dirname(__filename);
 
 dotenv.config({ path: join(__dirname, '.env') });
 
+// CRITICAL FIX: Support both local and production (Render) deployment
+// If API_URL is set in environment, use it (for Render deployment)
+// Otherwise, fall back to localhost (for local development)
 const PORT = process.env.PORT || 3001;
-const API_URL = `http://localhost:${PORT}/api`;
+const API_URL = process.env.API_URL || `http://localhost:${PORT}/api`;
 const CRON_SECRET = process.env.CRON_SECRET || 'clientcatcher-cron-secret-2024';
+
+console.log(`🔧 Worker Configuration:`);
+console.log(`   API URL: ${API_URL}`);
+console.log(`   Port: ${PORT}`);
 
 const runWorker = async () => {
     console.log('⏰ Email Job Worker Started');
