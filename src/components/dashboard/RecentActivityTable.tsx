@@ -44,7 +44,11 @@ export function RecentActivityTable({ className }: RecentActivityTableProps) {
       id: log._id || log.id || '',
       company,
       email,
-      status: log.status === 'sent' ? 'sent' : log.status === 'failed' ? 'failed' : 'sent',
+      status: log.status === 'sent' ? 'sent'
+        : log.status === 'failed' ? 'failed'
+          : log.type === 'reply_received' ? 'replied'
+            : log.type === 'bounce_received' ? 'bounced'
+              : 'sent',
       lastAction: date,
     };
   });
