@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Check, Zap, Rocket, Building2, ArrowLeft } from 'lucide-react';
+import { Check, Zap, Rocket, Building2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
-import LanguageToggle from '@/components/LanguageToggle';
+import LandingNavbar from '@/components/landing/LandingNavbar';
 
 export default function Pricing() {
   const { t } = useLanguage();
@@ -68,25 +68,7 @@ export default function Pricing() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
-              <Zap className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold">Get Project</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <LanguageToggle />
-            <Button variant="ghost" asChild>
-              <Link to="/" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                {t('login.backToHome')}
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <LandingNavbar />
 
       {/* Hero */}
       <section className="py-16 lg:py-24">
