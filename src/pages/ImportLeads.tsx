@@ -407,7 +407,7 @@ export default function ImportLeads() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-3 mb-4">
+                  <div className="grid grid-cols-4 gap-3 mb-4">
                     <div className="p-3 rounded-lg bg-background text-center">
                       <p className="text-xl font-bold text-foreground">{importResult.totalRows || 0}</p>
                       <p className="text-xs text-muted-foreground">Total</p>
@@ -416,13 +416,22 @@ export default function ImportLeads() {
                       <p className="text-xl font-bold text-primary">{importResult.importedCount || 0}</p>
                       <p className="text-xs text-muted-foreground">Imported</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-background text-center">
-                      <p className="text-xl font-bold text-foreground">
-                        {(importResult.invalidCount || 0) + (importResult.duplicateCount || 0)}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Skipped</p>
+                    <div className="p-3 rounded-lg bg-orange-500/10 text-center">
+                      <p className="text-xl font-bold text-orange-600">{importResult.duplicateCount || 0}</p>
+                      <p className="text-xs text-muted-foreground">Duplicates</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-red-500/10 text-center">
+                      <p className="text-xl font-bold text-red-600">{importResult.invalidCount || 0}</p>
+                      <p className="text-xs text-muted-foreground">Invalid</p>
                     </div>
                   </div>
+
+                  {importResult.importedCount === 0 && importResult.totalRows > 0 && (
+                    <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm mb-4">
+                      <strong>⚠️ Zero leads imported?</strong>
+                      <p>Check your <strong>Column Mapping</strong>. The system might not be finding the "Email" column correctly.</p>
+                    </div>
+                  )}
 
                   <div className="p-4 rounded-lg bg-background border border-border mb-4">
                     <h5 className="font-medium text-sm mb-2">Next Steps:</h5>
