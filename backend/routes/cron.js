@@ -181,10 +181,16 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
           job.lastError = error.message;
           await job.save();
         } else {
+          // Max attempts reached - mark BOTH job AND lead as failed
           await Job.findByIdAndUpdate(job._id, {
             status: 'FAILED',
             lastError: error.message
           });
+
+          // CRITICAL FIX: Update lead status to FAILED
+          lead.status = 'FAILED';
+          await lead.save();
+
           failed++;
         }
         processed++;
