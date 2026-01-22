@@ -35,6 +35,13 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
     const limit = parseInt(req.query.limit || '5');
     const now = new Date();
 
+    // Auto-cleanup: Reset stuck running jobs (> 5 mins)
+    const fiveMinsAgo = new Date(now.getTime() - 5 * 60 * 1000);
+    await Job.updateMany(
+      { status: 'RUNNING', updatedAt: { $lt: fiveMinsAgo } },
+      { $set: { status: 'PENDING', attempts: 0 } } // Reset attempts to force fresh retry
+    );
+
     // Find due jobs
     const jobs = await Job.find({
       status: 'PENDING',

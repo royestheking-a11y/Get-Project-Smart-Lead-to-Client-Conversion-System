@@ -93,18 +93,27 @@ const sendViaSMTP = async (to, subject, body) => {
   return info.messageId;
 };
 
-// Main send email function
+// Main send email function with timeout
 export const sendEmail = async (to, subject, body) => {
   try {
-    if (gmailClient) {
-      const messageId = await sendViaGmail(to, subject, body);
-      return { success: true, messageId };
-    } else if (transporter) {
-      const messageId = await sendViaSMTP(to, subject, body);
-      return { success: true, messageId };
-    } else {
-      throw new Error('No email service configured');
-    }
+    // 15 second timeout to prevent hanging
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Email sending timed out after 15s')), 15000)
+    );
+
+    const sendPromise = (async () => {
+      if (gmailClient) {
+        const messageId = await sendViaGmail(to, subject, body);
+        return { success: true, messageId };
+      } else if (transporter) {
+        const messageId = await sendViaSMTP(to, subject, body);
+        return { success: true, messageId };
+      } else {
+        throw new Error('No email service configured');
+      }
+    })();
+
+    return await Promise.race([sendPromise, timeoutPromise]);
   } catch (error) {
     console.error('Email send error:', error);
     return { success: false, error: error.message };
