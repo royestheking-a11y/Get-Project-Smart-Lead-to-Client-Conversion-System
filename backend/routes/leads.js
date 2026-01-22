@@ -120,7 +120,12 @@ router.post('/import', upload.single('file'), async (req, res) => {
       if (!email) {
         invalidRows.push(row);
         if (errors.length < 5) {
-          errors.push(`Row ${i + 2}: Missing or empty email in column "${emailColumn}"`);
+          // Check if the raw value was actually undefined (wrong column mapping)
+          if (rawEmail === undefined) {
+            errors.push(`Row ${i + 2}: Column "${emailColumn}" not found or empty. Check your Column Mapping.`);
+          } else {
+            errors.push(`Row ${i + 2}: Empty value in column "${emailColumn}"`);
+          }
         }
         continue;
       }
@@ -128,7 +133,7 @@ router.post('/import', upload.single('file'), async (req, res) => {
       if (!isValidEmail(email)) {
         invalidRows.push(row);
         if (errors.length < 5) {
-          errors.push(`Row ${i + 2}: Invalid email format "${rawEmail}"`);
+          errors.push(`Row ${i + 2}: Invalid email format "${rawEmail}" (Domain emails are allowed! Check for spaces or typos).`);
         }
         continue;
       }
