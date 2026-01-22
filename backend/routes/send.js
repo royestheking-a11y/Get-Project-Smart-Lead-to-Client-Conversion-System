@@ -2,6 +2,7 @@ import express from 'express';
 import Campaign from '../models/Campaign.js';
 import Lead from '../models/Lead.js';
 import EmailTemplate from '../models/EmailTemplate.js';
+import EmailLog from '../models/EmailLog.js';
 import Job from '../models/Job.js';
 import { requireAuth } from '../middleware/auth.js';
 
