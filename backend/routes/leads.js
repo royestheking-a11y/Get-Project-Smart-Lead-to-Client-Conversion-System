@@ -99,6 +99,19 @@ router.post('/import', upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: 'Unsupported file format. Use CSV or XLSX' });
     }
 
+    // Helper to normalize row keys (trim spaces from headers)
+    const normalizeRows = (rawRows) => {
+      return rawRows.map(row => {
+        const newRow = {};
+        Object.keys(row).forEach(key => {
+          newRow[key.trim()] = row[key];
+        });
+        return newRow;
+      }).filter(row => Object.keys(row).length > 0); // Remove empty rows
+    };
+
+    rows = normalizeRows(rows);
+
     // Process rows
     const processedLeads = [];
     const seenEmails = new Set();
