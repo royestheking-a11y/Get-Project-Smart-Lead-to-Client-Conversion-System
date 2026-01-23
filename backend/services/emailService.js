@@ -107,7 +107,7 @@ const sendViaSMTP = async (to, subject, body) => {
   }
 
   const info = await transporter.sendMail({
-    from: process.env.SMTP_USER || process.env.GMAIL_USER,
+    from: process.env.FROM_EMAIL || process.env.SMTP_USER || process.env.GMAIL_USER,
     to,
     subject,
     html: body
