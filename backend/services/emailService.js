@@ -1,142 +1,42 @@
-import nodemailer from 'nodemailer';
-import { google } from 'googleapis';
+import { Resend } from 'resend';
 
-let transporter = null;
-let gmailClient = null;
+let resendClient = null;
 
-// Initialize Gmail API client
-const initGmailClient = () => {
-  if (process.env.GMAIL_CLIENT_ID && process.env.GMAIL_CLIENT_SECRET && process.env.GMAIL_REFRESH_TOKEN) {
-    const oauth2Client = new google.auth.OAuth2(
-      process.env.GMAIL_CLIENT_ID,
-      process.env.GMAIL_CLIENT_SECRET,
-      'urn:ietf:wg:oauth:2.0:oob'
-    );
-
-    oauth2Client.setCredentials({
-      refresh_token: process.env.GMAIL_REFRESH_TOKEN
-    });
-
-    gmailClient = google.gmail({ version: 'v1', auth: oauth2Client });
-    return true;
-  }
-  return false;
-};
-
-// Initialize SMTP transporter
-const initSMTP = () => {
-  if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-    const port = parseInt(process.env.SMTP_PORT || '587');
-    const isSecure = port === 465;
-
-    transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: port,
-      secure: isSecure,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-      },
-      // Connection pooling for better performance
-      pool: true,
-      maxConnections: 5,
-      maxMessages: 100,
-
-      // Extended timeouts for cloud environments
-      connectionTimeout: 60000, // 60 seconds
-      greetingTimeout: 30000,   // 30 seconds
-      socketTimeout: 60000,      // 60 seconds
-
-      // TLS settings for better compatibility
-      tls: {
-        rejectUnauthorized: true,
-        minVersion: 'TLSv1.2'
-      },
-
-      // Enable debug logging in development
-      logger: process.env.NODE_ENV === 'development',
-      debug: process.env.NODE_ENV === 'development'
-    });
-
-    return true;
-  }
-  return false;
-};
-
-// Initialize email service
+// Initialize Resend HTTP API client
 export const initEmailService = () => {
-  if (!initGmailClient()) {
-    initSMTP();
-  }
-};
-
-// Send email via Gmail API
-const sendViaGmail = async (to, subject, body) => {
-  if (!gmailClient) {
-    throw new Error('Gmail client not initialized');
+  if (process.env.RESEND_API_KEY) {
+    resendClient = new Resend(process.env.RESEND_API_KEY);
+    console.log('✅ Resend HTTP API initialized');
+    return;
   }
 
-  const email = [
-    `To: ${to}`,
-    `Subject: ${subject}`,
-    'Content-Type: text/html; charset=utf-8',
-    '',
-    body
-  ].join('\n');
-
-  const encodedEmail = Buffer.from(email)
-    .toString('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
-
-  const response = await gmailClient.users.messages.send({
-    userId: 'me',
-    requestBody: {
-      raw: encodedEmail
-    }
-  });
-
-  return response.data.id;
+  console.warn('⚠️ RESEND_API_KEY not found. Email sending will fail.');
 };
 
-// Send email via SMTP
-const sendViaSMTP = async (to, subject, body) => {
-  if (!transporter) {
-    throw new Error('SMTP transporter not initialized');
-  }
-
-  const info = await transporter.sendMail({
-    from: process.env.FROM_EMAIL || process.env.SMTP_USER || process.env.GMAIL_USER,
-    to,
-    subject,
-    html: body
-  });
-
-  return info.messageId;
-};
-
-// Main send email function with timeout
+// Main send email function
 export const sendEmail = async (to, subject, body) => {
   try {
-    // 90 second timeout to accommodate cloud environment connection times
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Email sending timed out after 90s')), 90000)
-    );
+    if (!resendClient) {
+      throw new Error('Resend API not initialized. Set RESEND_API_KEY environment variable.');
+    }
 
-    const sendPromise = (async () => {
-      if (gmailClient) {
-        const messageId = await sendViaGmail(to, subject, body);
-        return { success: true, messageId };
-      } else if (transporter) {
-        const messageId = await sendViaSMTP(to, subject, body);
-        return { success: true, messageId };
-      } else {
-        throw new Error('No email service configured');
-      }
-    })();
+    const fromEmail = process.env.FROM_EMAIL || 'ClientCatcher <onboarding@resend.dev>';
 
-    return await Promise.race([sendPromise, timeoutPromise]);
+    const { data, error } = await resendClient.emails.send({
+      from: fromEmail,
+      to: [to],
+      subject: subject,
+      html: body,
+    });
+
+    if (error) {
+      console.error('Resend API error:', error);
+      return { success: false, error: error.message };
+    }
+
+    console.log(`✅ Email sent successfully to ${to}, ID: ${data.id}`);
+    return { success: true, messageId: data.id };
+
   } catch (error) {
     console.error('Email send error:', error);
     return { success: false, error: error.message };
