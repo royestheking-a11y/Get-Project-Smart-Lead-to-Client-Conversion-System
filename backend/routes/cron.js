@@ -537,11 +537,12 @@ router.post('/check-replies', verifyCronSecret, async (req, res) => {
 // Debug config
 router.get('/debug-config', async (req, res) => {
   const config = {
-    SMTP_HOST: process.env.SMTP_HOST ? 'Set' : 'Missing',
+    SMTP_HOST: process.env.SMTP_HOST ? `Set (${process.env.SMTP_HOST})` : 'Missing',
     SMTP_USER: process.env.SMTP_USER ? 'Set' : 'Missing',
     SMTP_PASS: process.env.SMTP_PASS ? 'Set' : 'Missing',
-    SMTP_PORT: process.env.SMTP_PORT ? 'Set' : 'Missing',
-    Keys: Object.keys(process.env).filter(k => k.startsWith('SMTP')),
+    SMTP_PORT: process.env.SMTP_PORT ? `Set (${process.env.SMTP_PORT})` : 'Missing',
+    FROM_EMAIL: process.env.FROM_EMAIL ? `Set (${process.env.FROM_EMAIL})` : 'Missing',
+    Keys: Object.keys(process.env).filter(k => k.startsWith('SMTP') || k === 'FROM_EMAIL'),
   };
   console.log('Debug Config:', config);
   res.json(config);
