@@ -96,9 +96,9 @@ const sendViaSMTP = async (to, subject, body) => {
 // Main send email function with timeout
 export const sendEmail = async (to, subject, body) => {
   try {
-    // 15 second timeout to prevent hanging
+    // 30 second timeout to prevent hanging
     const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Email sending timed out after 15s')), 15000)
+      setTimeout(() => reject(new Error('Email sending timed out after 30s')), 30000)
     );
 
     const sendPromise = (async () => {
