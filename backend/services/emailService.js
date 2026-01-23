@@ -26,15 +26,38 @@ const initGmailClient = () => {
 // Initialize SMTP transporter
 const initSMTP = () => {
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    const port = parseInt(process.env.SMTP_PORT || '587');
+    const isSecure = port === 465;
+
     transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_PORT === '465',
+      port: port,
+      secure: isSecure,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS
-      }
+      },
+      // Connection pooling for better performance
+      pool: true,
+      maxConnections: 5,
+      maxMessages: 100,
+
+      // Extended timeouts for cloud environments
+      connectionTimeout: 60000, // 60 seconds
+      greetingTimeout: 30000,   // 30 seconds
+      socketTimeout: 60000,      // 60 seconds
+
+      // TLS settings for better compatibility
+      tls: {
+        rejectUnauthorized: true,
+        minVersion: 'TLSv1.2'
+      },
+
+      // Enable debug logging in development
+      logger: process.env.NODE_ENV === 'development',
+      debug: process.env.NODE_ENV === 'development'
     });
+
     return true;
   }
   return false;
@@ -96,9 +119,9 @@ const sendViaSMTP = async (to, subject, body) => {
 // Main send email function with timeout
 export const sendEmail = async (to, subject, body) => {
   try {
-    // 30 second timeout to prevent hanging
+    // 90 second timeout to accommodate cloud environment connection times
     const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Email sending timed out after 30s')), 30000)
+      setTimeout(() => reject(new Error('Email sending timed out after 90s')), 90000)
     );
 
     const sendPromise = (async () => {
