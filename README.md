@@ -4,8 +4,6 @@
 
 A powerful, full-stack email outreach automation platform designed to turn cold leads into warm clients. Built with React (Vite) and Node.js.
 
-![Dashboard Preview](https://github.com/user-attachments/assets/placeholder)
-
 ---
 
 ## ✨ Key Features
