@@ -156,26 +156,40 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
             status: 'DONE'
           });
 
+          console.log(`✅ Email sent successfully to ${lead.email}`);
           succeeded++;
         } else {
-          // Handle retry
-          job.attempts += 1;
-          if (job.attempts <= 2) {
-            // Retry after 10 minutes
-            job.status = 'PENDING';
-            job.runAt = new Date(now.getTime() + 10 * 60 * 1000);
-            job.lastError = emailResult.error;
-            await job.save();
+          // Handle retry with exponential backoff
+          const currentAttempts = (job.attempts || 0) + 1;
+          const MAX_ATTEMPTS = 3;
+
+          if (currentAttempts <= MAX_ATTEMPTS) {
+            // Exponential backoff: 1min, 5min, 15min
+            const backoffMinutes = currentAttempts === 1 ? 1 : currentAttempts === 2 ? 5 : 15;
+            const retryAt = new Date(now.getTime() + backoffMinutes * 60 * 1000);
+
+            await Job.findByIdAndUpdate(job._id, {
+              status: 'PENDING',
+              runAt: retryAt,
+              attempts: currentAttempts,
+              lastError: emailResult.error
+            });
+
+            console.log(`⚠️  Email failed for ${lead.email}, retrying in ${backoffMinutes}min (attempt ${currentAttempts}/${MAX_ATTEMPTS})`);
+            console.log(`   Error: ${emailResult.error}`);
           } else {
-            // Max attempts reached
+            // Max attempts reached - mark as permanently failed
             await Job.findByIdAndUpdate(job._id, {
               status: 'FAILED',
+              attempts: currentAttempts,
               lastError: emailResult.error
             });
 
             lead.status = 'FAILED';
             await lead.save();
 
+            console.log(`❌ Email permanently failed for ${lead.email} after ${MAX_ATTEMPTS} attempts`);
+            console.log(`   Final error: ${emailResult.error}`);
             failed++;
           }
         }
