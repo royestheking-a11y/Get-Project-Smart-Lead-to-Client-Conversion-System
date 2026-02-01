@@ -2,20 +2,32 @@ export const renderTemplate = (template, lead, senderProfile = {}) => {
   let subject = template.subjectTemplate;
   let body = template.bodyTemplate;
 
-  // Replace variables
+  // Replace variables - support both camelCase and snake_case formats
   const variables = {
-    '{{company_name}}': lead.companyName || 'there',
+    // Lead variables
+    '{{firstName}}': lead.firstName || lead.contactName?.split(' ')[0] || 'there',
+    '{{first_name}}': lead.firstName || lead.contactName?.split(' ')[0] || 'there',
+    '{{companyName}}': lead.companyName || lead.company || 'your company',
+    '{{company_name}}': lead.companyName || lead.company || 'your company',
     '{{website}}': lead.website || '',
     '{{location}}': lead.location || '',
     '{{industry}}': lead.industry || '',
-    '{{sender_name}}': senderProfile.name || '',
-    '{{your_name}}': senderProfile.name || '', // Alias for sender_name
+
+    // Sender variables - camelCase (used in new templates)
+    '{{senderName}}': senderProfile.name || 'Aurangzeb Sunny',
+    '{{senderCompany}}': senderProfile.company || 'RizQara Tech',
+    '{{senderPhone}}': senderProfile.whatsapp || '+880 1343-042761',
+    '{{senderWebsite}}': senderProfile.portfolioLink || 'https://rizqaratech.vercel.app',
+
+    // Sender variables - snake_case (legacy support)
+    '{{sender_name}}': senderProfile.name || 'Aurangzeb Sunny',
+    '{{your_name}}': senderProfile.name || 'Aurangzeb Sunny',
     '{{sender_email}}': senderProfile.email || '',
-    '{{company}}': senderProfile.company || '',
-    '{{sender_company}}': senderProfile.company || '',
-    '{{your_company}}': senderProfile.company || '',
-    '{{whatsapp}}': senderProfile.whatsapp || '',
-    '{{portfolio_link}}': senderProfile.portfolioLink || ''
+    '{{company}}': senderProfile.company || 'RizQara Tech',
+    '{{sender_company}}': senderProfile.company || 'RizQara Tech',
+    '{{your_company}}': senderProfile.company || 'RizQara Tech',
+    '{{whatsapp}}': senderProfile.whatsapp || '+880 1343-042761',
+    '{{portfolio_link}}': senderProfile.portfolioLink || 'https://rizqaratech.vercel.app'
   };
 
   // Replace all variables in subject and body

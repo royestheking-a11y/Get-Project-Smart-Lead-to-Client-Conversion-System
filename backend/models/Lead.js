@@ -6,6 +6,10 @@ const leadSchema = new mongoose.Schema({
     ref: 'Campaign',
     required: true
   },
+  contactName: {
+    type: String,
+    trim: true
+  },
   companyName: {
     type: String,
     trim: true
