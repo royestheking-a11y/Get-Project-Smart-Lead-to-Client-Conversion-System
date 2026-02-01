@@ -4,7 +4,7 @@ import Lead from '../models/Lead.js';
 import Campaign from '../models/Campaign.js';
 import EmailTemplate from '../models/EmailTemplate.js';
 import EmailLog from '../models/EmailLog.js';
-import { sendEmail } from '../services/emailService.js';
+import { sendEmail, initEmailService } from '../services/emailService.js';
 import { renderTemplate } from '../services/emailRenderService.js';
 import User from '../models/User.js';
 
@@ -546,6 +546,16 @@ router.get('/debug-config', async (req, res) => {
   };
   console.log('Debug Config:', config);
   res.json(config);
+});
+
+// Force reload email service
+router.post('/reload-email-config', verifyCronSecret, (req, res) => {
+  try {
+    initEmailService();
+    res.json({ message: 'Email service re-initialized with current config' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export default router;

@@ -2,50 +2,36 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import EmailLog from '../models/EmailLog.js';
 
-// Environment setup
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '../.env') });
 
-// Schema
-const emailLogSchema = new mongoose.Schema({
-    leadId: mongoose.Schema.Types.ObjectId,
-    campaignId: mongoose.Schema.Types.ObjectId,
-    recipient: String,
-    status: String,
-    errorMessage: String, // Correct field name
-    sentAt: Date
-});
-const EmailLog = mongoose.model('EmailLog', emailLogSchema);
-
-const checkLogs = async () => {
+const checkLatestLogs = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('✅ Connected to MongoDB\n');
 
-        // Get logs from last 20 minutes
-        const twentyMinsAgo = new Date(Date.now() - 20 * 60 * 1000);
+        const logs = await EmailLog.find({})
+            .sort({ _id: -1 })
+            .limit(10);
 
-        const logs = await EmailLog.find({
-            sentAt: { $gte: twentyMinsAgo }
-        }).sort({ sentAt: -1 });
-
-        console.log(`Found ${logs.length} logs in last 20 mins:`);
+        console.log(`Found ${logs.length} latest logs:\n`);
 
         logs.forEach(log => {
             console.log(`Recipient: ${log.recipient}`);
             console.log(`Status: ${log.status}`);
-            console.log(`Error: ${log.errorMessage || 'None'}`);
-            console.log(`Time: ${log.sentAt.toISOString()}`);
-            console.log('---');
+            console.log(`Error: ${log.errorMessage}`);
+            console.log(`Time: ${log.createdAt || log._id.getTimestamp()}`); // _id has timestamp
+            console.log('---\n');
         });
 
         process.exit(0);
     } catch (error) {
-        console.error(error);
+        console.error('Error:', error);
         process.exit(1);
     }
 };
 
-checkLogs();
+checkLatestLogs();

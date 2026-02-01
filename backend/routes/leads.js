@@ -418,6 +418,10 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Campaign not found' });
     }
 
+    // Cascade delete: remove related EmailLogs and Jobs
+    await EmailLog.deleteMany({ leadId: lead._id });
+    await Job.deleteMany({ leadId: lead._id });
+
     await lead.deleteOne();
     res.json({ message: 'Lead deleted' });
   } catch (error) {
@@ -439,6 +443,10 @@ router.post('/delete-batch', async (req, res) => {
     // Optimization: find all campaigns for user, then delete leads that are in those campaigns AND in leadIds
     const userCampaigns = await Campaign.find({ userId: req.user.userId }).select('_id');
     const userCampaignIds = userCampaigns.map(c => c._id);
+
+    // Cascade delete: remove related EmailLogs and Jobs first
+    await EmailLog.deleteMany({ leadId: { $in: leadIds } });
+    await Job.deleteMany({ leadId: { $in: leadIds } });
 
     const result = await Lead.deleteMany({
       _id: { $in: leadIds },
