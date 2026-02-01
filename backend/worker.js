@@ -21,7 +21,7 @@ console.log(`   Port: ${PORT}`);
 
 const runWorker = async () => {
     console.log('⏰ Email Job Worker Started');
-    console.log(`Checking for jobs every 30 seconds...\n`);
+    console.log(`Checking for jobs every 60 seconds (1 email per minute)...\n`);
 
     let cycleCount = 0;
 
@@ -30,7 +30,8 @@ const runWorker = async () => {
 
         try {
             // 1. Run Pending Jobs
-            const response = await fetch(`${API_URL}/cron/run-jobs?limit=10`, {
+            // Rate limit: Process only 1 email per minute
+            const response = await fetch(`${API_URL}/cron/run-jobs?limit=1`, {
                 method: 'POST',
                 headers: {
                     'x-cron-secret': CRON_SECRET,
@@ -119,8 +120,8 @@ const runWorker = async () => {
     // Run immediately
     await processJobs();
 
-    // Then run every 30 seconds
-    setInterval(processJobs, 30 * 1000);
+    // Run every 60 seconds (1 email per minute rate limit)
+    setInterval(processJobs, 60 * 1000);
 };
 
 runWorker();
