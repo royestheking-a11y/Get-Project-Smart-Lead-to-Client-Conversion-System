@@ -30,6 +30,8 @@ export const renderTemplate = (template, lead, senderProfile = {}) => {
     '{{portfolio_link}}': senderProfile.portfolioLink || 'https://rizqaratech.vercel.app'
   };
 
+  console.log('📝 Template variables:', JSON.stringify(variables, null, 2));
+
   // Replace all variables in subject and body
   Object.keys(variables).forEach(key => {
     const regex = new RegExp(key.replace(/[{}]/g, '\\$&'), 'g');

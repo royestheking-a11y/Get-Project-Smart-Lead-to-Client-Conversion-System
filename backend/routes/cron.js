@@ -114,6 +114,8 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
           portfolioLink: user?.signature?.portfolioLink || ''
         };
 
+        console.log('📧 Sending email with senderProfile:', JSON.stringify(senderProfile));
+
         // Render email
         const { subject, body } = renderTemplate(template, lead, senderProfile);
 
