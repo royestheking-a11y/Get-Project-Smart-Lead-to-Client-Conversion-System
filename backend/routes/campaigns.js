@@ -49,73 +49,188 @@ router.post('/', async (req, res) => {
       {
         name: 'No Website - Initial',
         category: 'NO_WEBSITE',
-        subjectTemplate: '{{companyName}} - Professional Website Proposal',
+        subjectTemplate: '{{companyName}} - Let\'s Build Your Online Presence',
         bodyTemplate: `<p>Hi {{firstName}},</p>
-<p>I noticed that {{companyName}} doesn't have a website yet, and I wanted to reach out because I help businesses like yours establish a strong online presence.</p>
-<p>In today's digital world, having a professional website is essential for attracting new customers 24/7, building credibility, and showcasing your products/services.</p>
-<p>I'd love to discuss how we can create a website that perfectly represents {{companyName}} and helps grow your business.</p>
-<p>Would you be open to a quick 15-minute call this week?</p>
-<p>Best regards,<br>{{senderName}}<br>{{senderCompany}}</p>`
+
+<p>I hope this message finds you well! My name is {{senderName}}, and I specialize in helping businesses like {{companyName}} establish a powerful online presence.</p>
+
+<p>I noticed that {{companyName}} doesn't currently have a website, and in today's digital-first world, this could mean you're missing out on significant opportunities:</p>
+
+<ul>
+  <li><strong>24/7 Visibility</strong> – Your customers can find you anytime, even when you're closed</li>
+  <li><strong>Credibility & Trust</strong> – 75% of consumers judge a business's credibility based on their website</li>
+  <li><strong>Competitive Edge</strong> – Stand out from competitors who are already online</li>
+  <li><strong>Lead Generation</strong> – Turn website visitors into paying customers automatically</li>
+</ul>
+
+<p>I'd love to show you how a professionally designed website can transform {{companyName}}'s growth. No pressure, just a friendly 15-minute conversation to explore the possibilities.</p>
+
+<p>Would you be available for a quick call this week?</p>
+
+<p>Looking forward to hearing from you!</p>
+
+<p>Best regards,</p>
+<p><strong>{{senderName}}</strong><br>
+{{senderCompany}}<br>
+{{senderPhone}}<br>
+<a href="{{senderWebsite}}">{{senderWebsite}}</a></p>`
       },
       {
         name: 'Has Website - Improvement',
         category: 'HAS_WEBSITE',
-        subjectTemplate: 'Quick idea for {{companyName}} website',
+        subjectTemplate: 'A Few Ideas to Boost {{companyName}}\'s Website Performance',
         bodyTemplate: `<p>Hi {{firstName}},</p>
-<p>I just visited the {{companyName}} website and I'm impressed with what you've built!</p>
-<p>I noticed a few opportunities that could help boost your conversions and user experience - mobile optimization, page speed, and SEO quick wins.</p>
-<p>Would you be interested in a free website audit? I'll share specific, actionable recommendations with no obligation.</p>
-<p>Best,<br>{{senderName}}<br>{{senderCompany}}</p>`
+
+<p>I recently visited the {{companyName}} website and was impressed with what you've built! It's clear you've put thought into your online presence.</p>
+
+<p>That said, I noticed a few opportunities that could help take your website to the next level:</p>
+
+<ul>
+  <li><strong>Mobile Optimization</strong> – Ensuring a seamless experience on phones and tablets (where 60%+ of users browse)</li>
+  <li><strong>Page Speed</strong> – Faster loading times can significantly reduce bounce rates and improve conversions</li>
+  <li><strong>SEO Enhancements</strong> – Small tweaks that could help you rank higher on Google</li>
+  <li><strong>Conversion Optimization</strong> – Strategic changes to turn more visitors into customers</li>
+</ul>
+
+<p>I'd be happy to provide a <strong>free, no-obligation website audit</strong> with specific, actionable recommendations tailored to {{companyName}}.</p>
+
+<p>Would you be interested in seeing what improvements could make the biggest impact for your business?</p>
+
+<p>Warm regards,</p>
+<p><strong>{{senderName}}</strong><br>
+{{senderCompany}}<br>
+{{senderPhone}}<br>
+<a href="{{senderWebsite}}">{{senderWebsite}}</a></p>`
       },
       {
         name: 'Weak Website - Redesign',
         category: 'WEAK_WEBSITE',
-        subjectTemplate: 'Modernize {{companyName}} online presence?',
+        subjectTemplate: 'Time to Refresh {{companyName}}\'s Website?',
         bodyTemplate: `<p>Hi {{firstName}},</p>
-<p>I came across {{companyName}} while researching businesses in your area, and I believe your website might be holding back your growth potential.</p>
-<p>A fresh, modern design could help you convert more visitors into customers, build trust instantly, and rank higher on Google.</p>
-<p>Would you have 10 minutes to discuss how a refresh could benefit {{companyName}}?</p>
-<p>Best regards,<br>{{senderName}}<br>{{senderCompany}}</p>`
+
+<p>I came across {{companyName}} while researching businesses in your industry, and I wanted to reach out with some honest feedback.</p>
+
+<p>Your current website may be holding back your business potential. Here's what a modern redesign could do for you:</p>
+
+<ul>
+  <li><strong>Professional First Impression</strong> – Visitors form an opinion about your business within 0.05 seconds of landing on your site</li>
+  <li><strong>Higher Conversion Rates</strong> – A well-designed site can increase conversions by 200% or more</li>
+  <li><strong>Better Google Rankings</strong> – Modern, fast websites rank higher in search results</li>
+  <li><strong>Mobile-First Design</strong> – Capture the growing mobile audience with a responsive layout</li>
+</ul>
+
+<p>I specialize in website redesigns that focus on <strong>results, not just aesthetics</strong>. Every design decision is made with your business goals in mind.</p>
+
+<p>Would you have 10 minutes this week to discuss how a refresh could benefit {{companyName}}? I'd love to share some ideas specific to your business.</p>
+
+<p>Best regards,</p>
+<p><strong>{{senderName}}</strong><br>
+{{senderCompany}}<br>
+{{senderPhone}}<br>
+<a href="{{senderWebsite}}">{{senderWebsite}}</a></p>`
       },
       {
         name: 'SEO Weak - Optimization',
         category: 'SEO_WEAK',
-        subjectTemplate: 'Get {{companyName}} on page 1 of Google',
+        subjectTemplate: 'Help {{companyName}} Get Found on Google',
         bodyTemplate: `<p>Hi {{firstName}},</p>
-<p>I was searching for businesses like {{companyName}} and noticed your website isn't appearing on the first page of Google for key search terms.</p>
-<p>This means potential customers are finding your competitors instead of you.</p>
-<p>Would you like a free SEO analysis showing exactly where you stand and how to improve?</p>
-<p>Best,<br>{{senderName}}<br>{{senderCompany}}</p>`
+
+<p>I was searching for businesses like {{companyName}} on Google and noticed something concerning – your website isn't appearing on the first page for key search terms in your industry.</p>
+
+<p>This is a significant missed opportunity. Here's why:</p>
+
+<ul>
+  <li><strong>75% of users never scroll past the first page</strong> of search results</li>
+  <li><strong>Your competitors are getting those clicks</strong> instead of you</li>
+  <li><strong>Organic traffic is FREE</strong> – unlike paid ads that cost money every click</li>
+  <li><strong>SEO builds long-term value</strong> – good rankings compound over time</li>
+</ul>
+
+<p>I'd like to offer you a <strong>free SEO analysis</strong> that shows exactly where {{companyName}} stands and provides a clear roadmap for improvement.</p>
+
+<p>Would you be interested in seeing the specific keywords you could be ranking for and how to get there?</p>
+
+<p>Looking forward to helping {{companyName}} get the visibility it deserves!</p>
+
+<p>Best regards,</p>
+<p><strong>{{senderName}}</strong><br>
+{{senderCompany}}<br>
+{{senderPhone}}<br>
+<a href="{{senderWebsite}}">{{senderWebsite}}</a></p>`
       },
       {
         name: 'E-commerce - Sales Boost',
         category: 'ECOMMERCE',
-        subjectTemplate: 'Increase {{companyName}} online sales?',
+        subjectTemplate: 'Ideas to Boost {{companyName}}\'s Online Sales',
         bodyTemplate: `<p>Hi {{firstName}},</p>
-<p>I visited your online store and love what {{companyName}} is offering!</p>
-<p>I noticed a few quick wins that could significantly boost your sales - checkout optimization, product page improvements, and mobile experience enhancements.</p>
-<p>Would you be open to a quick chat about your growth goals?</p>
-<p>Best regards,<br>{{senderName}}<br>{{senderCompany}}</p>`
+
+<p>I visited the {{companyName}} online store and I'm genuinely impressed with your products! You've clearly built something special.</p>
+
+<p>While browsing, I noticed some opportunities that could significantly boost your sales:</p>
+
+<ul>
+  <li><strong>Checkout Optimization</strong> – Reducing cart abandonment (industry average is 70%!) with streamlined checkout</li>
+  <li><strong>Product Page Enhancements</strong> – Better images, descriptions, and trust signals that convert browsers into buyers</li>
+  <li><strong>Mobile Shopping Experience</strong> – Over 50% of e-commerce traffic comes from mobile devices</li>
+  <li><strong>Upselling & Cross-selling</strong> – Smart product recommendations that increase average order value</li>
+</ul>
+
+<p>I've helped similar e-commerce businesses increase their revenue by <strong>30-50%</strong> with these strategies.</p>
+
+<p>Would you be open to a quick conversation about your growth goals for {{companyName}}? I'd love to share some specific ideas tailored to your store.</p>
+
+<p>Warm regards,</p>
+<p><strong>{{senderName}}</strong><br>
+{{senderCompany}}<br>
+{{senderPhone}}<br>
+<a href="{{senderWebsite}}">{{senderWebsite}}</a></p>`
       },
       {
         name: 'Follow-up 1 - Gentle Reminder',
         category: 'FOLLOWUP_1',
-        subjectTemplate: 'Re: {{companyName}} - Following up',
+        subjectTemplate: 'Quick Follow-up: {{companyName}} Website Opportunity',
         bodyTemplate: `<p>Hi {{firstName}},</p>
+
 <p>I wanted to follow up on my previous email about helping {{companyName}} with your online presence.</p>
-<p>I understand you're busy, so I'll keep this brief - I'd love just 10 minutes of your time to share some ideas that could benefit your business.</p>
-<p>Is there a better time to connect?</p>
-<p>Best,<br>{{senderName}}</p>`
+
+<p>I completely understand you're busy – running a business takes a lot of time and energy!</p>
+
+<p>I'll keep this brief: I genuinely believe there's an opportunity to help {{companyName}} grow through improved digital presence. I'd love just <strong>10 minutes of your time</strong> to share some ideas that could make a real difference.</p>
+
+<p>Would any of these work for a quick call?</p>
+<ul>
+  <li>This week (any day, any time)</li>
+  <li>Next week (morning or afternoon)</li>
+  <li>Or just reply with your preferred time!</li>
+</ul>
+
+<p>Looking forward to connecting!</p>
+
+<p>Best regards,</p>
+<p><strong>{{senderName}}</strong><br>
+{{senderCompany}}<br>
+{{senderPhone}}<br>
+<a href="{{senderWebsite}}">{{senderWebsite}}</a></p>`
       },
       {
         name: 'Follow-up 2 - Final Check',
         category: 'FOLLOWUP_2',
-        subjectTemplate: 'Last follow-up for {{companyName}}',
+        subjectTemplate: 'Final Check-in: {{companyName}}',
         bodyTemplate: `<p>Hi {{firstName}},</p>
-<p>I don't want to be a pest, so this will be my last follow-up.</p>
-<p>If improving {{companyName}}'s online presence is a priority, I'm here to help. Just reply to this email when you're ready.</p>
-<p>If the timing isn't right, no worries at all - I wish you continued success!</p>
-<p>All the best,<br>{{senderName}}<br>{{senderCompany}}</p>`
+
+<p>I don't want to overstay my welcome in your inbox, so this will be my final follow-up.</p>
+
+<p>If improving {{companyName}}'s online presence is a priority right now, I'm here and ready to help. Just reply to this email whenever you're ready – even if it's months from now!</p>
+
+<p>If the timing isn't right, I completely understand. Running a business means constantly juggling priorities. I wish you and {{companyName}} continued success!</p>
+
+<p>Feel free to reach out anytime in the future. My door is always open.</p>
+
+<p>All the best,</p>
+<p><strong>{{senderName}}</strong><br>
+{{senderCompany}}<br>
+{{senderPhone}}<br>
+<a href="{{senderWebsite}}">{{senderWebsite}}</a></p>`
       }
     ];
 
