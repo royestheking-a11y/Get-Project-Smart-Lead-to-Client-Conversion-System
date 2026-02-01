@@ -215,7 +215,8 @@ router.get('/stats', async (req, res) => {
         status: { $in: ['SENT', 'FOLLOWUP_1_SENT', 'FOLLOWUP_2_SENT'] }
       }),
       Lead.countDocuments({ campaignId, status: 'REPLIED' }),
-      EmailLog.countDocuments({ campaignId, status: { $in: ['failed', 'bounced'] } }),
+      // FIX: Count failed LEADS, not failed email logs (which have duplicates from retries)
+      Lead.countDocuments({ campaignId, status: 'FAILED' }),
       Job.countDocuments({ campaignId, status: 'PENDING' }),
       Job.countDocuments({ campaignId, status: 'RUNNING' })
     ]);
