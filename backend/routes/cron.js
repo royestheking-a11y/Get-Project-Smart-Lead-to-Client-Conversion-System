@@ -56,8 +56,10 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
     if (jobs.length === 0) {
       const pendingCount = await Job.countDocuments({ status: 'PENDING' });
       const readyCount = await Job.countDocuments({ status: 'PENDING', runAt: { $lte: now } });
-      console.log(`[Worker] No jobs ready to run. Total Pending: ${pendingCount}, Ready Now: ${readyCount}, Current Time: ${now.toISOString()}`);
-      return res.json({ processed: 0, pending: pendingCount, ready: readyCount, message: 'No due jobs' });
+      const nextJob = await Job.findOne({ status: 'PENDING' }).sort({ runAt: 1 });
+      
+      console.log(`[Worker] No jobs ready to run. Total Pending: ${pendingCount}, Ready Now: ${readyCount}, Next Job At: ${nextJob ? nextJob.runAt.toISOString() : 'N/A'}, Current Time: ${now.toISOString()}`);
+      return res.json({ processed: 0, pending: pendingCount, ready: readyCount, nextJobAt: nextJob ? nextJob.runAt : null, message: 'No due jobs' });
     }
 
     let processed = 0;
