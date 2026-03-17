@@ -49,7 +49,8 @@ const sendViaResend = async (to, subject, body) => {
       from: fromEmail,
       to: [to],
       subject: subject,
-      html: body,
+      html: body.html,
+      text: body.text
     });
 
     if (error) {
@@ -74,7 +75,8 @@ const sendViaSMTP = async (to, subject, body) => {
       from: fromEmail,
       to: to,
       subject: subject,
-      html: body,
+      html: body.html,
+      text: body.text
     });
 
     console.log(`✅ Email sent via SMTP to ${to}, ID: ${info.messageId}`);

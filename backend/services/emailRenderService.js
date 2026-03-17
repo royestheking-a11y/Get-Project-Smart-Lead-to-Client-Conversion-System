@@ -46,17 +46,28 @@ export const renderTemplate = (template, lead, senderProfile = {}) => {
   const website = senderProfile.portfolioLink || 'www.rizqara.tech';
   const websiteUrl = website.startsWith('http') ? website : `https://${website}`;
 
-  // Build signature lines dynamically to avoid duplication
-  let signature = `Best,\n${signatureName}`;
+  // Build signature lines for TEXT
+  let textSignature = `Best,\n${signatureName}`;
   if (signatureCompany && signatureCompany !== signatureName) {
-    signature += `\n${signatureCompany}`;
+    textSignature += `\n${signatureCompany}`;
   }
+  textSignature += `\nWhatsApp: ${whatsapp}`;
+  textSignature += `\nWebsite: ${website}\n\nReply STOP to opt out.`;
+
+  // Build signature for HTML
+  let htmlSignature = `<br>Best,<br>${signatureName}`;
+  if (signatureCompany && signatureCompany !== signatureName) {
+    htmlSignature += `<br>${signatureCompany}`;
+  }
+  htmlSignature += `<br>WhatsApp: ${whatsapp}`;
+  htmlSignature += `<br><a href="${websiteUrl}" style="color: #111; text-decoration: underline;">${website}</a>`;
+  htmlSignature += `<br><br><span style="font-size: 11px; color: #999;">Reply STOP to opt out.</span>`;
+
+  // CLEANUP: Convert body to text and html
+  const textBody = body.trim() + '\n\n' + textSignature;
   
-  // Add WhatsApp and Website with clean, non-spammy links
-  signature += `\nWhatsApp: ${whatsapp}`;
-  signature += `\n<a href="${websiteUrl}" style="color: #111; text-decoration: underline;">${website}</a>`;
+  // HTML Body: convert newlines to <br> for standard compatibility
+  const htmlBody = `<div style="font-family: Arial, sans-serif; font-size: 14px; color: #111; line-height: 1.4;">${body.trim().replace(/\n/g, '<br>')}${htmlSignature}</div>`;
 
-  const finalBody = `<div style="font-family: sans-serif; font-size: 14px; color: #111; line-height: 1.5; white-space: pre-wrap;">${body.trim()}\n\n${signature}\n\n<span style="font-size: 11px; color: #999;">Reply STOP to opt out.</span></div>`;
-
-  return { subject, body: finalBody };
+  return { subject, html: htmlBody, text: textBody };
 };

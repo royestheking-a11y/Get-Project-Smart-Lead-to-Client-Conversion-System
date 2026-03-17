@@ -120,12 +120,12 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
         console.log('📧 Sending email with senderProfile:', JSON.stringify(senderProfile));
 
         // Render email
-        const { subject, body } = renderTemplate(template, lead, senderProfile);
+        const { subject, html, text } = renderTemplate(template, lead, senderProfile);
 
-        // Send email
-        const emailResult = await sendEmail(lead.email, subject, body);
+        // Send email (passing both html and text for better deliverability)
+        const emailResult = await sendEmail(lead.email, subject, { html, text });
 
-        // Write email log
+        // Write email log (using html for the body log)
         const emailType = job.type === 'SEND_EMAIL' ? 'initial' :
           job.type === 'FOLLOWUP_1_EMAIL' ? 'followup1' : 'followup2';
 
@@ -135,7 +135,7 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
           recipient: lead.email,
           type: emailType,
           subject,
-          body,
+          body: html,
           providerMessageId: emailResult.messageId || null,
           status: emailResult.success ? 'sent' : 'failed',
           errorMessage: emailResult.error || null
