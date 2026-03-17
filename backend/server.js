@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './config/database.js';
 import { initEmailService } from './services/emailService.js';
+import { initSelfPing } from './services/selfPing.js';
 import './worker.js'; // Start the worker/cron jobs automatically
 
 // Import routes
@@ -38,6 +39,9 @@ initEmailService();
 
 // Connect to MongoDB
 connectDB();
+
+// Anti-sleep self-pinger for Render
+initSelfPing();
 
 // Health check
 app.get('/health', (req, res) => {
