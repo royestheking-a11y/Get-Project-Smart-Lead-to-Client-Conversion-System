@@ -50,45 +50,46 @@ const fetchWebsite = async (url) => {
 
 const categorizeLead = async (lead) => {
   const websiteUrl = normalizeWebsite(lead.website);
+  const industry = (lead.industry || '').toLowerCase();
 
-  // If no website or invalid website, mark as NO_WEBSITE
+  // 1. Logic for Leads WITHOUT a Website
   if (!websiteUrl) {
-    lead.category = 'NO_WEBSITE';
+    // If they are in a marketing-related industry, they likely need help with social media/marketing
+    const marketingIndustries = ['marketing', 'advertising', 'digital', 'agency', 'social media', 'creative'];
+    if (marketingIndustries.some(ind => industry.includes(ind))) {
+      lead.category = 'DIGITAL_MARKETING';
+    } else {
+      lead.category = 'NO_WEBSITE';
+    }
     lead.status = 'READY';
     await lead.save();
     return;
   }
+
+  // 2. Logic for Leads WITH a Website
   const html = await fetchWebsite(websiteUrl);
 
+  // If website exists but is completely broken/empty
   if (!html) {
-    lead.category = 'WEAK_WEBSITE';
+    lead.category = 'POOR_UI_SEO'; // Focus on fix/redesign
     lead.status = 'READY';
     await lead.save();
     return;
   }
 
-  // Check for title tag
+  // Check for basic SEO (Title, Meta, H1)
   const hasTitle = /<title[^>]*>[\s\S]*?<\/title>/i.test(html);
-  if (!hasTitle) {
-    lead.category = 'WEAK_WEBSITE';
-    lead.status = 'READY';
-    await lead.save();
-    return;
-  }
-
-  // Check for meta description
   const hasMetaDescription = /<meta[^>]*name=["\']description["\'][^>]*>/i.test(html);
-  // Check for H1 tag (basic SEO requirement)
   const hasH1 = /<h1[^>]*>[\s\S]*?<\/h1>/i.test(html);
 
-  if (!hasMetaDescription || !hasH1) {
-    lead.category = 'SEO_WEAK';
+  if (!hasTitle || !hasMetaDescription || !hasH1) {
+    lead.category = 'POOR_UI_SEO';
     lead.status = 'READY';
     await lead.save();
     return;
   }
 
-  // Check for ecommerce keywords
+  // Check for ecommerce (Specialized Marketing)
   const ecommerceKeywords = /cart|checkout|shop|buy now|add to cart|purchase|basket|store|shipping|order|product/i;
   if (ecommerceKeywords.test(html)) {
     lead.category = 'ECOMMERCE';
@@ -97,8 +98,8 @@ const categorizeLead = async (lead) => {
     return;
   }
 
-  // Default to HAS_WEBSITE
-  lead.category = 'HAS_WEBSITE';
+  // If website is technically sound, pitch growth/marketing
+  lead.category = 'DIGITAL_MARKETING';
   lead.status = 'READY';
   await lead.save();
 };
