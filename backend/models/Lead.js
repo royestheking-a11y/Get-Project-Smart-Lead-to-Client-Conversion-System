@@ -34,7 +34,7 @@ const leadSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: [null, 'NO_WEBSITE', 'HAS_WEBSITE', 'WEAK_WEBSITE', 'SEO_WEAK', 'ECOMMERCE'],
+    enum: [null, 'NO_WEBSITE', 'HAS_WEBSITE', 'WEAK_WEBSITE', 'SEO_WEAK', 'ECOMMERCE', 'DIGITAL_MARKETING', 'POOR_UI_SEO'],
     default: null
   },
   status: {

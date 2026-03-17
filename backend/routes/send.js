@@ -233,7 +233,7 @@ router.get('/stats', async (req, res) => {
     });
   } catch (error) {
     console.error('Stats error:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
 });
 

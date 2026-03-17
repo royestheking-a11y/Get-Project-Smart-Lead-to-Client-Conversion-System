@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
     }
 
     // Validate limits
-    if (dailyLimit < 1 || dailyLimit > 200) {
-      return res.status(400).json({ error: 'Daily limit must be between 1 and 200' });
+    if (dailyLimit < 1 || dailyLimit > 500) {
+      return res.status(400).json({ error: 'Daily limit must be between 1 and 500' });
     }
 
     const campaign = await Campaign.create({
@@ -244,7 +244,7 @@ router.post('/', async (req, res) => {
     res.status(201).json(campaign);
   } catch (error) {
     console.error('Create campaign error:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
 });
 
@@ -299,7 +299,7 @@ router.get('/', async (req, res) => {
     res.json(campaignsWithCounts);
   } catch (error) {
     console.error('List campaigns error:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
 });
 
@@ -318,7 +318,7 @@ router.get('/:id', async (req, res) => {
     res.json(campaign);
   } catch (error) {
     console.error('Get campaign error:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
 });
 
@@ -351,8 +351,8 @@ router.patch('/:id', async (req, res) => {
     });
 
     if (req.body.dailyLimit !== undefined) {
-      if (req.body.dailyLimit < 1 || req.body.dailyLimit > 200) {
-        return res.status(400).json({ error: 'Daily limit must be between 1 and 200' });
+      if (req.body.dailyLimit < 1 || req.body.dailyLimit > 500) {
+        return res.status(400).json({ error: 'Daily limit must be between 1 and 500' });
       }
     }
 
@@ -360,7 +360,7 @@ router.patch('/:id', async (req, res) => {
     res.json(campaign);
   } catch (error) {
     console.error('Update campaign error:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
 });
 

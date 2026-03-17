@@ -182,6 +182,8 @@ router.post('/import', upload.single('file'), async (req, res) => {
     // Insert leads
     if (processedLeads.length > 0) {
       await Lead.insertMany(processedLeads);
+      // Trigger categorization in background
+      categorizeLeads(campaignId, processedLeads.length).catch(err => console.error('Background categorization error:', err));
     }
 
     res.json({
@@ -275,7 +277,7 @@ router.get('/', async (req, res) => {
     res.json(response);
   } catch (error) {
     console.error('List leads error:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
 });
 
