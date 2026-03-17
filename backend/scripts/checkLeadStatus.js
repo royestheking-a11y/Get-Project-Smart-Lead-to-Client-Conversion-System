@@ -1,44 +1,43 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Lead from '../models/Lead.js';
-import { connectDB } from '../config/database.js';
-
 dotenv.config();
 
-const checkLeads = async () => {
-    try {
-        await connectDB();
-        console.log('MongoDB Connected\n');
+async function checkLeadStatus() {
+    await mongoose.connect(process.env.MONGODB_URI);
 
-        const leads = await Lead.find({});
+    const leads = await mongoose.connection.collection('leads').find({}).toArray();
 
-        console.log('=== LEAD STATUS CHECK ===\n');
-        leads.forEach(l => {
-            console.log(`${l.email}`);
-            console.log(`  Status: ${l.status}`);
-            console.log(`  Category: ${l.category || 'NULL - NOT CATEGORIZED!'}`);
-            console.log(`  Ready to send: ${l.status === 'READY' && l.category ? 'YES' : 'NO - needs categorization'}`);
-            console.log('');
-        });
+    console.log('=== ALL LEADS BY STATUS ===\n');
 
-        const readyCount = leads.filter(l => l.status === 'READY' && l.category).length;
-        const needsCategorization = leads.filter(l => !l.category).length;
+    const byStatus = {};
+    leads.forEach(l => {
+        if (!byStatus[l.status]) byStatus[l.status] = [];
+        byStatus[l.status].push(l.email);
+    });
 
-        console.log(`\n=== SUMMARY ===`);
-        console.log(`Total leads: ${leads.length}`);
-        console.log(`Ready to send: ${readyCount}`);
-        console.log(`Need categorization: ${needsCategorization}`);
+    Object.keys(byStatus).forEach(status => {
+        console.log(`${status}: ${byStatus[status].length}`);
+        byStatus[status].forEach(email => console.log(`  - ${email}`));
+        console.log('');
+    });
 
-        if (needsCategorization > 0) {
-            console.log(`\n⚠️  ACTION REQUIRED: Categorize leads before sending!`);
-            console.log(`Go to Leads page → Select campaign → Click "Categorize Leads"`);
-        }
+    // Check email logs
+    const logs = await mongoose.connection.collection('emaillogs').find({}).toArray();
+    console.log('=== EMAIL LOGS BY STATUS ===\n');
 
-        process.exit(0);
-    } catch (error) {
-        console.error('Error:', error);
-        process.exit(1);
-    }
-};
+    const logsByStatus = {};
+    logs.forEach(l => {
+        if (!logsByStatus[l.status]) logsByStatus[l.status] = [];
+        logsByStatus[l.status].push(l.recipient);
+    });
 
-checkLeads();
+    Object.keys(logsByStatus).forEach(status => {
+        console.log(`${status}: ${logsByStatus[status].length}`);
+        logsByStatus[status].forEach(email => console.log(`  - ${email}`));
+        console.log('');
+    });
+
+    await mongoose.disconnect();
+}
+
+checkLeadStatus().catch(console.error);

@@ -12,6 +12,7 @@ const config = {
         host: process.env.IMAP_HOST || 'imap.gmail.com',
         port: parseInt(process.env.IMAP_PORT) || 993,
         tls: process.env.IMAP_TLS === 'true',
+        tlsOptions: { rejectUnauthorized: false }, // Add this to handle self-signed certs
         authTimeout: 10000
     }
 };

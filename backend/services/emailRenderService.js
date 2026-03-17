@@ -39,30 +39,24 @@ export const renderTemplate = (template, lead, senderProfile = {}) => {
     body = body.replace(regex, variables[key]);
   });
 
-  // Append signature and opt-out line
-  // Append signature only if no closing is detected
-  // We check for common closing phrases (case-insensitive) to avoid duplicates
-  const hasClosing = /(regards|sincerely|cheers|best,|faithfully|yours|thanks,)/i.test(body);
+  // Wrap in a very simple, clean div with standard sans-serif font
+  const signatureName = senderProfile.name || 'Aurangzeb Sunny';
+  const signatureCompany = senderProfile.company || 'RizQara Tech';
+  const whatsapp = senderProfile.whatsapp || '8801343042761';
+  const website = senderProfile.portfolioLink || 'www.rizqara.tech';
+  const websiteUrl = website.startsWith('http') ? website : `https://${website}`;
 
-  if (!hasClosing) {
-    // Use exact signature format requested by user
-    const signature = `<br><br><p>
-Best regards,<br>
-${senderProfile.name || 'Aurangzeb Sunny'}<br>
-${senderProfile.company || 'RizQara Tech'}<br>
-WhatsApp: <a href="https://api.whatsapp.com/send?phone=${senderProfile.whatsapp || '8801343042761'}">${senderProfile.whatsapp || '+880 1343-042761'}</a><br>
-Website: <a href="${senderProfile.portfolioLink || 'https://rizqaratech.vercel.app/'}">${senderProfile.portfolioLink || 'https://rizqaratech.com/'}</a><br><br>
-Reply STOP to opt out.
-</p>`;
-
-    body = body + signature;
-  } else {
-    // If body already has a closing, just add the opt-out line separately
-    if (!body.toLowerCase().includes('reply stop')) {
-      const optOut = '<br><br><span style="font-size: 12px; color: #888;">Reply STOP to opt out.</span>';
-      body = body + optOut;
-    }
+  // Build signature lines dynamically to avoid duplication
+  let signature = `Best,\n${signatureName}`;
+  if (signatureCompany && signatureCompany !== signatureName) {
+    signature += `\n${signatureCompany}`;
   }
+  
+  // Add WhatsApp and Website with clean, non-spammy links
+  signature += `\nWhatsApp: ${whatsapp}`;
+  signature += `\n<a href="${websiteUrl}" style="color: #111; text-decoration: underline;">${website}</a>`;
 
-  return { subject, body };
+  const finalBody = `<div style="font-family: sans-serif; font-size: 14px; color: #111; line-height: 1.5; white-space: pre-wrap;">${body.trim()}\n\n${signature}\n\n<span style="font-size: 11px; color: #999;">Reply STOP to opt out.</span></div>`;
+
+  return { subject, body: finalBody };
 };
