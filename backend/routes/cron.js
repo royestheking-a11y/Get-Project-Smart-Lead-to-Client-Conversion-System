@@ -54,7 +54,10 @@ router.post('/run-jobs', verifyCronSecret, async (req, res) => {
       .populate('templateId');
 
     if (jobs.length === 0) {
-      return res.json({ processed: 0, message: 'No due jobs' });
+      const pendingCount = await Job.countDocuments({ status: 'PENDING' });
+      const readyCount = await Job.countDocuments({ status: 'PENDING', runAt: { $lte: now } });
+      console.log(`[Worker] No jobs ready to run. Total Pending: ${pendingCount}, Ready Now: ${readyCount}, Current Time: ${now.toISOString()}`);
+      return res.json({ processed: 0, pending: pendingCount, ready: readyCount, message: 'No due jobs' });
     }
 
     let processed = 0;
@@ -564,11 +567,30 @@ router.get('/debug-config', async (req, res) => {
   res.json(config);
 });
 
-// Force reload email service
-router.post('/reload-email-config', verifyCronSecret, (req, res) => {
+// Help debug jobs and timezone issues
+router.get('/debug-jobs', verifyCronSecret, async (req, res) => {
   try {
-    initEmailService();
-    res.json({ message: 'Email service re-initialized with current config' });
+    const now = new Date();
+    const pendingJobs = await Job.find({ status: 'PENDING' }).sort({ runAt: 1 }).limit(10).populate('campaignId');
+    const campaigns = await Campaign.find({});
+    
+    res.json({
+      serverTime: now.toISOString(),
+      serverHour: now.getHours(),
+      pendingJobs: pendingJobs.map(j => ({
+        id: j._id,
+        runAt: j.runAt.toISOString(),
+        type: j.type,
+        campaign: j.campaignId?.name,
+        window: `${j.campaignId?.sendingWindowStart} - ${j.campaignId?.sendingWindowEnd}`
+      })),
+      campaigns: campaigns.map(c => ({
+        name: c.name,
+        status: c.status,
+        window: `${c.sendingWindowStart} - ${c.sendingWindowEnd}`,
+        dailyLimit: c.dailyLimit
+      }))
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
