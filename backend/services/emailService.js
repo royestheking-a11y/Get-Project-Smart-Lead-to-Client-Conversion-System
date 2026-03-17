@@ -76,7 +76,10 @@ const sendViaSMTP = async (to, subject, body) => {
       to: to,
       subject: subject,
       html: body.html,
-      text: body.text
+      text: body.text,
+      headers: {
+        'X-Mailin-Track-Clicks': '0' // Disable Brevo link tracking to move to Primary tab
+      }
     });
 
     console.log(`✅ Email sent via SMTP to ${to}, ID: ${info.messageId}`);
