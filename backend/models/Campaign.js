@@ -15,7 +15,7 @@ const campaignSchema = new mongoose.Schema({
     type: Number,
     default: 20,
     min: 1,
-    max: 200
+    max: 500
   },
   sendingWindowStart: {
     type: String,
