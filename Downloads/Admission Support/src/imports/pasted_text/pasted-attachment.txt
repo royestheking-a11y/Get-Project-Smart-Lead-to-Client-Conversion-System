@@ -1,0 +1,1227 @@
+🎓 Admission Support — Complete Web Application Plan
+
+use color deep brown and white premium theme 
+Product Type: Education Service Platform
+Target Users:
+
+HSC / Admission Students
+Guardians
+Admin / Admission Agents
+Universities (future integration)
+
+Core Mission:
+Make university admission simple, guided, and stress-free.
+
+1) Core System Modules (Big Picture)
+
+The platform will have 6 main systems:
+
+University Finder System
+Admission Application Service
+Student Dashboard
+Admin Control Panel
+Notice & Updates System
+Accommodation & Living Cost Estimator
+
+Plus future expansion modules.
+
+2) User Flow (Simple Real Scenario)
+
+Student journey:
+
+Student visits website
+Creates account
+Enters:
+Budget
+Subject
+Location
+GPA
+
+System shows:
+
+Best universities list
+
+Student clicks:
+
+Apply Now
+
+Then:
+
+Admin receives request
+Admin completes application
+Student tracks progress
+Student pays service fee
+
+3) Main Pages Structure (Frontend)
+
+Home
+Universities
+Admission Support
+Medical Admission
+Accommodation
+Tutorial
+Notice
+Dashboard
+Login / Register
+Contact
+
+4) Homepage UI Layout (Premium Style)
+
+Hero Section
+
+Title:
+
+Admission Made Simple for Every Student
+
+Subtitle:
+
+Find the right university, apply easily, and track everything in one place.
+
+Buttons:
+
+Find University
+Apply Now
+
+Sections:
+
+How It Works
+Top Universities
+Latest Notices
+Student Reviews
+Admission Process
+Accommodation Guide
+FAQ
+
+5) University Finder System (Core Feature)
+
+This is the heart of the platform.
+
+Students can search universities using filters.
+
+Filters:
+
+Budget range
+Subject
+Location
+Public / Private
+Admission requirement
+GPA
+City
+
+Example:
+
+Budget:
+
+5,000 – 10,000 BDT per semester
+
+Subject:
+
+CSE
+
+Result:
+
+University list appears instantly.
+
+University Card UI
+
+University Name
+Location
+Type
+Total Cost
+Admission Fee
+Duration
+Apply Button
+
+University Details Page
+
+Name
+Location
+Departments
+Tuition Fees
+Admission Requirements
+Deadline
+Seat Capacity
+Living Cost Estimate
+
+Button:
+
+Apply Through Admission Support
+
+6) Government University Section
+
+Database includes:
+
+All public universities in Bangladesh.
+
+Examples categories:
+
+General Universities
+Engineering Universities
+Medical Colleges
+Agricultural Universities
+Science & Technology Universities
+
+Data Fields:
+
+University Name
+Admission Website
+Application Fee
+Subjects
+Requirements
+Admission Date
+Notice PDF
+
+Admin can update:
+
+Admission deadlines
+Circulars
+Requirements
+
+7) Private University Section
+
+System includes:
+
+Top 50 private universities.
+
+Sorted by:
+
+High budget
+Medium budget
+Low budget
+
+Each university includes:
+
+Tuition fee per semester
+Total program cost
+Admission fee
+Scholarship availability
+
+Smart Feature:
+
+Budget Recommendation System
+
+Student enters:
+
+Budget
+Subject
+
+System suggests:
+
+Best universities.
+
+8) Admission Application Service (Paid Feature)
+
+This is your revenue engine.
+
+Student submits:
+
+Name
+GPA
+Subject
+University
+Documents
+
+Admin handles:
+
+Application submission
+Form filling
+Document upload
+Payment
+
+Student pays:
+
+Service fee.
+
+Application Status System
+
+Pending
+Processing
+Submitted
+Approved
+Rejected
+
+9) Student Dashboard (Premium UI)
+
+Sections:
+
+My Applications
+Application Status
+Payment History
+Notifications
+Saved Universities
+Documents
+Profile
+
+Dashboard Cards:
+
+Total Applications
+Active Applications
+Completed Applications
+Pending Payments
+
+Timeline UI Example:
+
+Application Submitted
+Documents Verified
+Form Filled
+Submitted to University
+Admission Confirmed
+
+10) Admin Panel (Full Control System)
+
+Admin can manage everything.
+
+Admin Dashboard Widgets:
+
+Total Students
+Total Applications
+Total Revenue
+Pending Requests
+New Registrations
+
+Admin Features:
+
+Student Management
+University Management
+Application Management
+Notice Management
+Payment Management
+Content Management
+
+Admin can:
+
+Approve applications
+Upload notices
+Update university data
+Send notifications
+Track revenue
+
+11) Notice System
+
+Important for admission.
+
+Notice Page Features:
+
+Title
+Description
+Publish Date
+Category
+Download PDF
+
+Categories:
+
+Admission Notice
+Result
+Deadline
+Scholarship
+Exam Schedule
+
+Admin can:
+
+Upload PDF
+Edit notice
+Schedule notice
+
+12) Tutorial Section (YouTube Integration)
+
+This reduces support workload massively.
+
+Videos:
+
+How to apply
+How to choose university
+How to pay fees
+Admission process
+Document preparation
+
+UI:
+
+Premium video cards.
+
+Each tutorial includes:
+
+Video
+Title
+Description
+Steps
+Download guide
+
+13) Medical Admission Section
+
+Separate module.
+
+Same system but specific to medical students.
+
+Features:
+
+Medical colleges list
+Admission requirements
+Exam details
+Application help
+
+Filters:
+
+Budget
+Location
+Private / Government
+Seat availability
+
+14) Accommodation & Living Cost System
+
+This is a very smart differentiator.
+
+Most platforms don't have this.
+
+Student selects:
+
+City
+Lifestyle
+Accommodation type
+
+System calculates:
+
+Rent
+Food
+Transport
+Utilities
+
+Output:
+
+Monthly living cost estimate.
+
+Example:
+
+Dhaka:
+
+Accommodation:
+
+6,000 BDT
+
+Food:
+
+5,000 BDT
+
+Transport:
+
+1,500 BDT
+
+Total:
+
+12,500 BDT
+
+15) Payment System
+
+Payment methods:
+
+bKash
+Nagad
+Rocket
+Card
+
+Features:
+
+Online payment
+Payment verification
+Invoice generation
+Payment history
+21) UI Design Style (Premium Direction)
+
+Design theme:
+
+Modern
+Clean
+Student-friendly
+Trustworthy
+
+also there is all university details i get 
+You’re planning a Bangladesh‑wide “BD Admission Support System” that lets students filter universities by budget, location, subject, GPA, and accommodation cost.
+
+Right now, no single public source lists 100 private universities in one table with “all subjects, all fees, all seats, and all hostel costs”—that data is spread across UGC lists, individual university fee‑sheets, and hostel pages.
+
+Still, I can give you a foundational structure and a sample list of ~40–50 major private universities (Dhaka, Chittagong, Sylhet, Rajshahi, Khulna, etc.) with fee ranges, typical admission‑cost examples, and hostel‑cost ranges so you can build your own database and filters.
+
+1. What you realistically need to collect
+For your system, you should design a database with at least these columns per university per program:
+
+University name, city, UGC approval status
+
+Program (e.g., CSE, BBA, LLB, EEE, Pharmacy, etc.)
+
+Duration (years), total semesters, total credits
+
+Per‑credit fee (BDT)
+
+Tuition per semester (BDT)
+
+Admission fee (one‑time, BDT)
+
+Additional fees per semester (registration, library, lab, internet, etc.)
+
+Total approximate degree cost (low / high band, based on GPA waiver)
+
+Campus hostel fee (low / high band per month)
+
+Nearby private hostel / flat rent band (low / high per month)
+
+Minimum GPA / GPA waiver rules
+
+Seats per batch (approx.)
+
+You can then build filters for:
+
+Budget (total degree + hostel),
+
+City / division,
+
+Subject / faculty,
+
+GPA range and waiver rules,
+
+On‑campus vs. off‑campus accommodation level.
+
+2. Sample structured list (high‑to‑mid‑tier, by city)
+Here is a simplified sample list of ~45 major private universities across Bangladesh, grouped by city, with approximate fee bands and hostel ranges (based on 2024–2025 data).
+
+Note:
+
+Fees are per‑semester for popular undergrad programs (CSE/BBA/EEE/LLB).
+
+“Low” ≈ lower‑waiver / low‑waiver programs; “High” ≈ premium‑tuition programs (e.g., CSE, Architecture, MBA).
+
+Hostel ranges are per month (campus + nearby private).
+
+Dhaka and nearby (Dhaka, Savar, Tongi, Narayanganj)
+University (Dhaka)	Approx. tuition per semester (BDT)	Admission fee (BDT)	Hostel / rent band (BDT/month)
+North South University (NSU)	25,000 – 45,000 (CSE/BBA) 
+20,000 – 30,000 
+​	7,000 – 12,000 (hostel), 10,000 – 18,000 (private) 
+​
+BRAC University	25,000 – 45,000 (CSE/BBA/Pharmacy) 
+20,000 – 25,000 
+​	8,000 – 15,000 (private/hostel‑like) 
+​
+Independent University, Bangladesh (IUB)	20,000 – 38,000 
+20,000 
+​	7,000 – 12,000 
+​
+East West University (EWU)	18,000 – 30,000 
+​	20,000 
+​	7,000 – 11,000 
+​
+American International University‑Bangladesh (AIUB)	22,000 – 40,000 
+20,000 
+​	7,000 – 12,000
+Daffodil International University (DIU)	18,000 – 35,000 
+15,000 – 20,000	6,000 – 10,000
+United International University (UIU)	20,000 – 35,000 
+​	~20,000 
+​	7,000 – 12,000
+Ahsanullah University of Science & Technology (AUST)	18,000 – 32,000 
+​	20,000 – 25,000	6,000 – 10,000
+International University of Business Agriculture & Technology (IUBAT)	15,000 – 25,000 
+​	10,000 – 20,000	5,000 – 9,000
+Green University of Bangladesh	12,000 – 25,000 
+20,000 
+​	5,000 – 8,000
+State University of Bangladesh (SUB)	10,000 – 20,000 
+​	10,000	5,000 – 8,000 (nearby) 
+​
+Uttara University	12,000 – 22,000 
+​	10,000 – 15,000	5,000 – 9,000
+Gono Bishwabidyalay	10,000 – 18,000 
+​	10,000	5,000 – 8,000
+World University of Bangladesh (WUB)	12,000 – 22,00.Nodes	10,000 – 15,000 
+​	6,000 – 9,000
+Central Women’s University	10,000 – 18,000	10,000	5,000 – 8,000
+Asian University for Women (note: main campus in Chittagong, small Dhaka presence)	25,000 – 40,000	20,000+	8,000 – 13,000
+Southeast University	15,000 – 25,000 
+​	10,000 – 15,000	5,000 – 8,000
+Stamford University Bangladesh	12,000 – 22,000 
+​	10,000 – 15,000	5,000 – 8,000
+Bangladesh University of Business and Technology (BUBT)	15,000 – 28,000 
+10,000 – 20,000	5,000 – 9,000
+Sonargaon University (Narayanganj)	12,000 – 22,000 
+​	10,000	5,000 – 8,000
+Chittagong (Chattogram)
+University (Chittagong)	Approx. tuition per semester (BDT)	Admission fee (BDT)	Hostel / rent band (BDT/month)
+University of Science & Technology Chittagong (USTC)	15,000 – 25,000 
+20,000	5,000 – 9,000
+International Islamic University Chittagong (IIUC)	12,000 – 20,000 
+​	10,000 – 15,000	4,000 – 8,000
+Asian University for Women (Chittagong campus)	25,000 – 40,000 
+​	20,000+	8,000 – 12,000
+BGC Trust University Bangladesh	12,000 – 20,000 
+​	10,000	4,000 – 7,000
+Port City International University	15,000 – 25,000 
+​	10,000 – 15,000	4,000 – 8,000
+Premier University	12,000 – 20,000 
+​	10,000	4,000 – 7,000
+University of Creative Technology, Chittagong (UCTC)	10,000 – 18,000 
+​	8,000 – 12,000	4,000 – 7,000
+Khwaja Yunus Ali University (Kushtia branch in Chittagong area)	10,000 – 18,000 
+​	10,000	4,000 – 7,000
+Sylhet
+University (Sylhet)	Approx. tuition per semester (BDT)	Admission fee (BDT)	Hostel / rent band (BDT/month)
+Leading University	12,000 – 22,000 
+​	10,000	4,000 – 7,000
+North East University Bangladesh (NEUB)	10,000 – 18,000 
+​	8,000 – 12,000	4,000 – 6,000
+Rajshahi
+University (Rajshahi)	Approx. tuition per semester (BDT)	Admission fee (BDT)	Hostel / rent band (BDT/month)
+Pundra University of Science & Technology	10,000 – 18,000 
+​	8,000 – 12,000	4,000 – 7,000
+Rabindra Maitree University, Kushtia (near Rajshahi region)	10,000 – 16,000 
+​	8,000	4,000 – 6,000
+Khulna
+University (Khulna)	Approx. tuition per semester (BDT)	Admission fee (BDT)	Hostel / rent band (BDT/month)
+North Western University (NWU)	10,000 – 18,000 
+​	8,000 – 12,000	4,000 – 7,000
+Northern University of Business & Technology, Khulna (NUBT)	12,000 – 20,000 
+​	10,000	4,000 – 7,000
+Barisal, Comilla, Feni, Cox’s Bazar, etc.
+University	Approx. tuition per semester (BDT)	Admission fee (BDT)	Typical rent band (BDT/month)
+Global University Bangladesh (Barisal) 
+​	10,000 – 16,000	8,000	4,000 – 6,000
+Britannia University (Comilla) 
+​	10,000 – 18,000	10,000	4,000 – 6,000
+Feni University 
+​	10,000 – 16,000	8,000	4,000 – 6,000
+Cox’s Bazar International University 
+​	10,000 – 16,000	8,000	4,000 – 6,000
+3. How to get the “full 100‑university + all‑subject + all‑fees” dataset
+Because no single page lists all 100+ universities with every subject’s fee and every hostel cost, you will need to scrape or manually collect from:
+
+UGC‑approved private‑university list (official PDF/Excel) – gives you all 100+ names and cities.
+
+Each university’s official fee page (e.g., AIUB, IUB, BRACU, Green University, etc.) – gives per‑credit / per‑semester fees by program.
+
+Hostel / accommodation pages (e.g., UIU, WUB, SUB, etc.) – gives monthly hostel rent.
+
+4. How you can build your BD Admission Support System
+You can now design something like:
+
+Main filters
+
+City / division (Dhaka, Chittagong, Sylhet, etc.)
+
+Subject / faculty (CSE, EEE, BBA, LLB, Pharmacy, etc.)
+
+Budget range (total degree cost + hostel)
+
+GPA (and GPA‑based waiver rules)
+
+Campus hostel vs. private hostel / flat
+
+Database structure ideas
+
+Table: universities (name, city, UGC_status, contact).
+
+Table: programs (university_id, degree, subject_group, duration, semesters, total_credits).
+
+Table: fees (program_id, per_credit_fee, admission_fee, per_semester_other_fees, total_low, total_high).
+
+Table: accommodation (university_id, hostel_fee_low, hostel_fee_high, nearby_rent_low, nearby_rent_high).
+
+5. Next step (if you want)
+If you tell me:
+
+which subjects you focus on (e.g., CSE/EEE/BBA/LLB only),
+
+and your city focus (e.g., “mostly Dhaka + Savar + Chittagong”),
+
+I can next time give you a ready‑to‑import CSV‑style table with:
+
+80–100 private universities,
+
+1–3 sample programs per university,
+
+fee ranges, admission fee, and hostel bands,
+so you can plug this into your system (Laravel, Django, Flutter, etc.).
+
+Add scholarship and quota filters to the admission system
+Completed 1 step
+You can extend your BD admission‑support system with scholarship and quota filters by adding a few extra layers to your filters and database.
+
+Below is a clear, practical design you can follow (scholarship + quota filters + DB structure + example filters).
+
+1. Types of scholarships to support
+Most private universities in Bangladesh use:
+
+Merit‑based scholarships
+
+Based on SSC/HSC/Diploma GPA (e.g., 5.00, 4.8, 4.5, etc.).
+
+Ranges: 10%–100% tuition‑fee waiver.
+
+Social/need‑based scholarships
+
+For financially disadvantaged students, freedom‑fighter children, or indigenous‑minority students.
+
+Often 50%–100% tuition‑fee waiver.
+
+Renewable scholarships
+
+Require minimum CGPA per year (e.g., 3.0, 3.3, 3.5) to keep.
+
+Your system can let students select what kind of scholarship they qualify for (merit, need, FF, etc.).
+
+2. Quota‑based filters
+Common quotas in private‑university admissions in Bangladesh:
+
+Freedom‑Fighter (FF) quota
+
+Children of freedom fighters may get 50%–100% tuition‑fee waiver.
+​
+
+Indigenous/ethnic‑minority quota
+
+Reserved seats or special waiver in some universities.
+​
+
+District/region‑based quota (rural / remote area).
+​
+
+Special‑talent / sports quota
+
+Some universities give partial‑fee support for sports/cultural excellence.
+​
+
+You can add these as checkbox filters or dropdown filters in the UI.
+
+3. How to design the filters in your system
+You can show filters like:
+
+Scholarship filters
+
+“I want 100% tuition‑fee waiver”
+
+“I want 50%‑75% waiver”
+
+“I want 20%‑49% waiver”
+
+“I want only merit‑based waiver”
+
+“I want need‑based / FF quota”
+
+Quota filters
+
+“Freedom‑Fighter child quota”
+
+“Indigenous / ethnic‑minority quota”
+
+“Rural / remote‑district quota”
+
+“Special‑talent (sports/art) quota”
+
+GPA‑linked filters
+
+“I have SSC/HSC GPA ≥ 5.0”
+
+“I have SSC/HSC GPA 4.8–4.99”
+
+“I have SSC/HSC GPA 4.5–4.79”
+
+“I have SSC/HSC GPA < 4.5”
+
+Based on this, the system shows only universities that match your scholarship/quota rule and GPA.
+
+4. Database fields to add
+To support these filters, extend your universities / programs / fees tables with:
+
+Per‑university scholarship fields
+
+merit_scholarship_eligible (bool)
+
+merit_scholarship_min_gpa_ssc (e.g., 4.5)
+
+merit_scholarship_min_gpa_hsc (e.g., 4.8)
+
+merit_scholarship_min_gpa_diploma (if applicable)
+
+merit_scholarship_percent_min / max (e.g., 10–100%)
+
+Need‑based / quota fields
+
+has_ff_quota (bool)
+
+ff_quota_percent (e.g., 50–100%)
+
+has_indigenous_quota (bool)
+
+has_rural_quota (bool)
+
+has_sports_talent_quota (bool)
+
+Renewal conditions
+
+scholarship_min_cgpa (e.g., 3.0, 3.3, 3.5)
+
+Then, when a user selects:
+
+“I am a Freedom‑Fighter child”,
+
+“I have SSC/HSC 5.00”,
+
+“I want 50%–100% waiver”,
+
+your query becomes:
+
+sql
+SELECT * FROM universities
+WHERE merit_scholarship_min_gpa_ssc >= 5.00
+  AND merit_scholarship_min_gpa_hsc >= 5.00
+  AND merit_scholarship_percent_min >= 50
+  AND (has_ff_quota = TRUE OR has_rural_quota = TRUE)
+5. Example: How your system would show data
+When a student sets:
+
+GPA range: “SSC/HSC 5.00”
+
+Scholarship level: “75%–100% tuition‑fee waiver”
+
+Quota: “Freedom‑Fighter child”
+
+Your system can list rows like:
+
+University	Program	GPA needed	Max waiver	FF quota?	Notes
+State University of Bangladesh	BBA	5.00 (Golden)	75% merit	Yes (100% FF) 
+​	FF children get full tuition; 75% merit up to 5.00
+Green University of Bangladesh	CSE	10.00 (SSC+HSC 5.00 each)	100% 
+​	Needs‑based only	100% for 10 GPA, CGPA 3.5 to keep
+World University of Bangladesh	All programs	Golden 5 in both SSC/HSC	100% merit 
+​	Yes	Plus 100% for need‑based
+6. Next step (if you want)
+If you tell me:
+
+which subjects / cities you care about most,
+
+and what level of scholarship you want to focus on (e.g., “only 50–100% waivers”),
+
+I can give you:
+
+a ready‑to‑import CSV‑style table with scholarship/quota flags for 50–80 private universities,
+so you can plug it into your BD Admission Support System (Laravel, Django, Flutter, etc.).
+
+80–100 private universities private university’s list
+Here is a compact list of 80–100 private universities in Bangladesh, grouped roughly by city/region, based on UGC‑approved and recent Bangladesh‑specific listings.
+
+✅ This is not the full 116+ UGC list, but a core 80–100 private universities you can start with for your BD‑admission‑support system.
+
+Dhaka and nearby (Dhaka, Savar, Narayanganj, Tongi)
+North South University (NSU) – Dhaka
+​
+
+BRAC University – Dhaka
+​
+
+Independent University, Bangladesh (IUB) – Dhaka
+​
+
+American International University–Bangladesh (AIUB) – Dhaka
+​
+
+Ahsanullah University of Science & Technology (AUST) – Dhaka
+​
+
+East West University (EWU) – Dhaka
+​
+
+University of Asia Pacific (UAP) – Dhaka
+​
+
+Central Women’s University – Dhaka
+​
+
+International University of Business Agriculture & Technology (IUBAT) – Dhaka
+​
+
+Dhaka International University – Dhaka
+​
+
+Manarat International University – Dhaka
+​
+
+Bangladesh University – Dhaka
+​
+
+The People’s University of Bangladesh – Dhaka
+​
+
+Asian University of Bangladesh – Dhaka
+​
+
+Gono Bishwabidyalay – Dhaka
+​
+
+World University of Bangladesh – Dhaka
+​
+
+Shanto‑Mariam University of Creative Technology – Dhaka
+​
+
+The Millennium University – Dhaka
+​
+
+Eastern University – Dhaka
+​
+
+Metropolitan University – Dhaka
+​
+
+Silver University – Dhaka
+​
+
+Prime University – Dhaka
+
+Stamford University Bangladesh – Dhaka
+​
+
+Southeast University – Dhaka
+​
+
+Uttara University – Dhaka
+​
+
+Green University of Bangladesh – Dhaka
+​
+
+State University of Bangladesh – Dhaka
+​
+
+World University of Bangladesh (WUB) – Dhaka
+​
+
+United International University (UIU) – Dhaka
+​
+
+Daffodil International University (DIU) – Dhaka
+​
+
+Asian University for Women (Dhaka‑linked) – Dhaka
+​
+
+Sheikh Fazilatunnesa Mujib University – Dhaka
+​
+
+R.P. Shaha University – Dhaka
+
+German University Bangladesh – Dhaka
+​
+
+CCN University of Science & Technology – Dhaka
+​
+
+Global University Bangladesh – Barisal (but Dhaka‑administered)
+
+Chittagong (Chattogram)
+University of Science & Technology Chittagong (USTC) – Chittagong
+​
+
+International Islamic University Chittagong (IIUC) – Chittagong
+​
+
+Asian University for Women – Chittagong
+​
+
+BGC Trust University Bangladesh – Chittagong
+​
+
+Port City International University – Chittagong
+​
+
+Premier University – Chittagong
+​
+
+University of Creative Technology Chittagong (UCTC) – Chittagong
+​
+
+Khwaja Yunus Ali University – Enayetpur (near Sirajganj)
+​
+
+Khulna Khan Bahadur Ahsanullah University – Khulna (listed in ranked list)
+​
+
+Sylhet
+Leading University – Sylhet
+​
+
+North East University Bangladesh (NEUB) – Sylhet
+​
+
+Sylhet International University – Sylhet
+​
+
+Rajshahi / Rangpur / Mymensingh
+Pundra University of Science & Technology – Rajshahi
+​
+
+Rabindra Maitree University – Kushtia (Rajshahi region)
+​
+
+Khwaja Yunus Ali University – Enayetpur, Sirajganj
+​
+
+North Bengal University of Engineering & Technology (NBUE&T) – Nilphamari
+​
+
+Mymensingh Medical University – Mymensingh
+​
+
+Khulna / Barisal / Comilla / Cox’s Bazar
+North Western University – Khulna
+​
+
+Northern University of Business & Technology (NUBT) – Khulna
+​
+
+Khulna Khan Bahadur Ahsanullah University – Khulna
+​
+
+Global University Bangladesh – Barisal
+
+Britannia University – Comilla
+​
+
+Feni University – Feni
+​
+
+Cox’s Bazar International University – Cox’s Bazar
+​
+
+Other widely recognized private universities (extra 20–30 to reach 80–100)
+These are commonly included in Bangladesh‑wide private‑university lists.
+
+Bangladesh University of Health Sciences – Dhaka
+​
+
+Atish Dipankar University of Science & Technology – Dhaka
+​
+
+University of Development Alternative (UODA) – Dhaka
+​
+
+Victoria University of Bangladesh – Dhaka
+​
+
+Fareast International University – Dhaka
+​
+
+Bangladesh Islami University – Dhaka
+​
+
+Scholastica School & College (undergraduate pathway) – Dhaka
+​
+
+Time University Bangladesh – Dhaka
+​
+
+Bangladesh University of Professionals (BUP) – Dhaka (semi‑public/private‑style)
+​
+
+Notre Dame University Bangladesh – Dhaka
+​
+
+Canadian University of Bangladesh – Dhaka
+​
+
+North Bengal University – Rajshahi region (multi‑campus)
+​
+
+Bangladesh Army University of Science & Technology (BAUST) – Saidpur
+​
+
+Bangladesh Army University of Engineering & Technology (BAUET) – Qadirabad
+​
+
+University of Brahmanbaria – Brahmanbaria
+​
+
+University of Skill Enrichment and Technology –
+​
+
+R.T.M Al‑Kabir Technical University –
+​
+
+Sheikh Hasina University of Science and Technology –
+​
+
+Chattogram BGMEA University of Fashion and Technology – Chattogram
+​
+
+Bangladesh Army University of Science and Technology, Khulna – Khulna
+​
+Bangladesh has around 59 UGC-approved public universities, but undergraduate honours admissions are mainly through the GST cluster (19 universities, ~24,000 seats total across units: Science 12,076, Humanities 7,294, Commerce 4,636) or individual tests at major ones like DU, RU, JU, BUET. Application fees are typically 1,000-1,500 BDT via cluster portals like gstadmission.ac.bd or individual sites, paid online (e.g., GST: 1,500 BDT). Detailed per-university data (exact seats, fees, subjects) varies yearly and is published in admission circulars (e.g., December-March); check official sites or ugc-universities.gov.bd for 2026 updates as numbers fluctuate.
+
+Admission Systems
+Public university admissions use clusters or individual processes.
+
+GST Cluster (19 universities): Single test for A (Science), B (Humanities), C (Commerce) units; apply at gstadmission.ac.bd; fee 1,500 BDT (+500 BDT for architecture).
+
+Individual: Major unis like DU, RU, JU, BUET, CU hold separate tests; fees ~1,000-2,000 BDT.
+
+Ex-GST (recent exits): Jagannath, Khulna, SUST, etc., now individual.
+​
+
+Key Universities Overview
+University	Location	Approx. Seats (Honours)	Application Fee (BDT)	Main Subjects/Units
+University of Dhaka (DU)	Dhaka	~4,500	~1,200	Science, Arts, Business, Engineering
+​
+Jahangirnagar University (JU)	Savar, Dhaka	~1,844	Varies by unit	Math/Physical (426), Social Sciences (326), etc.
+​
+BUET	Dhaka	~885 (Engineering)	Individual	CSE, EEE, Civil, Mech
+​
+GST Cluster Total	Various	~24,000	1,500	Science (12k), Humanities (7k), Commerce (4k)
+​
+GST Cluster Universities (19)
+Begum Rokeya Northern Univ., Comilla Univ., Jatiya Kabi Kazi Nazrul Islam Univ., Jagannath Univ. (exited?), Jashore Univ. of Sci. & Tech., Jessore Univ., Khulna Univ. (exited?), Maulana Bhashani Sci. & Tech. Univ., etc. (full list on gstadmission.ac.bd).
+
+Subjects: BSc (CSE, EEE, Physics), BSS (Sociology, Economics), BBA, etc., varying by uni/faculty.
+
+Building Your System Tips
+Aggregate data from UGC site, gstadmission.ac.bd, and individual uni portals (e.g., du.ac.bd/admissions); scrape circular PDFs for seats/fees/subjects updated annually. Include user location (Savar near JU) for personalized filters. For complete lists, fetch latest circulars as 2026 details finalize soon.
+
+give me proper details all 59 ugc universities then also gst all universitys all list seat and details give me
+Completed 2 steps
+Bangladesh's University Grants Commission (UGC) lists 57 public universities (some sites cite 59, including recent ones), spanning general, science/tech, agricultural, engineering, medical, and specialized types. Honours admissions are centralized via GST cluster for 19 universities (~24,000 seats total), with others like DU, BUET handling individually; exact seats vary yearly per circulars (e.g., 2025-26 GST: A Unit Science ~12k, B Humanities ~7k, C Commerce ~4k).
+
+Full UGC Public Universities List
+Here's the official UGC list of 57 public universities (as of March 2026), with websites for details like seats/subjects/fees (check annual admission circulars).
+​
+
+SL	University	Website
+1	University of Dhaka	www.du.ac.bd
+2	University of Rajshahi	www.ru.ac.bd
+3	Bangladesh Agricultural University	www.bau.edu.bd
+4	Bangladesh University of Engineering & Technology	www.buet.ac.bd
+5	University of Chittagong	www.cu.ac.bd
+6	Jahangirnagar University	www.juniv.edu
+7	Islamic University, Bangladesh	www.iu.ac.bd
+8	Shahjalal University of Science & Technology	www.sust.edu
+9	Khulna University	www.ku.ac.bd
+10	National University	www.nu.edu.bd
+11	Bangladesh Open University	www.bou.ac.bd
+12	Bangladesh Medical University (BSMMU)	www.bsmmu.ac.bd
+13	Gazipur Agricultural University	https://gau.edu.bd/
+14	Hajee Mohammad Danesh Science & Technology University	www.hstu.ac.bd
+15	Mawlana Bhashani Science & Technology University	www.mbstu.ac.bd
+16	Patuakhali Science And Technology University	www.pstu.ac.bd
+17	Sher-e-Bangla Agricultural University	www.sau.edu.bd
+18	Chittagong University of Engineering & Technology (CUET)	www.cuet.ac.bd
+19	Rajshahi University of Engineering & Technology (RUET)	www.ruet.ac.bd
+20	Khulna University of Engineering & Technology (KUET)	www.kuet.ac.bd
+21	Dhaka University of Engineering & Technology (DUET)	www.duet.ac.bd
+22	Noakhali Science & Technology University	www.nstu.edu.bd
+23	Jagannath University	www.jnu.ac.bd
+24	Comilla University	www.cou.ac.bd
+25	Jatiya Kabi Kazi Nazrul Islam University	www.jkkniu.edu.bd
+26	Chittagong Veterinary and Animal Sciences University	www.cvasu.ac.bd
+27	Sylhet Agricultural University	www.sau.ac.bd
+28	Jessore University of Science & Technology	www.just.edu.bd
+29	Pabna University of Science and Technology	www.pust.ac.bd
+30	Begum Rokeya University, Rangpur	www.brur.ac.bd
+31	Bangladesh University of Professionals	www.bup.edu.bd
+32	Gopalganj Science & Technology University	www.bsmrstu.edu.bd
+33	Bangladesh University of Textiles	www.butex.edu.bd
+34	University of Barishal	www.bu.ac.bd
+35	Rangamati Science and Technology University	www.rmstu.edu.bd
+36	Bangladesh Maritime University	https://bmu.edu.bd/
+37	Islamic Arabic University	www.iau.edu.bd
+38	Chittagong Medical University	www.cmu.edu.bd
+39	Rajshahi Medical University	www.rmu.edu.bd
+40	Rabindra University, Bangladesh	www.rub.ac.bd
+41	University of Frontier Technology, Bangladesh	www.uftb.ac.bd
+42	Netrokona University (Sheikh Hasina Univ.)	https://www.shu.edu.bd/
+43	Khulna Agricultural University	www.kau.edu.bd
+44	Jamalpur Science and Technology University	https://bsfmstu.ac.bd/
+45	Sylhet Medical University	www.bsfmmu.edu.bd
+46	Aviation And Aerospace University, Bangladesh	www.aaub.edu.bd
+47	Chandpur Science and Technology University	www.cstu.ac.bd
+48	Kishoreganj University	bsmru.ac.bd
+49	Hobiganj Agricultural University	www.hau.ac.bd
+50	Khulna Medical University	www.shmu.ac.bd
+51	Kurigram Agricultural University	www.kuriau.edu.bd
+52	Sunamganj Science and Technology University	www.sstu.ac.bd
+53	Pirojpur Science & Technology University	www.prstu.ac.bd
+54	Naogaon University	N/A
+55	Meherpur University	N/A
+56	Bogra Science and Technology University	bstu.ac.bd
+57	Dhaka Central University	N/A
+​
+GST Cluster Universities (19 in 2025-26)
+These participate in centralized GST admission (gstadmission.ac.bd; fee ~1,500 BDT; tests March-April 2026; min GPA: Science 7.0, Humanities/Commerce 6.0+). Total seats ~24,000; subjects include BSc (Physics, CSE), BSS (Economics), BBA via A/B/C units.
+​
+
+General: Islami University, Kazi Nazrul University, Begum Rokeya University, Barisal University, Rabindra University, University of Frontier Technology, Netrokona University, Kishoreganj University.
+
+Science/Tech: Mawlana Bhashani STU, Noakhali STU, Jessore STU, Pabna STU, Gopalganj STU, Rangamati STU, Jamalpur STU, Patuakhali STU (dual), Chandpur STU, Sunamganj STU, Pirojpur STU.
+​
+
+Others (e.g., DU ~4,500 seats, BUET ~885) have separate processes; for project, scrape sites like ugc-universities.gov.bd annually for updates.
+
+now engineer and medical universities divide in two sections
+Completed 2 steps
+Engineering Universities
+Bangladesh has dedicated public engineering universities (10 main ones) with separate admissions via individual entrance tests, not GST; seats ~5,000-6,000 total yearly, fees ~1,000-2,000 BDT, focusing on B.Sc Engineering (CSE, EEE, Civil, etc.).
+
+University	Location	Approx. Seats	Admission Site	Key Programs
+BUET	Dhaka	1,300+	buet.ac.bd	CSE, EEE, Mech, Civil
+​
+CUET	Chittagong	660	cuet.ac.bd	CSE, Petroleum
+​
+KUET	Khulna	660	kuet.ac.bd	Industrial, CSE
+​
+RUET	Rajshahi	660	ruet.ac.bd	CSE, EEE
+​
+DUET	Gazipur	780	duet.ac.bd	CSE, Textile
+​
+BUTEX	Dhaka	600	butex.edu.bd	Textile Engg.
+​
+Medical Universities
+Public medical universities (8+) oversee MBBS/BDS admissions via DGHS centralized test (dgme.teletalk.com.bd; ~4,500 MBBS seats, 1,000 BDS; fee ~1,200 BDT; GPA min 9.0 SSC/HSC). Affiliated colleges (37 govt. medical colleges) host students.
+
+University	Location	Affiliated Colleges	Admission Site	Programs
+Bangabandhu Sheikh Mujib Medical Univ. (BSMMU)	Dhaka	Dhaka Medical College, etc.	dgme.teletalk.com.bd	MBBS, BDS, PG
+​
+Dhaka Medical College (under DU)	Dhaka	Multiple	medicaladmission.dgme.gov.bd	MBBS
+​
+Chittagong Medical Univ.	Chittagong	Chittagong Medical College	Same	MBBS
+​
+Rajshahi Medical Univ.	Rajshahi	Rajshahi Medical College	Same	MBBS
+​
+Sylhet Medical Univ.	Sylhet	Sylhet MAG Osmani MC	Same	MBBS
+​
+Rangpur Community Medical College (under RU)	Rangpur	Rangpur Medical College	Same	MBBS
+​
+For your project, integrate DGHS for medical (~Oct-Dec apps) and individual portals for engineering; data from circulars on sites above.
+
+under dhaka medical all university’s
+Dhaka University oversees several government medical colleges for MBBS/BDS programs, but centralized MBBS admissions are managed nationally by DGHS via a single test (medicaladmission.dgme.gov.bd), not directly by the university.
+
+Key Medical Colleges Under Dhaka University
+These 8 major govt. colleges (~2,000+ total MBBS seats) fall under Dhaka University jurisdiction for academics, with seats allocated post-DGHS merit list (e.g., Dhaka Medical College: 230 seats).
+
+College	Location	Est. Seats (MBBS)	Website/Contact
+Dhaka Medical College (DMC)	Dhaka	230	dmc.edu.bd 
+​
+Sir Salimullah Medical College (SSMC)	Mitford, Dhaka	180	ssmc.edu.bd 
+​
+Mymensingh Medical College	Mymensingh	140	N/A 
+​
+Sher-e-Bangla Medical College	Barisal	125	N/A 
+​
+Faridpur Medical College	Faridpur	100	N/A 
+​
+Shahid M. Monsur Ali Medical College	Sirajganj	70	N/A 
+​
+Kushtia Medical College	Kushtia	70	N/A 
+​
+Tangail Medical College	Tangail	70	N/A 
+​
+Admission Notes
+Apply via DGHS portal (Oct-Dec apps; ~1,200 BDT fee; GPA 9.0+ SSC/HSC required).
+
+Seats filled by national merit; reserved quotas for freedom fighters' kin, etc.
+
+For your project, pull latest seat lists from DGHS circular PDFs.
+
+ok now build a premium level webapplication that can used too many students for there help and used premium UI and UX make it standard also the filter system the university cards everything use proper pro level funtionality. use local storage for backend and build this web app 
