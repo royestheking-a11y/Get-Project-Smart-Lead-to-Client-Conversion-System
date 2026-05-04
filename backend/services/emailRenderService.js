@@ -5,8 +5,8 @@ export const renderTemplate = (template, lead, senderProfile = {}) => {
   // Replace variables - support both camelCase and snake_case formats
   const variables = {
     // Lead variables
-    '{{firstName}}': lead.firstName || lead.contactName?.split(' ')[0] || 'there',
-    '{{first_name}}': lead.firstName || lead.contactName?.split(' ')[0] || 'there',
+    '{{firstName}}': lead.firstName || lead.ownerName || lead.contactName?.split(' ')[0] || 'there',
+    '{{first_name}}': lead.firstName || lead.ownerName || lead.contactName?.split(' ')[0] || 'there',
     '{{companyName}}': lead.companyName || lead.company || 'your company',
     '{{company_name}}': lead.companyName || lead.company || 'your company',
     '{{website}}': lead.website || '',
@@ -18,6 +18,14 @@ export const renderTemplate = (template, lead, senderProfile = {}) => {
     '{{senderCompany}}': senderProfile.company || 'RizQara Tech',
     '{{senderPhone}}': senderProfile.whatsapp || '+880 1343-042761',
     '{{senderWebsite}}': senderProfile.portfolioLink || 'https://rizqaratech.vercel.app',
+
+    // New Premium Placeholders
+    '{{Business Name}}': lead.companyName || lead.company || 'your business',
+    '{{Owner Name}}': lead.firstName || lead.ownerName || lead.contactName?.split(' ')[0] || 'there',
+    '{{Website}}': lead.website || '',
+    '{{City}}': lead.location || '',
+    '{{Service Type}}': lead.industry || 'your services',
+    '{{Smart Summary}}': lead.smartSummary || `I came across ${lead.companyName || 'your business'} online and wanted to reach out.`,
 
     // Sender variables - snake_case (legacy support)
     '{{sender_name}}': senderProfile.name || 'Aurangzeb Sunny',

@@ -48,58 +48,127 @@ const fetchWebsite = async (url) => {
   }
 };
 
-const categorizeLead = async (lead) => {
+const categoryKeywords = {
+  RESTAURANT: [
+    "restaurant", "cafe", "takeaway", "food", "pizza", "burger", "grill",
+    "kitchen", "dining", "menu", "coffee", "bakery", "pizzeria", "diner", "bistro"
+  ],
+  SALON: [
+    "salon", "parlour", "parlor", "beauty", "spa", "barber", "hair",
+    "makeup", "lashes", "nails", "skincare", "wellness", "grooming", "massage"
+  ],
+  HEALTHCARE: [
+    "doctor", "clinic", "hospital", "dentist", "pharmacy", "medical",
+    "healthcare", "therapy", "physio", "surgeon", "physician", "nursing", "dental"
+  ],
+  EDUCATION: [
+    "school", "college", "academy", "training", "course", "tuition",
+    "institute", "learning", "university", "coaching", "education", "student"
+  ],
+  FITNESS: [
+    "gym", "fitness", "yoga", "trainer", "workout", "crossfit",
+    "personal training", "pilates", "studio", "health club"
+  ],
+  ECOMMERCE: [
+    "ecommerce", "online store", "shop online", "fashion", "products",
+    "cart", "checkout", "delivery", "order now", "shopping", "store"
+  ],
+  SHOP: [
+    "shop", "store", "retail", "boutique", "market", "clothing",
+    "electronics", "grocery", "jewellery", "jewelry", "supermarket", "mall"
+  ],
+  PORTFOLIO: [
+    "designer", "developer", "photographer", "artist", "consultant",
+    "freelancer", "personal brand", "portfolio", "creative"
+  ],
+  REAL_ESTATE: [
+    "real estate", "property", "apartment", "rent", "sale", "letting",
+    "estate agent", "homes", "realtor", "housing", "realty", "broker"
+  ],
+  AGENCY: [
+    "agency", "marketing", "advertising", "consulting", "digital", "branding",
+    "social media", "creative agency", "pr agency", "consultancy"
+  ]
+};
+
+// Extract metadata from HTML
+const extractMetadata = (html) => {
+  if (!html) return { title: '', description: '' };
+  
+  const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+  const title = titleMatch ? titleMatch[1].trim() : '';
+  
+  const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["'][^>]*>/i) || 
+                   html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["'][^>]*>/i);
+  const description = descMatch ? descMatch[1].trim() : '';
+  
+  return { title, description };
+};
+
+export const categorizeLead = async (lead) => {
+  let websiteText = "";
+  
+  // Try to fetch website for deeper intelligence
   const websiteUrl = normalizeWebsite(lead.website);
-  const industry = (lead.industry || '').toLowerCase();
-
-  // 1. Logic for Leads WITHOUT a Website
-  if (!websiteUrl) {
-    // If they are in a marketing-related industry, they likely need help with social media/marketing
-    const marketingIndustries = ['marketing', 'advertising', 'digital', 'agency', 'social media', 'creative'];
-    if (marketingIndustries.some(ind => industry.includes(ind))) {
-      lead.category = 'DIGITAL_MARKETING';
-    } else {
-      lead.category = 'NO_WEBSITE';
+  if (websiteUrl) {
+    console.log(`🔍 Scraping ${websiteUrl} for deeper intelligence...`);
+    const html = await fetchWebsite(websiteUrl);
+    if (html) {
+      const { title, description } = extractMetadata(html);
+      websiteText = `${title} ${description}`;
+      
+      // Generate a Smart Summary for personalized outreach
+      if (title) {
+        lead.smartSummary = `I was recently exploring ${lead.companyName} and came across your website ("${title.length > 60 ? title.substring(0, 60) + '...' : title}") - it looks like you're doing great work in the ${lead.industry || 'local'} space.`;
+      } else {
+        lead.smartSummary = `I came across ${lead.companyName} online and was impressed by the services you offer to your clients.`;
+      }
+      
+      // Bonus: Try to find an owner name if missing
+      if (!lead.contactName || lead.contactName === 'there') {
+        const founderMatch = html.match(/(?:founder|owner|ceo|director|founder of|owner of)\s*:\s*([A-Z][a-z]+\s+[A-Z][a-z]+)/i);
+        if (founderMatch) {
+          lead.contactName = founderMatch[1];
+          console.log(`✨ Found potential owner name: ${lead.contactName}`);
+        }
+      }
     }
-    lead.status = 'READY';
-    await lead.save();
-    return;
   }
 
-  // 2. Logic for Leads WITH a Website
-  const html = await fetchWebsite(websiteUrl);
+  const text = `
+    ${lead.companyName || ""}
+    ${lead.industry || ""}
+    ${lead.notes || ""}
+    ${lead.location || ""}
+    ${websiteText}
+  `.toLowerCase();
 
-  // If website exists but is completely broken/empty
-  if (!html) {
-    lead.category = 'POOR_UI_SEO'; // Focus on fix/redesign
-    lead.status = 'READY';
-    await lead.save();
-    return;
+  const scores = {};
+
+  for (const [category, keywords] of Object.entries(categoryKeywords)) {
+    scores[category] = 0;
+
+    for (const keyword of keywords) {
+      // Give more weight to website metadata matches
+      const regex = new RegExp(`\\b${keyword.toLowerCase()}\\b`, 'g');
+      const matches = (text.match(regex) || []).length;
+      scores[category] += matches;
+    }
   }
 
-  // Check for basic SEO (Title, Meta, H1)
-  const hasTitle = /<title[^>]*>[\s\S]*?<\/title>/i.test(html);
-  const hasMetaDescription = /<meta[^>]*name=["\']description["\'][^>]*>/i.test(html);
-  const hasH1 = /<h1[^>]*>[\s\S]*?<\/h1>/i.test(html);
+  const sortedCategories = Object.entries(scores)
+    .sort((a, b) => b[1] - a[1]);
 
-  if (!hasTitle || !hasMetaDescription || !hasH1) {
-    lead.category = 'POOR_UI_SEO';
-    lead.status = 'READY';
-    await lead.save();
-    return;
+  const bestCategoryMatch = sortedCategories[0];
+
+  if (!bestCategoryMatch || bestCategoryMatch[1] === 0) {
+    lead.category = 'GENERAL';
+    lead.confidenceScore = 0;
+  } else {
+    lead.category = bestCategoryMatch[0];
+    lead.confidenceScore = bestCategoryMatch[1];
   }
 
-  // Check for ecommerce (Specialized Marketing)
-  const ecommerceKeywords = /cart|checkout|shop|buy now|add to cart|purchase|basket|store|shipping|order|product/i;
-  if (ecommerceKeywords.test(html)) {
-    lead.category = 'ECOMMERCE';
-    lead.status = 'READY';
-    await lead.save();
-    return;
-  }
-
-  // If website is technically sound, pitch growth/marketing
-  lead.category = 'DIGITAL_MARKETING';
   lead.status = 'READY';
   await lead.save();
 };

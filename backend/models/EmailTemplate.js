@@ -13,7 +13,7 @@ const emailTemplateSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['NO_WEBSITE', 'HAS_WEBSITE', 'WEAK_WEBSITE', 'SEO_WEAK', 'ECOMMERCE', 'FOLLOWUP_1', 'FOLLOWUP_2', 'AUTHORITY', 'EXECUTIVE', 'RELATIONSHIP'],
+    enum: ['RESTAURANT', 'SALON', 'SHOP', 'ECOMMERCE', 'HEALTHCARE', 'EDUCATION', 'FITNESS', 'PORTFOLIO', 'REAL_ESTATE', 'AGENCY', 'GENERAL', 'SEO', 'FOLLOWUP'],
     required: true
   },
   subjectTemplate: {

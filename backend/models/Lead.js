@@ -34,8 +34,12 @@ const leadSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: [null, 'NO_WEBSITE', 'HAS_WEBSITE', 'WEAK_WEBSITE', 'SEO_WEAK', 'ECOMMERCE', 'DIGITAL_MARKETING', 'POOR_UI_SEO'],
+    enum: [null, 'RESTAURANT', 'SALON', 'SHOP', 'ECOMMERCE', 'HEALTHCARE', 'EDUCATION', 'FITNESS', 'PORTFOLIO', 'REAL_ESTATE', 'AGENCY', 'GENERAL', 'SEO', 'FOLLOWUP'],
     default: null
+  },
+  confidenceScore: {
+    type: Number,
+    default: 0
   },
   status: {
     type: String,
@@ -50,6 +54,10 @@ const leadSchema = new mongoose.Schema({
     default: false
   },
   notes: {
+    type: String,
+    trim: true
+  },
+  smartSummary: {
     type: String,
     trim: true
   },

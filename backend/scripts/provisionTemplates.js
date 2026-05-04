@@ -9,34 +9,78 @@ dotenv.config();
 
 const defaultTemplates = [
     {
-        name: 'Value First Cold Outreach',
-        category: 'NO_WEBSITE',
-        subjectTemplate: 'Idea for {{companyName}}',
-        bodyTemplate: `<p>Hi,</p><p>I found {{companyName}} and had an idea on how you could improve your outreach.</p><p>Worth a chat?</p><p>Best,<br>{{senderName}}</p>`
+        name: 'Premium: Retail / Shops',
+        category: 'RETAIL',
+        subjectTemplate: 'Boost your business presence: {{Business Name}}',
+        bodyTemplate: `Hello {{Owner Name}},
+I came across {{Business Name}} and noticed that your business has strong potential to attract more customers online.
+Many local shops lose customers because they either do not have a professional website, or their current online presence does not clearly show their products, location, offers, and contact options in a user-friendly way.
+We specialize in building complete digital presences.
+We are currently offering a **20% discount** + a **free demo preview**.
+Would you like us to send a free demo concept for {{Business Name}}?
+Best regards,
+Rizqara Tech`
     },
     {
-        name: 'Website Audit Teaser',
-        category: 'WEAK_WEBSITE',
-        subjectTemplate: 'Quick feedback on your site',
-        bodyTemplate: `<p>Hi,</p><p>I noticed a few small issues on your website that might be hurting conversions.</p><p>I recorded a quick 2-min video showing how to fix them. Want me to send it over?</p><p>Best,<br>{{senderName}}</p>`
+        name: 'Premium: Restaurant / Cafe',
+        category: 'RESTAURANT',
+        subjectTemplate: 'Digital Growth for {{Business Name}}',
+        bodyTemplate: `Hello {{Owner Name}},
+I found {{Business Name}} online and wanted to reach out with a simple idea.
+For restaurants, cafes, and takeaways, a professional website and online ordering system can make a big difference.
+We offer a **20% discount** and can prepare a **free demo design** for {{Business Name}} first.
+Would you be open to seeing a free demo concept?
+Best regards,
+Rizqara Tech`
     },
     {
-        name: 'E-commerce Growth',
-        category: 'ECOMMERCE',
-        subjectTemplate: 'Scaling {{companyName}}',
-        bodyTemplate: `<p>Hi,</p><p>Love what you're doing with {{companyName}}. I saw you're using Shopify/WooCommerce.</p><p>We help stores like yours add 15% revenue in 30 days.</p><p>Open to a case study?</p><p>Best,<br>{{senderName}}</p>`
+        name: 'Premium: Salon / Beauty',
+        category: 'SALON',
+        subjectTemplate: 'Professional Online Presence for {{Business Name}}',
+        bodyTemplate: `Hello {{Owner Name}},
+I came across {{Business Name}} and noticed that your services could look even more professional online.
+We provide premium salon websites and booking systems.
+We are currently offering a **20% discount**.
+Before starting, we can create a **free demo preview** for your business.
+Would you like us to prepare a free demo for {{Business Name}}?
+Best regards,
+Rizqara Tech`
     },
     {
-        name: 'Quick Question Opener',
-        category: 'HAS_WEBSITE',
-        subjectTemplate: 'Question about {{companyName}}',
-        bodyTemplate: `<p>Hi,</p><p>Are you currently looking for help with [Service]?</p><p>I have a few ideas that could help {{companyName}} stand out.</p><p>Thanks,</p>`
+        name: 'Premium: Healthcare / Clinic',
+        category: 'HEALTHCARE',
+        subjectTemplate: 'Digital Solutions for {{Business Name}}',
+        bodyTemplate: `Hello {{Owner Name}},
+I found {{Business Name}} online and wanted to share a professional idea.
+In healthcare, trust is very important. A professional website helps patients understand your services and book appointments easily.
+We are currently offering a **20% discount** and a **free demo preview**.
+Would you like us to prepare a free demo concept for {{Business Name}}?
+Best regards,
+Rizqara Tech`
     },
     {
-        name: 'SEO Visibility Follow-up',
-        category: 'SEO_WEAK',
-        subjectTemplate: 'Lost traffic opportunity',
-        bodyTemplate: `<p>Hi,</p><p>I noticed {{companyName}} isn't ranking for some key terms in your industry.</p><p>We could fix this quickly.</p><p>Let me know if you'd like to see the keyword list.</p>`
+        name: 'Premium: General / E-commerce',
+        category: 'GENERAL',
+        subjectTemplate: 'Grow {{Business Name}} with Rizqara Tech',
+        bodyTemplate: `Hello {{Owner Name}},
+I came across {{Business Name}} and wanted to reach out from **Rizqara Tech**.
+We help businesses build a strong digital presence through modern websites, custom software, and SEO.
+We are currently offering a **20% discount** and a **free demo preview**.
+Would you like us to send a free demo idea for {{Business Name}}?
+Best regards,
+Rizqara Tech`
+    },
+    {
+        name: 'Premium: SEO Audit',
+        category: 'SEO',
+        subjectTemplate: 'SEO Growth for {{Business Name}}',
+        bodyTemplate: `Hello {{Owner Name}},
+I came across {{Business Name}} and noticed that your business has strong potential to get more customers from Google.
+We help businesses improve their online visibility through professional SEO and digital growth strategies.
+We are currently offering a **20% discount** and a **free SEO audit/demo report**.
+Would you like us to prepare a free SEO audit for your business?
+Best regards,
+Rizqara Tech`
     }
 ];
 

@@ -7,12 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, '../.env') });
 
-// Import the actual model
 import EmailTemplate from '../models/EmailTemplate.js';
 import Campaign from '../models/Campaign.js';
 
-// Professional Built-in Templates
-const builtInTemplates = [
+const premiumTemplates = [
     {
         name: 'Premium: Restaurant / Cafe',
         category: 'RESTAURANT',
@@ -370,37 +368,31 @@ Rizqara Tech
     }
 ];
 
-const seedTemplates = async () => {
+const updateAllTemplates = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('✅ Connected to MongoDB\n');
 
-        // Find the first campaign (or create one if none exists)
-        let campaign = await Campaign.findOne();
+        const campaigns = await Campaign.find();
+        console.log(`Found ${campaigns.length} campaigns to update.\n`);
 
-        if (!campaign) {
-            console.log('⚠️  No campaigns found. Please create a campaign first in the app.');
-            console.log('   Templates will be auto-created when you add a campaign.\n');
-            process.exit(0);
+        for (const campaign of campaigns) {
+            console.log(`Updating templates for campaign: ${campaign.name || campaign._id}`);
+            
+            // Delete existing templates for this campaign
+            await EmailTemplate.deleteMany({ campaignId: campaign._id });
+            
+            // Add new premium templates
+            for (const template of premiumTemplates) {
+                await EmailTemplate.create({
+                    ...template,
+                    campaignId: campaign._id
+                });
+            }
+            console.log(`   ✅ Successfully updated templates for: ${campaign.name || campaign._id}`);
         }
 
-        console.log(`📧 Adding templates to campaign: ${campaign.name || campaign._id}\n`);
-
-        // Clear existing templates for this campaign
-        await EmailTemplate.deleteMany({ campaignId: campaign._id });
-        console.log('   Cleared existing templates');
-
-        // Insert built-in templates
-        for (const template of builtInTemplates) {
-            await EmailTemplate.create({
-                campaignId: campaign._id,
-                ...template
-            });
-            console.log(`   ✅ Created: ${template.name}`);
-        }
-
-        console.log(`\n🎉 Successfully added ${builtInTemplates.length} built-in templates!`);
-
+        console.log('\n🎉 All campaigns have been updated with premium templates!');
         process.exit(0);
     } catch (error) {
         console.error('Error:', error);
@@ -408,4 +400,4 @@ const seedTemplates = async () => {
     }
 };
 
-seedTemplates();
+updateAllTemplates();

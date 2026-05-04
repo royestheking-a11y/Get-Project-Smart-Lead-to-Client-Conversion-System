@@ -274,7 +274,7 @@ router.post('/followups', verifyCronSecret, async (req, res) => {
 
       for (const lead of followup1Leads) {
         // Use specific FOLLOWUP_1 template if available, otherwise fall back to category or defaults
-        const templateId = templateMap['FOLLOWUP_1'] || templateMap[lead.category] || templates[0]?._id;
+        const templateId = templateMap['FOLLOWUP_1'] || templateMap['FOLLOWUP'] || templateMap[lead.category] || templates[0]?._id;
         if (!templateId) continue;
 
         // Check if followup1 job already exists
@@ -315,7 +315,7 @@ router.post('/followups', verifyCronSecret, async (req, res) => {
 
       for (const lead of followup2Leads) {
         // Use specific FOLLOWUP_2 template
-        const templateId = templateMap['FOLLOWUP_2'] || templateMap[lead.category] || templates[0]?._id;
+        const templateId = templateMap['FOLLOWUP_2'] || templateMap['FOLLOWUP'] || templateMap[lead.category] || templates[0]?._id;
         if (!templateId) continue;
 
         const existingJob = await Job.findOne({
